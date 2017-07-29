@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">WeeWorh - Rescuer</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!--Login-->
+    <string name="login_username">Username</string>
+    <string name="login_password">Password</string>
+    <string name="login_register">Register</string>
+    <string name="login_login">Login</string>
+    <string name="login_nouser">Invalid User Data, Please Check your \'Username\' or \'Password\' is valid.</string>
+
+    <!--Main-->
+    <string name="main_wheewhor">WheeWhor</string>
+
+    <!--Simple-->
+    <string name="ok">OKAY</string>
+    <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="acknowledge">Acknowledge</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+
+    <!--Warning-->
+    <string name="warn_no_network">A Network Connectivity isn\'t Available</string>
+</resources>

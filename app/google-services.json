@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "849744362017",
+    "firebase_url": "https://weewhorescuer.firebaseio.com",
+    "project_id": "weewhorescuer",
+    "storage_bucket": "weewhorescuer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849744362017:android:4bb882a2ca4a1bed",
+        "android_client_info": {
+          "package_name": "com.sitsenior.g40.weewhorescuer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "849744362017-pfnvcu1mai7n289u6o16391r4ehu4j5r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sitsenior.g40.weewhorescuer",
+            "certificate_hash": "027bd42e59429fa7522e129a98d5daf245ba87a3"
+          }
+        },
+        {
+          "client_id": "849744362017-ccisgjqgk9dtse5ovfvgadr25ellm7c4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGRDNi2mf50lgkTcXkrkgtbaaO2PQ2Ip4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "849744362017-ccisgjqgk9dtse5ovfvgadr25ellm7c4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
