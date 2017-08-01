@@ -25,12 +25,11 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
+    compile 'com.koushikdutta.ion:ion:2.+'
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.google.firebase:firebase-messaging:10.2.1'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    /*Spring*/
-    compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
 }
 
 apply plugin: 'com.google.gms.google-services'
