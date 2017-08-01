@@ -14,6 +14,9 @@ import com.sitsenior.g40.weewhorescuer.R;
  */
 
 public class NavigatorFragment extends Fragment {
+
+    private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyAq29rswALv-iwMrEDAsrxAQcaEDWLCKcI";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

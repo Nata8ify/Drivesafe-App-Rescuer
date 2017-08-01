@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
+import com.sitsenior.g40.weewhorescuer.adapters.AccidentListAdapter;
+import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 
@@ -27,6 +29,9 @@ import java.util.List;
  */
 
 public class OverviewFragment extends Fragment {
+
+    private ListAdapter accidentListAdapter;
+    private ListView accidentListView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -36,6 +41,7 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        accidentListView = (ListView)getView().findViewById(R.id.listvw_a_acclist);
         new AccidentResultAsyncTask().execute();
     }
 
@@ -57,7 +63,8 @@ public class OverviewFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Object o) {
-            Toast.makeText(context, accList.toString(), Toast.LENGTH_LONG).show();
+            accidentListAdapter = new AccidentListAdapter(getView().getContext(), R.layout.row_accident, accList);
+            accidentListView.setAdapter(accidentListAdapter);
             super.onPostExecute(o);
         }
     }
