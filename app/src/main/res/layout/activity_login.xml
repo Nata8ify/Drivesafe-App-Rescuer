@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Drivesafe Prototype"
+        android:text="Weeworh Prototype"
         android:layout_gravity="center"/>
     <LinearLayout
         android:layout_width="match_parent"
