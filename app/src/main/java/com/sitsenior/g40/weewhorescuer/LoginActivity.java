@@ -1,7 +1,6 @@
 package com.sitsenior.g40.weewhorescuer;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,8 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.sitsenior.g40.weewhorescuer.utils.SettingVerify;
+import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,11 +36,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-    }
+}
 
     @OnClick({R.id.btn_login, R.id.btn_register})
     public void onClick(View view) {
-        if (!SettingVerify.isNetworkConnected(this)) {
+        if (!SettingUtils.isNetworkConnected(this)) {
             return;
         }
         switch (view.getId()) {

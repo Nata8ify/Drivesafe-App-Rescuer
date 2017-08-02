@@ -18,6 +18,7 @@ import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.adapters.AccidentListAdapter;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
+import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 
@@ -57,7 +58,8 @@ public class OverviewFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            accList = Weeworh.with(this.context).getInBoundTodayIncidents(1l);
+            accList = Weeworh.with(this.context).getInBoundTodayIncidents(1);
+
             return null;
         }
 

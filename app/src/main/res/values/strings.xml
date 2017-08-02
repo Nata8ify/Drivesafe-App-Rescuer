@@ -25,4 +25,7 @@
 
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>
+    <string name="warn_no_location_permission">This Application need the Location Permission or else this module will not function.</string>
+
+    <!--Class-->
 </resources>

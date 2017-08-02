@@ -30,18 +30,16 @@ public class AddressFactory {
     }
 
     public String getBriefLocationAddress(double latitude, double longitude){
-        StringBuilder addrBuilder = null;
         try {
-            addrBuilder = new StringBuilder();
             List<Address> addrs = geocoder.getFromLocation(latitude, longitude, 1);
-            addrBuilder.append(addrs.get(0).getAddressLine(0));
-            Log.d("FF", addrs.toString());
+            return addrs.get(0).getAddressLine(0);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return addrBuilder.toString();
+        return "na";
     }
 
+    /* Goddamn Mother f;cker Hardest Algorithm involed on Mathematic's Formular  */
     private final double DR = Math.PI / 180; //DEG_TO_RAD
     private final int RADIAN_OF_EARTH_IN_KM = 6371;
     public int getEstimateDistanceFromCurrentPoint(LatLng current, LatLng des){
