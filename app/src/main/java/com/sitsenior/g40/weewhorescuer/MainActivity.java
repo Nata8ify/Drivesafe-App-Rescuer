@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.sitsenior.g40.weewhorescuer.adapters.MainActivityTabSectionAdapter;
+import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.fragments.ConfigurationFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mainViewPager = (ViewPager)findViewById(R.id.vwpgr_main);
         setMainViewPager(mainViewPager);
+        LocationFactory.getInstance(this);
     }
 
 

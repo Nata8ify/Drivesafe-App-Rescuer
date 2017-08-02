@@ -1,8 +1,11 @@
 package com.sitsenior.g40.weewhorescuer.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -19,13 +23,16 @@ import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.adapters.AccidentListAdapter;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
+import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
+import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -33,6 +40,7 @@ import java.util.List;
 
 public class OverviewFragment extends Fragment {
 
+    private LinearLayout emptyAccidentResultLayout;
     private ListAdapter accidentListAdapter;
     private ListView accidentListView;
     @Nullable
@@ -41,39 +49,32 @@ public class OverviewFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
+    private Handler overviewHandler;
+    private Runnable overviewRunnable;
+
     @Override
     public void onStart() {
         super.onStart();
         accidentListView = (ListView)getView().findViewById(R.id.listvw_a_acclist);
-        new AccidentResultAsyncTask().execute();
-    }
-
-    class AccidentResultAsyncTask extends AsyncTask {
-
-        private Context context;
-        @Override
-        protected void onPreExecute() {
-            this.context = getView().getContext();
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Object doInBackground(Object[] params) {
-            AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(1));
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object o) {
-            accidentListAdapter = new AccidentListAdapter(getView().getContext(), R.layout.row_accident, AccidentFactory.getInstance(null).getAccidentList());
-            accidentListView.setAdapter(accidentListAdapter);
-            accidentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(context, AccidentFactory.getInstance(null).getAccidentList().get(position).toString(), Toast.LENGTH_LONG).show();
+        emptyAccidentResultLayout = (LinearLayout)getView().findViewById(R.id.linrlout_emptyacc);
+        final ProgressDialog waitGpsProgressDialog = new ProgressDialog(getContext());
+        waitGpsProgressDialog.setMessage("Waiting Location Service...");
+        waitGpsProgressDialog.setCancelable(false);
+        waitGpsProgressDialog.show();
+        overviewHandler = new Handler();
+        overviewRunnable = (new Runnable() {
+            @Override
+            public void run() {
+                if(!LocationFactory.getInstance(null).isLocationActivated()) {
+                    overviewHandler.postDelayed(this, 1000);
+                    return;
                 }
-            });
-            super.onPostExecute(o);
-        }
+                waitGpsProgressDialog.dismiss();
+                new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, accidentListView, accidentListAdapter).execute();
+            }
+        });
+        overviewHandler.post(overviewRunnable);
     }
+
+
 }

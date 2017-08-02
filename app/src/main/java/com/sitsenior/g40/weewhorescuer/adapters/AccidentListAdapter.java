@@ -52,7 +52,8 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
         TextView txtEstimateDistance = (TextView)row.findViewById(R.id.txt_distanceest);
         txtReportTime.setText(accident.getTime());
         txtBriefAddress.setText(AddressFactory.getInstance(context).getBriefLocationAddress(accident.getLatitude(), accident.getLongitude()));
-        //txtEstimateDistance.setText();
+        if(LocationFactory.getInstance(null).isLocationActivated())
+            txtEstimateDistance.setText(getEstimatedDistanceMessage(LocationFactory.getInstance(null).getLatLng(), new LatLng(accident.getLatitude(), accident.getLongitude())));
         accidentTypeImage.setImageResource(getAccidentTypeImage(accident.getAccType()));
         accCodeBarStatus.setBackgroundColor(Color.parseColor(getColorByAccidentCode(accident.getAccCode())));
         return row;
@@ -60,7 +61,6 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
 
     public int getAccidentTypeImage(byte accType){
         String imgName = null;
-        Log.d("accType", accType+" ");
         switch (accType){
             case Accident.ACC_TYPE_TRAFFIC :
                 imgName = "acctype_crash"; break;
@@ -92,7 +92,12 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
     }
 
     public String getEstimatedDistanceMessage(LatLng current, LatLng des){
-        AddressFactory.getInstance(context).getEstimateDistanceFromCurrentPoint(current, des);
+        if(current != null){
+            return AddressFactory.getInstance(context).getEstimateDistanceFromCurrentPoint(current, des) + " Km(s)";
+        } else {
+
+        }
+
         return "unavaialbe";
     }
 

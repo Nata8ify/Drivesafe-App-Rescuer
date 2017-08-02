@@ -1,5 +1,6 @@
 package com.sitsenior.g40.weewhorescuer.cores;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -35,10 +36,12 @@ public class Weeworh {
         try {
             rescuerProfile = Ion.with(context)
                     .load(Url.RESCUER_LOGIN)
+                    .progressDialog(new ProgressDialog(context))
                     .setBodyParameter(Param.usrn, username)
                     .setBodyParameter(Param.pswd, password)
                     .as(Profile.class)
                     .get();
+            Profile.getInsatance().set(rescuerProfile);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

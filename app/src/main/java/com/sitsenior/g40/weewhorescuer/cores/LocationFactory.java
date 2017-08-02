@@ -16,6 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.R;
+import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
 import com.sitsenior.g40.weewhorescuer.models.extra.LatLng;
 
 import java.security.Permission;
@@ -49,6 +50,8 @@ public class LocationFactory {
             public void onLocationChanged(Location location) {
                 Log.d("Loc Changef ", location.getAltitude()+"");
                 setLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                Log.d("latlng", getLatLng().getLatitude()+" : "+getLatLng().getLongitude());
+                locationActivated = true;
             }
 
             @Override
@@ -75,8 +78,8 @@ public class LocationFactory {
             Toast.makeText(context, context.getResources().getString(R.string.warn_no_location_permission), Toast.LENGTH_LONG).show();
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        this.locationActivated = true;
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+        /*this.locationActivated = true;*/
     }
     public void deactivatedLocation(){
         locationManager.removeUpdates(locationListener);

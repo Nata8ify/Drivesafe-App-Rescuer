@@ -5,6 +5,8 @@
  */
 package com.sitsenior.g40.weewhorescuer.models;
 
+import android.support.annotation.NonNull;
+
 /**
  *
  * @author PNattawut
@@ -27,7 +29,12 @@ public class Profile {
         }
         return profile;
     }
-    
+
+
+    public static void set(@NonNull Profile profile){
+        Profile.profile = profile;
+    }
+
     public long getUserId() {
         return userId;
     }

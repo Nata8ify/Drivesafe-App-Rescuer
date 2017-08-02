@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
+import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
+import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 
 import butterknife.BindView;
@@ -39,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         SettingUtils.requestPermission(this);
         LocationFactory.getInstance(this).activatedLocation();
+
 }
 
     @OnClick({R.id.btn_login, R.id.btn_register})
@@ -48,8 +51,8 @@ public class LoginActivity extends AppCompatActivity {
         }
         switch (view.getId()) {
             case R.id.btn_login:
-                if (true) {
-                    //TODO
+                Weeworh.with(this).login(edtxtLoginUsername.getText().toString(), edtxtLoginPassword.getText().toString());
+                if (!(Profile.getInsatance().getUserId() == 0)) {
                     startActivity(new Intent(this, MainActivity.class));
                     finish();
                 } else {

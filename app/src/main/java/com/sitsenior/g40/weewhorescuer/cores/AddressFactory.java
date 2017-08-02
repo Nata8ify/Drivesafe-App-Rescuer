@@ -8,6 +8,7 @@ import android.util.Log;
 import com.sitsenior.g40.weewhorescuer.models.extra.LatLng;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,7 +43,8 @@ public class AddressFactory {
     /* Goddamn Mother f;cker Hardest Algorithm involed on Mathematic's Formular  */
     private final double DR = Math.PI / 180; //DEG_TO_RAD
     private final int RADIAN_OF_EARTH_IN_KM = 6371;
-    public int getEstimateDistanceFromCurrentPoint(LatLng current, LatLng des){
+    private final DecimalFormat kmDecimalFormat = new DecimalFormat("###.00");
+    public double getEstimateDistanceFromCurrentPoint(LatLng current, LatLng des){
         double dLat = DR * (current.getLatitude() - des.getLatitude());
         double dLng = DR * (current.getLongitude() - des.getLongitude());
         double a = (Math.sin(dLat / 2) * Math.sin(dLat / 2))
@@ -50,6 +52,7 @@ public class AddressFactory {
                 * (Math.sin(dLng / 2) * Math.sin(dLng / 2));
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = c * RADIAN_OF_EARTH_IN_KM;
-        return (int)distance;
+        Log.d("Distance is ", distance+" Km(s)");
+        return Double.valueOf(kmDecimalFormat.format(distance));
     }
 }
