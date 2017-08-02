@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 
 import butterknife.BindView;
@@ -36,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        SettingUtils.requestPermission(this);
+        LocationFactory.getInstance(this).activatedLocation();
 }
 
     @OnClick({R.id.btn_login, R.id.btn_register})
@@ -58,6 +61,5 @@ public class LoginActivity extends AppCompatActivity {
                 //TODO
                 break;
         }
-
     }
 }

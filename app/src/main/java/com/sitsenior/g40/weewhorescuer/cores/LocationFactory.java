@@ -36,8 +36,8 @@ public class LocationFactory {
 
     public static LocationFactory getInstance(final Context context) {
         if (locationFactory == null) {
-
             LocationFactory.context = context;
+            locationFactory = new LocationFactory();
         }
         return locationFactory;
     }
@@ -66,7 +66,6 @@ public class LocationFactory {
                 context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
             }
         };
-        locationFactory = new LocationFactory();
     }
 
     private boolean locationActivated;

@@ -18,7 +18,7 @@ public class AccidentFactory {
 
     private static AccidentFactory accidentFactory;
 
-    public AccidentFactory getInstance(List<Accident> accidentList){
+    public static AccidentFactory getInstance(List<Accident> accidentList){
         if(accidentFactory == null){
             accidentFactory = new AccidentFactory();
             accidentFactory.setAccidentList(accidentList);

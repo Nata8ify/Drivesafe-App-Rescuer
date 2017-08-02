@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.adapters.AccidentListAdapter;
+import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
@@ -48,7 +50,6 @@ public class OverviewFragment extends Fragment {
 
     class AccidentResultAsyncTask extends AsyncTask {
 
-        private List<Accident> accList;
         private Context context;
         @Override
         protected void onPreExecute() {
@@ -58,15 +59,20 @@ public class OverviewFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            accList = Weeworh.with(this.context).getInBoundTodayIncidents(1);
-
+            AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(1));
             return null;
         }
 
         @Override
         protected void onPostExecute(Object o) {
-            accidentListAdapter = new AccidentListAdapter(getView().getContext(), R.layout.row_accident, accList);
+            accidentListAdapter = new AccidentListAdapter(getView().getContext(), R.layout.row_accident, AccidentFactory.getInstance(null).getAccidentList());
             accidentListView.setAdapter(accidentListAdapter);
+            accidentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(context, AccidentFactory.getInstance(null).getAccidentList().get(position).toString(), Toast.LENGTH_LONG).show();
+                }
+            });
             super.onPostExecute(o);
         }
     }

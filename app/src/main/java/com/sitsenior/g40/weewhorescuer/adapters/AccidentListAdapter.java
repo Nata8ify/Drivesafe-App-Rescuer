@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
+import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
+import com.sitsenior.g40.weewhorescuer.models.extra.LatLng;
 
 import java.util.List;
 import java.util.zip.Inflater;
@@ -50,7 +52,7 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
         TextView txtEstimateDistance = (TextView)row.findViewById(R.id.txt_distanceest);
         txtReportTime.setText(accident.getTime());
         txtBriefAddress.setText(AddressFactory.getInstance(context).getBriefLocationAddress(accident.getLatitude(), accident.getLongitude()));
-        txtEstimateDistance.setText("99 Kms From Now");
+        //txtEstimateDistance.setText();
         accidentTypeImage.setImageResource(getAccidentTypeImage(accident.getAccType()));
         accCodeBarStatus.setBackgroundColor(Color.parseColor(getColorByAccidentCode(accident.getAccCode())));
         return row;
@@ -87,6 +89,11 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
             case Accident.ACC_CODE_ERRS : return "#ddd";
         }
         return "#fff";
+    }
+
+    public String getEstimatedDistanceMessage(LatLng current, LatLng des){
+        AddressFactory.getInstance(context).getEstimateDistanceFromCurrentPoint(current, des);
+        return "unavaialbe";
     }
 
 }
