@@ -1,11 +1,16 @@
 package com.sitsenior.g40.weewhorescuer;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.adapters.MainActivityTabSectionAdapter;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
@@ -44,15 +49,39 @@ public class MainActivity extends AppCompatActivity {
         mainProgressDialog.show();
         mainHandler = new Handler();
         mainRunnable = (new Runnable() {
+            private boolean waitSetting = false;
+            private AlertDialog reqLocationDialog;
             @Override
             public void run() {
                 if(!LocationFactory.getInstance(null).isLocationActivated()) {
-                    mainHandler.postDelayed(this, 1000);
+                    if(!LocationFactory.getInstance(null).isGPSProviderEnabled() && !waitSetting) {
+                        reqLocationDialog = new AlertDialog.Builder(MainActivity.this)
+                                .setMessage(MainActivity.this.getResources().getString(R.string.warn_no_location_permission))
+                                .setNegativeButton(MainActivity.this.getResources().getString(R.string.main_btn_nope), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        MainActivity.this.finish();
+                                    }
+                                })
+                                .setPositiveButton(MainActivity.this.getResources().getString(R.string.main_btn_tosetting), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                    }
+                                })
+                                .setCancelable(false)
+                                .create();
+                        if (!waitSetting) {
+                            reqLocationDialog.show();
+                        }
+                        waitSetting = true;
+                    }
+                    mainHandler.postDelayed(this, 2000);
                     return;
                 }
                 setMainViewPager(mainViewPager);
-
                 mainProgressDialog.dismiss();
+                mainHandler.removeCallbacks(this);
             }
         });
         mainHandler.post(mainRunnable);

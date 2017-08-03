@@ -3,6 +3,8 @@ package com.sitsenior.g40.weewhorescuer.cores;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -65,6 +67,26 @@ public class AccidentFactory {
         }
     }
 
+    private static void sortByCode(List<Accident> accidentList, char[] codes){
+        Collections.sort(accidentList, Collections.reverseOrder(new Comparator<Accident>() {
+            @Override
+            public int compare(Accident accident, Accident t1) {
+                return accident.getTime().compareTo(t1.getTime());
+            }
+        }));
+        List<Accident> tempAccidentList = null;
+        for(char code : codes){
+            if(tempAccidentList == null){tempAccidentList = new ArrayList<>();}
+            for(Accident accident : accidentList){
+                if(accident.getAccCode() == code){
+                    tempAccidentList.add(accident);
+                }
+            }
+        }
+        accidentList.clear();
+        accidentList.addAll(tempAccidentList);
+    }
+
     /* Getter List & Setter List */
 
     public List<Accident> getAccidentList() {
@@ -72,6 +94,7 @@ public class AccidentFactory {
     }
 
     public void setAccidentList(List<Accident> accidentList) {
+        sortByCode(accidentList, new char[]{Accident.ACC_CODE_A, Accident.ACC_CODE_G, Accident.ACC_CODE_R});
         this.accidentList = accidentList;
     }
 

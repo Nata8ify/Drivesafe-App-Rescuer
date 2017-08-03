@@ -13,13 +13,17 @@
     <!--Main-->
     <string name="main_weeworh">WeeWorh</string>
     <string name="main_waiting_gps">Waiting for location service...</string>
+    <string name="main_btn_tosetting">Go to Setting</string>
+    <string name="main_btn_nope">No, and Close this Application</string>
     <!-- Main - Overview -->
     <!-- Main - Navigator -->
-    <string name="mainnav_curposition">Your Current Position is ...</string>
+    <string name="mainnav_curposition_title">Your Current Position is ...</string>
+    <string name="mainnav_navposition_title">Your Current Position is ...</string>
     <string name="mainnav_marker_curposition_title">You\'re Here</string>
     <string name="mainnav_marker_curposition_snipet">*</string>
     <string name="mainnav_marker_desposition_title">Destination</string>
-    <string name="mainnav_going">Copy! I\'m Going Now</string>
+    <string name="mainnav_btn_going">Copy! I\'m Going Now</string>
+    <string name="mainnav_btn_userinfo">User\'s Information</string>
     <string name="mainnav_rescued">Rescued</string>
     <string name="mainnav_errs">There are no Incident Around Here</string>
     <!-- Main - Configuration -->

@@ -34,9 +34,9 @@ public class AddressFactory {
         return addressFactory;
     }
 
-    public String getBriefLocationAddress(double latitude, double longitude){
+    public String getBriefLocationAddress(LatLng latLng){
         try {
-            List<Address> addrs = geocoder.getFromLocation(latitude, longitude, 1);
+            List<Address> addrs = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
             return addrs.get(0).getAddressLine(0);
         } catch (IOException e) {
             e.printStackTrace();

@@ -4,47 +4,95 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/map_navmap"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:padding="0dp"></com.google.android.gms.maps.MapView>
 
-    <RelativeLayout
-        android:id="@+id/reltvlout_details"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/map_navmap"
-        android:paddingTop="10dp">
+        android:paddingTop="5dp">
 
-        <TextView
-            android:id="@+id/txt_navtitle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Loading..."
-            android:textSize="22dp"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/txt_navtitle"
-            android:layout_marginTop="5dp"
-            android:id="@+id/txt_navdesc"
-            android:text="Loading..." />
-    </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/reltvlout_curposition_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp">
 
-    <RelativeLayout
-        android:id="@+id/reltvlout_action"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/reltvlout_details"
-        android:paddingTop="10dp">
+                <TextView
+                    android:id="@+id/txt_curnavtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mainnav_marker_curposition_title"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/mainnav_going"
-            android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/txt_curnavdesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_curnavtitle"
+                    android:layout_marginTop="5dp"
+                    android:text="Loading..." />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/reltvlout_desposition_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reltvlout_curposition_details"
+                android:paddingTop="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/txt_desnavtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mainnav_marker_desposition_title"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_desnavdesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_desnavtitle"
+                    android:layout_marginTop="5dp"
+                    android:text="Loading..." />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/reltvlout_action"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reltvlout_desposition_details"
+                android:paddingTop="10dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btn_going"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/mainnav_btn_going" />
+
+                <Button
+                    android:id="@+id/btn_userdetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btn_going"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/mainnav_btn_userinfo" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

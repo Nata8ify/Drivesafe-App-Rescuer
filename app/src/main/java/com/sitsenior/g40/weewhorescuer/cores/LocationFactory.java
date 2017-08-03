@@ -37,6 +37,7 @@ public class LocationFactory {
             @Override
             public void onLocationChanged(Location location) {
                 setLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                Log.d("latlng", getLatLng().latitude+" : "+getLatLng().longitude);
                 locationActivated = true;
             }
 
@@ -107,6 +108,10 @@ public class LocationFactory {
 
     public boolean isLocationActivated() {
         return locationActivated;
+    }
+
+    public boolean isGPSProviderEnabled(){
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
     public void setLocationActivated(boolean locationActivated) {
