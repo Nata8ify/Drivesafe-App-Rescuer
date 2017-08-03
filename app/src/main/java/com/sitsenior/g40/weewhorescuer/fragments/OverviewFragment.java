@@ -1,6 +1,5 @@
 package com.sitsenior.g40.weewhorescuer.fragments;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -8,13 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.R;
+import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
-import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
+import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 /**
@@ -38,26 +40,22 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        accidentListView = (ListView)getView().findViewById(R.id.listvw_a_acclist);
-        emptyAccidentResultLayout = (LinearLayout)getView().findViewById(R.id.linrlout_emptyacc);
-        final ProgressDialog waitGpsProgressDialog = new ProgressDialog(getContext());
-        waitGpsProgressDialog.setMessage("Waiting Location Service...");
-        waitGpsProgressDialog.setCancelable(false);
-        waitGpsProgressDialog.show();
-        overviewHandler = new Handler();
-        overviewRunnable = (new Runnable() {
-            @Override
-            public void run() {
-                if(!LocationFactory.getInstance(null).isLocationActivated()) {
-                    overviewHandler.postDelayed(this, 1000);
-                    return;
-                }
-                waitGpsProgressDialog.dismiss();
-                new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, accidentListView, accidentListAdapter).execute();
-            }
-        });
-        overviewHandler.post(overviewRunnable);
+        accidentListView = (ListView) getView().findViewById(R.id.listvw_a_acclist);
+        emptyAccidentResultLayout = (LinearLayout) getView().findViewById(R.id.linrlout_emptyacc);
+
+        new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, accidentListView, accidentListAdapter).execute();
+        setListener();
     }
 
+    public void setListener() {
+        /* accidentListView's Listener */
+        accidentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Accident accident = AccidentFactory.getInstance(null).getAccidentList().get(position);
+                Toast.makeText(getContext(), accident.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 }

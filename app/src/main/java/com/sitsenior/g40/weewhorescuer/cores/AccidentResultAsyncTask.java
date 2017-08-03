@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.adapters.AccidentListAdapter;
+import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 /**
@@ -52,12 +53,6 @@ public class AccidentResultAsyncTask extends AsyncTask {
     protected void onPostExecute(Object o) {
         try {
             accidentListView.setAdapter(accidentListAdapter);
-            accidentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(context, AccidentFactory.getInstance(null).getAccidentList().get(position).toString(), Toast.LENGTH_LONG).show();
-                }
-            });
         } catch (NullPointerException nexcp) {
             ((Activity) (context)).runOnUiThread(new Runnable() {
                 @Override

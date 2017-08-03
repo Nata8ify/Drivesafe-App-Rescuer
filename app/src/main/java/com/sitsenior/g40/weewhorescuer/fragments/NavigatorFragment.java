@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +21,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sitsenior.g40.weewhorescuer.R;
+import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
+import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -29,6 +34,9 @@ public class NavigatorFragment extends Fragment {
 
     private MapView navMapView;
     private GoogleMap googleMap;
+
+    private TextView txtNavigatorTitle;
+    private TextView txtNavigatorDescription;
 
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
 
@@ -40,6 +48,12 @@ public class NavigatorFragment extends Fragment {
 
     @Override
     public void onStart() {
+        /* Text setting and How to Display */
+        txtNavigatorTitle = (TextView) getView().findViewById(R.id.txt_navtitle);
+        txtNavigatorDescription = (TextView) getView().findViewById(R.id.txt_navdesc);
+        txtNavigatorDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude));
+
+        /* Google Map and Map View Setting */
         navMapView = (MapView) getView().findViewById(R.id.map_navmap);
         navMapView.onCreate(getArguments());
         navMapView.onResume();
@@ -54,11 +68,11 @@ public class NavigatorFragment extends Fragment {
                 NavigatorFragment.this.googleMap.setMyLocationEnabled(true);
 
                 // For dropping a marker at a point on the Map
-                LatLng sydney = new LatLng(-34, 151);
-                googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker Title").snippet("Marker Description"));
+                LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
+                googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title("Current Place").snippet("Your Current Place"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(sydney).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(current).zoom(12).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
             }

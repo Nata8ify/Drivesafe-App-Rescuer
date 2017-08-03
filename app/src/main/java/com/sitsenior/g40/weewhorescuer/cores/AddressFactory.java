@@ -45,10 +45,10 @@ public class AddressFactory {
     }
 
     public double getEstimateDistanceFromCurrentPoint(LatLng current, LatLng des){
-        double dLat = DR * (current.latitude - des.longitude);
-        double dLng = DR * (current.latitude - des.longitude);
+        double dLat = DR * (current.latitude - des.latitude);
+        double dLng = DR * (current.longitude - des.longitude);
         double a = (Math.sin(dLat / 2) * Math.sin(dLat / 2))
-                + (Math.cos(des.latitude * DR) * Math.cos(current.longitude * DR))
+                + (Math.cos(des.latitude * DR) * Math.cos(current.latitude * DR))
                 * (Math.sin(dLng / 2) * Math.sin(dLng / 2));
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         double distance = c * RADIAN_OF_EARTH_IN_KM;

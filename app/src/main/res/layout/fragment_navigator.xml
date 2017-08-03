@@ -21,7 +21,7 @@
             android:id="@+id/txt_navtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your Current Location is..."
+            android:text="Loading..."
             android:textSize="22dp"
             android:textStyle="bold" />
 
@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/txt_navtitle"
             android:layout_marginTop="5dp"
-            android:text="Thung Luk Nok Properties in Kamphaeng Saen, Nakhon Pathom, Thailand" />
+            android:id="@+id/txt_navdesc"
+            android:text="Loading..." />
     </RelativeLayout>
 
     <RelativeLayout

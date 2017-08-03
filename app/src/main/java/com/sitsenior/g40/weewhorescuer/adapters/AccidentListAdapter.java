@@ -49,7 +49,7 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
         TextView txtBriefAddress = (TextView)row.findViewById(R.id.txt_briefaddr);
         TextView txtEstimateDistance = (TextView)row.findViewById(R.id.txt_distanceest);
         txtReportTime.setText(accident.getTime());
-        txtBriefAddress.setText(AddressFactory.getInstance(context).getBriefLocationAddress(accident.getLatitude(), accident.getLongitude()));
+        txtBriefAddress.setText(AddressFactory.getInstance(null).getBriefLocationAddress(accident.getLatitude(), accident.getLongitude()));
         if(LocationFactory.getInstance(null).isLocationActivated())
             txtEstimateDistance.setText(getEstimatedDistanceMessage(LocationFactory.getInstance(null).getLatLng(), new LatLng(accident.getLatitude(), accident.getLongitude())));
         accidentTypeImage.setImageResource(getAccidentTypeImage(accident.getAccType()));
