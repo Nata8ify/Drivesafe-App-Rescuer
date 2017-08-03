@@ -30,7 +30,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
     public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, ListView accidentListView, ListAdapter accidentListAdapter) {
         this.profile = profile;
         this.context = context;
-        this.emptyAccidentResultLayout= emptyAccidentResultLayout;
+        this.emptyAccidentResultLayout = emptyAccidentResultLayout;
         this.accidentListView = accidentListView;
         this.accidentListAdapter = accidentListAdapter;
     }
@@ -38,16 +38,28 @@ public class AccidentResultAsyncTask extends AsyncTask {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Log.d("profile ", profile .toString());
+        Log.d("profile ", profile.toString());
     }
 
     @Override
     protected Object doInBackground(Object[] params) {
         AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(1));
-        try {
             accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).getAccidentList());
-        } catch(NullPointerException nexcp){
-            ((Activity)(context)).runOnUiThread(new Runnable() {
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(Object o) {
+        try {
+            accidentListView.setAdapter(accidentListAdapter);
+            accidentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(context, AccidentFactory.getInstance(null).getAccidentList().get(position).toString(), Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (NullPointerException nexcp) {
+            ((Activity) (context)).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     accidentListView.setVisibility(View.GONE);
@@ -55,18 +67,6 @@ public class AccidentResultAsyncTask extends AsyncTask {
                 }
             });
         }
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Object o) {
-        accidentListView.setAdapter(accidentListAdapter);
-        accidentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(context, AccidentFactory.getInstance(null).getAccidentList().get(position).toString(), Toast.LENGTH_LONG).show();
-            }
-        });
         super.onPostExecute(o);
     }
 }

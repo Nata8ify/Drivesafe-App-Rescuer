@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
-import com.sitsenior.g40.weewhorescuer.models.extra.LatLng;
 
 import java.util.List;
-import java.util.zip.Inflater;
 
 /**
  * Created by PNattawut on 01-Aug-17.

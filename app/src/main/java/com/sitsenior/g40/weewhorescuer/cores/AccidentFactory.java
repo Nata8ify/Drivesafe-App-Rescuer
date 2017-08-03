@@ -10,13 +10,12 @@ import java.util.List;
  */
 
 public class AccidentFactory {
+    private static AccidentFactory accidentFactory;
     private List<Accident> accidentList; // Accident List for Total Accidents of Today;
     private List<Accident> awaitAccidentList; // Accident List for Code 'A';
     private List<Accident> goingForRescueAccidentList; // Accident List for Code 'G';
     private List<Accident> rescuingAccidentList; // Accident List for Code 'R';
     private List<Accident> closedAccidentList; // Accident List for Code 'C';
-
-    private static AccidentFactory accidentFactory;
 
     public static AccidentFactory getInstance(List<Accident> accidentList){
         if(accidentFactory == null){

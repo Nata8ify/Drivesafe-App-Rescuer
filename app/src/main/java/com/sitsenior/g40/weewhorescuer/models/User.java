@@ -11,15 +11,14 @@ package com.sitsenior.g40.weewhorescuer.models;
  */
 public class User {
 
+    private static User user;
     private long userId;
     private String username;
     private String password;
-    private char userType;
     //User Type are specify by 
     //'T' is a Rescuer/Monitoring and 
     //'M' is a General User.
-
-    private static User user;
+    private char userType;
 
     public User(String username, String password, char userType) {
         this.username = username;

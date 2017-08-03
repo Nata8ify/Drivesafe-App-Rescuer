@@ -1,7 +1,6 @@
 package com.sitsenior.g40.weewhorescuer.cores;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,15 +10,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.sitsenior.g40.weewhorescuer.R;
-import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
-import com.sitsenior.g40.weewhorescuer.models.extra.LatLng;
-
-import java.security.Permission;
 
 /**
  * Created by PNattawut on 02-Aug-17.
@@ -34,14 +29,7 @@ public class LocationFactory {
     private static LocationManager locationManager;
     private static LocationListener locationListener;
     private static LatLng latLng;
-
-    public static LocationFactory getInstance(final Context context) {
-        if (locationFactory == null) {
-            LocationFactory.context = context;
-            locationFactory = new LocationFactory();
-        }
-        return locationFactory;
-    }
+    private boolean locationActivated;
 
     public LocationFactory() {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -50,7 +38,7 @@ public class LocationFactory {
             public void onLocationChanged(Location location) {
                 Log.d("Loc Changef ", location.getAltitude()+"");
                 setLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-                Log.d("latlng", getLatLng().getLatitude()+" : "+getLatLng().getLongitude());
+                Log.d("latlng", getLatLng().latitude+" : "+getLatLng().longitude);
                 locationActivated = true;
             }
 
@@ -71,7 +59,13 @@ public class LocationFactory {
         };
     }
 
-    private boolean locationActivated;
+    public static LocationFactory getInstance(final Context context) {
+        if (locationFactory == null) {
+            LocationFactory.context = context;
+            locationFactory = new LocationFactory();
+        }
+        return locationFactory;
+    }
 
     public void activatedLocation() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

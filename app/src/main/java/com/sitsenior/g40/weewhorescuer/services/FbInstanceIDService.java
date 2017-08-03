@@ -6,8 +6,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.io.IOException;
-
 /**
  * Created by PNattawut on 01-May-17.
  */

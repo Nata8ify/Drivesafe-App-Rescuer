@@ -26,7 +26,7 @@
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>
     <string name="warn_no_location_permission">This Application need the Location Permission or else this module will not function.</string>
-    <string name="warn_no_accidents">There are no accident occured by now (We wish it\'s still untill the end of the day or maybe long as it possible)</string>
+    <string name="warn_no_accidents">There are no accident occured by now \n(We wish it\'s still until the end of the day or maybe long as it possible)</string>
     <string name="title_activity_maps">Map</string>
 
     <!--Class-->

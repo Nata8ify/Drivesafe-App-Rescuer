@@ -5,6 +5,7 @@
  */
 package com.sitsenior.g40.weewhorescuer.models.extra;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 /**

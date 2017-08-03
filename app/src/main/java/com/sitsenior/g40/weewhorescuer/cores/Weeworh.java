@@ -2,17 +2,13 @@ package com.sitsenior.g40.weewhorescuer.cores;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
-import com.sitsenior.g40.weewhorescuer.models.User;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -21,8 +17,9 @@ import java.util.concurrent.ExecutionException;
 
 public class Weeworh {
 
-    private static Context context;
     public static Weeworh weeworh;
+    private static Context context;
+
     public static Weeworh with(Context context){
         if(weeworh == null){
             weeworh = new Weeworh();

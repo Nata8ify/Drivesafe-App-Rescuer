@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
  * @author PNattawut
  */
 public class Profile {
+    private static Profile profile;
     private long userId;
     private String firstName;
     private String lastName;
@@ -22,7 +23,6 @@ public class Profile {
     private int age;
     private char gender;
 
-    private static Profile profile;
     public static Profile getInsatance(){
         if(profile == null){
             profile = new Profile();
