@@ -42,8 +42,9 @@
         android:paddingTop="10dp">
 
         <Button
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Action" />
+            android:text="@string/mainnav_going"
+            android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 </RelativeLayout>

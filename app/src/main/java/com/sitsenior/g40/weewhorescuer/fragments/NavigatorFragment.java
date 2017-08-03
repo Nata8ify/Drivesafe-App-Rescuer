@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
+import com.sitsenior.g40.weewhorescuer.models.Accident;
 
 import org.w3c.dom.Text;
 
@@ -52,6 +53,7 @@ public class NavigatorFragment extends Fragment {
         txtNavigatorTitle = (TextView) getView().findViewById(R.id.txt_navtitle);
         txtNavigatorDescription = (TextView) getView().findViewById(R.id.txt_navdesc);
         txtNavigatorDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude));
+        txtNavigatorTitle.setText(getContext().getResources().getString(R.string.mainnav_curposition));
 
         /* Google Map and Map View Setting */
         navMapView = (MapView) getView().findViewById(R.id.map_navmap);
@@ -72,17 +74,18 @@ public class NavigatorFragment extends Fragment {
                 googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title("Current Place").snippet("Your Current Place"));
 
                 // For zooming automatically to the location of the marker
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(current).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
             }
         });
-        Log.d("onStart", "onStart");
+        Log.d("nav onStart", "onStart");
         super.onStart();
     }
 
     @Override
     public void onResume() {
+        Log.d("nav onResume", "onResume");
         super.onResume();
         navMapView.onResume();
     }
@@ -90,6 +93,7 @@ public class NavigatorFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("nav on pause", "D");
         navMapView.onPause();
     }
 
@@ -104,4 +108,11 @@ public class NavigatorFragment extends Fragment {
         super.onDestroy();
         navMapView.onDestroy();
     }
+
+
+    public void viewAccidentDataandLocation(Accident accident){
+        Log.d("selected acc" , accident.toString());
+    }
+
+    public static final int NAVIGATOR_PAGE = 2;
 }

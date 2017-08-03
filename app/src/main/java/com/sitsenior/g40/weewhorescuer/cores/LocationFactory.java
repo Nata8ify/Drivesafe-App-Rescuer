@@ -36,9 +36,7 @@ public class LocationFactory {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                Log.d("Loc Changef ", location.getAltitude()+"");
                 setLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-                Log.d("latlng", getLatLng().latitude+" : "+getLatLng().longitude);
                 locationActivated = true;
             }
 

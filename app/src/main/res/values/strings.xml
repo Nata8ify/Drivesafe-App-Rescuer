@@ -11,7 +11,16 @@
     <string name="login_nouser">Invalid User Data, Please Check your \'Username\' or \'Password\' is valid.</string>
 
     <!--Main-->
-    <string name="main_wheewhor">WheeWhor</string>
+    <string name="main_weeworh">WeeWorh</string>
+    <string name="main_waiting_gps">Waiting for location service...</string>
+    <!-- Main - Overview -->
+    <!-- Main - Navigator -->
+    <string name="mainnav_curposition">Your Current Position is ...</string>
+    <string name="mainnav_going">Copy! I\'m Going Now</string>
+    <string name="mainnav_rescued">Rescued</string>
+    <string name="mainnav_errs">There are no Incident Around Here</string>
+    <!-- Main - Configuration -->
+
 
     <!--Simple-->
     <string name="ok">OKAY</string>

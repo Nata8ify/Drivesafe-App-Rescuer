@@ -1,9 +1,11 @@
 package com.sitsenior.g40.weewhorescuer.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
@@ -24,7 +27,6 @@ import com.sitsenior.g40.weewhorescuer.models.Profile;
  */
 
 public class OverviewFragment extends Fragment {
-
     private LinearLayout emptyAccidentResultLayout;
     private ListAdapter accidentListAdapter;
     private ListView accidentListView;
@@ -54,8 +56,12 @@ public class OverviewFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Accident accident = AccidentFactory.getInstance(null).getAccidentList().get(position);
                 Toast.makeText(getContext(), accident.toString(), Toast.LENGTH_LONG).show();
+                AccidentFactory.getInstance(null).setSelectAccident(accident);
+                MainActivity.mainViewPager.setCurrentItem(NavigatorFragment.NAVIGATOR_PAGE);
+                ((MainActivity)getActivity()).getNavigatorFragment().viewAccidentDataandLocation(accident);
             }
         });
     }
 
+    public static final int OVERVIEW_PAGE = 1;
 }

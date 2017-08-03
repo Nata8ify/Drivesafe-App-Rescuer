@@ -3,6 +3,7 @@ package com.sitsenior.g40.weewhorescuer;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
@@ -17,7 +18,7 @@ import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPager mainViewPager;
+    public static ViewPager mainViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +34,14 @@ public class MainActivity extends AppCompatActivity {
     private Handler mainHandler;
     private Runnable mainRunnable;
 
+    private ProgressDialog mainProgressDialog;
     @Override
     protected void onStart() {
         super.onStart();
-        final ProgressDialog waitGpsProgressDialog = new ProgressDialog(this);
-        waitGpsProgressDialog.setMessage("Waiting Location Service...");
-        waitGpsProgressDialog.setCancelable(false);
-        waitGpsProgressDialog.show();
+        mainProgressDialog = new ProgressDialog(this);
+        mainProgressDialog.setMessage(getResources().getString(R.string.main_waiting_gps));
+        mainProgressDialog.setCancelable(false);
+        mainProgressDialog.show();
         mainHandler = new Handler();
         mainRunnable = (new Runnable() {
             @Override
@@ -48,20 +50,38 @@ public class MainActivity extends AppCompatActivity {
                     mainHandler.postDelayed(this, 1000);
                     return;
                 }
-                waitGpsProgressDialog.dismiss();
                 setMainViewPager(mainViewPager);
+
+                mainProgressDialog.dismiss();
             }
         });
         mainHandler.post(mainRunnable);
     }
 
+    private ConfigurationFragment configurationFragment;
+    private OverviewFragment overviewFragment;
+    private NavigatorFragment navigatorFragment;
     public void setMainViewPager(ViewPager viewPager){
         MainActivityTabSectionAdapter adapter = new MainActivityTabSectionAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ConfigurationFragment(), "Configuration");
-        adapter.addFragment(new OverviewFragment(), "Overview");
-        adapter.addFragment(new NavigatorFragment(), "Navigator");
+        this.configurationFragment = new ConfigurationFragment();
+        this.overviewFragment = new OverviewFragment();
+        this.navigatorFragment = new NavigatorFragment();
+        adapter.addFragment(configurationFragment, "Configuration");
+        adapter.addFragment(overviewFragment, "Overview");
+        adapter.addFragment(navigatorFragment, "Navigator");
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(1);
+        viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
     }
 
+    public ConfigurationFragment getConfigurationFragment() {
+        return configurationFragment;
+    }
+
+    public OverviewFragment getOverviewFragment() {
+        return overviewFragment;
+    }
+
+    public NavigatorFragment getNavigatorFragment() {
+        return navigatorFragment;
+    }
 }

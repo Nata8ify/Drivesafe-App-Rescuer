@@ -17,6 +17,8 @@ public class AccidentFactory {
     private List<Accident> rescuingAccidentList; // Accident List for Code 'R';
     private List<Accident> closedAccidentList; // Accident List for Code 'C';
 
+    private Accident selectAccident;
+
     public static AccidentFactory getInstance(List<Accident> accidentList){
         if(accidentFactory == null){
             accidentFactory = new AccidentFactory();
@@ -87,5 +89,13 @@ public class AccidentFactory {
 
     public List<Accident> getClosedAccidentList() {
         return closedAccidentList;
+    }
+
+    public Accident getSelectAccident() {
+        return selectAccident;
+    }
+
+    public void setSelectAccident(Accident selectAccident) {
+        this.selectAccident = selectAccident;
     }
 }
