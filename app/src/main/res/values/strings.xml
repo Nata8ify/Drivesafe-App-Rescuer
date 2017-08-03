@@ -16,6 +16,9 @@
     <!-- Main - Overview -->
     <!-- Main - Navigator -->
     <string name="mainnav_curposition">Your Current Position is ...</string>
+    <string name="mainnav_marker_curposition_title">You\'re Here</string>
+    <string name="mainnav_marker_curposition_snipet">*</string>
+    <string name="mainnav_marker_desposition_title">Destination</string>
     <string name="mainnav_going">Copy! I\'m Going Now</string>
     <string name="mainnav_rescued">Rescued</string>
     <string name="mainnav_errs">There are no Incident Around Here</string>

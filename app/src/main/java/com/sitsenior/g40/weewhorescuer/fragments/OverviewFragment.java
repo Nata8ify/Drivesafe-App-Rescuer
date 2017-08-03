@@ -55,7 +55,6 @@ public class OverviewFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Accident accident = AccidentFactory.getInstance(null).getAccidentList().get(position);
-                Toast.makeText(getContext(), accident.toString(), Toast.LENGTH_LONG).show();
                 AccidentFactory.getInstance(null).setSelectAccident(accident);
                 MainActivity.mainViewPager.setCurrentItem(NavigatorFragment.NAVIGATOR_PAGE);
                 ((MainActivity)getActivity()).getNavigatorFragment().viewAccidentDataandLocation(accident);

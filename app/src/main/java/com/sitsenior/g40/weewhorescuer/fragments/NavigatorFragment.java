@@ -2,6 +2,7 @@ package com.sitsenior.g40.weewhorescuer.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -12,6 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.akexorcist.googledirection.DirectionCallback;
+import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.model.Direction;
+import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -40,6 +46,7 @@ public class NavigatorFragment extends Fragment {
     private TextView txtNavigatorDescription;
 
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
+    private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
     @Nullable
     @Override
@@ -111,7 +118,30 @@ public class NavigatorFragment extends Fragment {
 
 
     public void viewAccidentDataandLocation(Accident accident){
-        Log.d("selected acc" , accident.toString());
+        googleMap.clear();
+        LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
+        LatLng des = new LatLng(accident.getLatitude(), accident.getLongitude());
+        Log.d("selected acc" , current.toString()+" : "+des.toString());
+        googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title(getString(R.string.mainnav_marker_curposition_title)));
+        googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(getString(R.string.mainnav_marker_desposition_title)));
+        GoogleDirection.withServerKey(N8IFY_GOOGLE_MAPS_DIRECTION_KEY)
+                .from(LocationFactory.getInstance(null).getLatLng())
+                .to(new LatLng(accident.getLatitude(), accident.getLongitude()))
+                .transportMode(TransportMode.TRANSIT)
+                .execute(new DirectionCallback() {
+                    @Override
+                    public void onDirectionSuccess(Direction direction, String rawBody) {
+                        if(direction.isOK()){
+                            Log.d("rawBody", rawBody);
+                            googleMap.addPolyline(DirectionConverter.createPolyline(getContext(), direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint(), 5, Color.RED));
+                        }
+                    }
+
+                    @Override
+                    public void onDirectionFailure(Throwable t) {
+
+                    }
+                });
     }
 
     public static final int NAVIGATOR_PAGE = 2;
