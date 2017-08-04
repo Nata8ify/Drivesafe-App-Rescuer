@@ -38,18 +38,18 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler mainHandler;
     private Runnable mainRunnable;
-
+    private boolean waitSetting = false;
     private ProgressDialog mainProgressDialog;
     @Override
     protected void onStart() {
         super.onStart();
+        if(mainProgressDialog == null){
         mainProgressDialog = new ProgressDialog(this);
         mainProgressDialog.setMessage(getResources().getString(R.string.main_waiting_gps));
         mainProgressDialog.setCancelable(false);
-        mainProgressDialog.show();
+        mainProgressDialog.show();}
         mainHandler = new Handler();
         mainRunnable = (new Runnable() {
-            private boolean waitSetting = false;
             private AlertDialog reqLocationDialog;
             @Override
             public void run() {
@@ -66,19 +66,20 @@ public class MainActivity extends AppCompatActivity {
                                 .setPositiveButton(MainActivity.this.getResources().getString(R.string.main_btn_tosetting), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQCODE_LOCATION_SOURCE);
                                     }
                                 })
                                 .setCancelable(false)
                                 .create();
                         if (!waitSetting) {
                             reqLocationDialog.show();
+                            waitSetting = true;
                         }
-                        waitSetting = true;
                     }
                     mainHandler.postDelayed(this, 2000);
                     return;
                 }
+                if(reqLocationDialog!=null){reqLocationDialog.dismiss();}
                 setMainViewPager(mainViewPager);
                 mainProgressDialog.dismiss();
                 mainHandler.removeCallbacks(this);
@@ -87,6 +88,21 @@ public class MainActivity extends AppCompatActivity {
         mainHandler.post(mainRunnable);
     }
 
+    private static final int REQCODE_LOCATION_SOURCE = 0x1;
+    private static final int REQCODE_INTERNET = 0x2;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode != RESULT_OK){
+            waitSetting = false;
+            return;
+        }
+        switch(requestCode){
+            case REQCODE_LOCATION_SOURCE : break;
+        }
+    }
+
+    /* Pager Set up */
     private ConfigurationFragment configurationFragment;
     private OverviewFragment overviewFragment;
     private NavigatorFragment navigatorFragment;

@@ -141,7 +141,7 @@ public class NavigatorFragment extends Fragment {
                     @Override
                     public void onDirectionSuccess(Direction direction, String rawBody) {
                         if(direction.isOK()){
-                            googleMap.addPolyline(DirectionConverter.createPolyline(getContext(), direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint(), 5, Color.RED));
+                            googleMap.addPolyline(DirectionConverter.createPolyline(getContext(), direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint(), 8, Color.RED));
                             double midLat = ((current.latitude+des.latitude)/2d);
                             double midLng = ((current.longitude+des.longitude)/2d);
                             float zoom = 14;

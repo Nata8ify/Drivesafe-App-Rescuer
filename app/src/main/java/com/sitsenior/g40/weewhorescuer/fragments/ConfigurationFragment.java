@@ -21,4 +21,8 @@ public class ConfigurationFragment extends Fragment {
     }
 
     public static final int CONFIGURATION_PAGE = 0;
+    static class ActivityResultCode{
+        private static final int REQCODE_LOCATION_SOURCE = 0x1;
+        private static final int REQCODE_INTERNET = 0x2;
+    }
 }
