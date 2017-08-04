@@ -94,7 +94,7 @@ public class AccidentFactory {
     }
 
     public void setAccidentList(List<Accident> accidentList) {
-        sortByCode(accidentList, new char[]{Accident.ACC_CODE_A, Accident.ACC_CODE_G, Accident.ACC_CODE_R});
+        /*sortByCode(accidentList, new char[]{Accident.ACC_CODE_A, Accident.ACC_CODE_G, Accident.ACC_CODE_R});*/
         this.accidentList = accidentList;
     }
 

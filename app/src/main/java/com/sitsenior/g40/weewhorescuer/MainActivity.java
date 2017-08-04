@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                                 .setPositiveButton(MainActivity.this.getResources().getString(R.string.main_btn_tosetting), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), REQCODE_LOCATION_SOURCE);
+                                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                                     }
                                 })
                                 .setCancelable(false)
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(navigatorFragment, "Navigator");
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
+
     }
 
     public ConfigurationFragment getConfigurationFragment() {
@@ -129,4 +130,5 @@ public class MainActivity extends AppCompatActivity {
     public NavigatorFragment getNavigatorFragment() {
         return navigatorFragment;
     }
+
 }

@@ -43,13 +43,6 @@ public class Weeworh {
                     .setBodyParameter(Param.usrn, username)
                     .setBodyParameter(Param.pswd, password)
                     .as(Profile.class)
-                    .setCallback(new FutureCallback<Profile>() {
-                        @Override
-                        public void onCompleted(Exception e, Profile result) {
-                            if(result == null){
-                            }
-                        }
-                    })
                     .get();
             Profile.getInsatance().set(rescuerProfile);
         } catch (InterruptedException e) {
@@ -84,6 +77,7 @@ public class Weeworh {
                     .setBodyParameter(Param.userId, String.valueOf(userId))
                     .as(TypeToken.get(new TypeToken<List<Accident>>(){}.getType()))
                     .get();
+            Log.d("accs", accidents.toString());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

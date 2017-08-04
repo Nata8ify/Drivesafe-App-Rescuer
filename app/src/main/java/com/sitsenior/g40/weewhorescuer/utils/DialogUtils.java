@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.R;
 
@@ -50,4 +51,13 @@ public class DialogUtils {
         return progressDialog;
     }
 
+
+    public void shortToast(String message){
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public void longToast(String message){
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
 }

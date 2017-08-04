@@ -44,15 +44,15 @@ public class AccidentResultAsyncTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] params) {
-        AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(Profile.getInsatance().getUserId()));
-            accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).getAccidentList());
+        AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(1));
+        accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).getAccidentList());
         return null;
     }
 
     @Override
     protected void onPostExecute(Object o) {
         try {
-            accidentListView.setAdapter(accidentListAdapter);
+           accidentListView.setAdapter(accidentListAdapter);
         } catch (NullPointerException nexcp) {
             ((Activity) (context)).runOnUiThread(new Runnable() {
                 @Override
