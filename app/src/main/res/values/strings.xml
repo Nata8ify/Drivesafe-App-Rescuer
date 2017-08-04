@@ -8,7 +8,9 @@
     <string name="login_password">Password</string>
     <string name="login_register">Register</string>
     <string name="login_login">Login</string>
-    <string name="login_nouser">Invalid User Data, Please Check your \'Username\' or \'Password\' is valid.</string>
+    <string name="login_loading">Loading...</string>
+    <string name="login_problem_title">Login is Unsuccessfuly</string>
+    <string name="login_problem_message">Please be ensured that \n\n 1. Login Data is valid (Username and Password). \n\n 2. The Internet Connection is Established. \n\n</string>
 
     <!--Main-->
     <string name="main_weeworh">WeeWorh</string>
@@ -25,6 +27,8 @@
     <string name="mainnav_btn_going">Copy! I\'m Going Now</string>
     <string name="mainnav_btn_userinfo">User\'s Information</string>
     <string name="mainnav_rescued">Rescued</string>
+    <string name="mainnav_from_curposition"> estimated from your position.</string>
+    <string name="mainnav_on_sight"> This incident may on the sight by now.</string>
     <string name="mainnav_errs">There are no Incident Around Here</string>
     <!-- Main - Configuration -->
 
@@ -38,6 +42,7 @@
     <string name="acknowledge">Acknowledge</string>
     <string name="on">ON</string>
     <string name="off">OFF</string>
+    <string name="kms"> Km \(s\)</string>
 
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>

@@ -44,7 +44,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] params) {
-        AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(1));
+        AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(Profile.getInsatance().getUserId()));
             accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).getAccidentList());
         return null;
     }

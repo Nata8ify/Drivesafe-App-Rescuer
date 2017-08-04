@@ -68,6 +68,16 @@
                     android:layout_below="@+id/txt_desnavtitle"
                     android:layout_marginTop="5dp"
                     android:text="Loading..." />
+
+                <TextView
+                    android:id="@+id/txt_estdistance"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_desnavdesc"
+                    android:layout_marginTop="5dp"
+                    android:text="Loading..."
+                    android:textSize="12dp"
+                    android:textStyle="italic"/>
             </RelativeLayout>
 
             <RelativeLayout

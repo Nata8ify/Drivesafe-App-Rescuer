@@ -68,12 +68,12 @@ public class AccidentFactory {
     }
 
     private static void sortByCode(List<Accident> accidentList, char[] codes){
-        Collections.sort(accidentList, Collections.reverseOrder(new Comparator<Accident>() {
+        Collections.sort(accidentList, new Comparator<Accident>() {
             @Override
             public int compare(Accident accident, Accident t1) {
                 return accident.getTime().compareTo(t1.getTime());
             }
-        }));
+        });
         List<Accident> tempAccidentList = null;
         for(char code : codes){
             if(tempAccidentList == null){tempAccidentList = new ArrayList<>();}

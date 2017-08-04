@@ -51,6 +51,7 @@ public class NavigatorFragment extends Fragment {
     private RelativeLayout destinationDetailRelativeLayout;
     private RelativeLayout actionDetailRelativeLayout;
     private TextView txtDestinationDescription;
+    private TextView txtNavigatorEstimatedDistance;
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
@@ -68,6 +69,7 @@ public class NavigatorFragment extends Fragment {
         txtDestinationDescription = (TextView) getView().findViewById(R.id.txt_desnavdesc);
         txtNavigatorTitle = (TextView) getView().findViewById(R.id.txt_curnavtitle);
         txtNavigatorDescription = (TextView) getView().findViewById(R.id.txt_curnavdesc);
+        txtNavigatorEstimatedDistance = (TextView) getView().findViewById(R.id.txt_estdistance);
         txtNavigatorDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(current));
 
         /* Google Map and Map View Setting */
@@ -169,6 +171,7 @@ public class NavigatorFragment extends Fragment {
         destinationDetailRelativeLayout.setVisibility(View.VISIBLE);
         actionDetailRelativeLayout.setVisibility(View.VISIBLE);
         txtDestinationDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(des));
+        txtNavigatorEstimatedDistance.setText(String.valueOf(estimatedDistance).concat(getString(R.string.kms)).concat(getString(R.string.mainnav_from_curposition)));
     }
 
     public static final int NAVIGATOR_PAGE = 2;

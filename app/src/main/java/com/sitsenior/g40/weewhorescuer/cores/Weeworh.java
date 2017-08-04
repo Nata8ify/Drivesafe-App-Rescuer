@@ -2,9 +2,13 @@ package com.sitsenior.g40.weewhorescuer.cores;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Handler;
+import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 
@@ -19,24 +23,33 @@ public class Weeworh {
 
     public static Weeworh weeworh;
     private static Context context;
-
     public static Weeworh with(Context context){
         if(weeworh == null){
-            weeworh = new Weeworh();
+            weeworh = new Weeworh(context);
         }
-        Weeworh.context = context;
+
         return weeworh;
     }
 
+    public Weeworh(Context context) {
+        Weeworh.context = context;
+    }
     public Profile login(String username, String password){
         Profile rescuerProfile = null;
         try {
             rescuerProfile = Ion.with(context)
                     .load(Url.RESCUER_LOGIN)
-                    .progressDialog(new ProgressDialog(context))
+                    .setTimeout(5000)
                     .setBodyParameter(Param.usrn, username)
                     .setBodyParameter(Param.pswd, password)
                     .as(Profile.class)
+                    .setCallback(new FutureCallback<Profile>() {
+                        @Override
+                        public void onCompleted(Exception e, Profile result) {
+                            if(result == null){
+                            }
+                        }
+                    })
                     .get();
             Profile.getInsatance().set(rescuerProfile);
         } catch (InterruptedException e) {
@@ -45,6 +58,22 @@ public class Weeworh {
             e.printStackTrace();
         }
         return rescuerProfile;
+    }
+
+    public Profile getReportUserInformation(long userId){
+        Profile reportUserProfile = null;
+        try {
+            reportUserProfile = Ion.with(context)
+                    .load(Url.GET_REPORT_USER_INFO)
+                    .setBodyParameter("userId", String.valueOf(userId))
+                    .as(Profile.class)
+                    .get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return reportUserProfile;
     }
 
     public List<Accident> getInBoundTodayIncidents(long userId){
@@ -67,6 +96,7 @@ public class Weeworh {
         public static final String HOST = "http://54.169.83.168:8080/WeeWorh-1.0-SNAPSHOT/";
         public static final String RESCUER_LOGIN = HOST.concat("RescuerIn?opt=login&utyp=t");
         public static final String GET_TODAY_INBOUND_ACCIDENTS = HOST.concat("RescuerIn?opt=get_boundactacc");
+        public static final String GET_REPORT_USER_INFO = HOST.concat("RescuerIn?opt=get_userinfo");
     }
 
     class Param{
