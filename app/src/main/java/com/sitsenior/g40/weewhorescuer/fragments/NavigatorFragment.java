@@ -69,18 +69,18 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        context = getActivity().getApplicationContext();
+        context = getContext();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View inflateNavigatorView = inflater.inflate(R.layout.fragment_navigator, container, false);
-        destinationDetailRelativeLayout = (RelativeLayout)  inflateNavigatorView.findViewById(R.id.reltvlout_desposition_details);
+        destinationDetailRelativeLayout = (RelativeLayout) inflateNavigatorView.findViewById(R.id.reltvlout_desposition_details);
         actionDetailRelativeLayout = (RelativeLayout) inflateNavigatorView.findViewById(R.id.reltvlout_action);
         txtDestinationDescription = (TextView) inflateNavigatorView.findViewById(R.id.txt_desnavdesc);
         txtNavigatorTitle = (TextView) inflateNavigatorView.findViewById(R.id.txt_curnavtitle);
-        txtNavigatorDescription = (TextView)inflateNavigatorView.findViewById(R.id.txt_curnavdesc);
+        txtNavigatorDescription = (TextView) inflateNavigatorView.findViewById(R.id.txt_curnavdesc);
         txtNavigatorEstimatedDistance = (TextView) inflateNavigatorView.findViewById(R.id.txt_estdistance);
         btnImGoing = (Button) inflateNavigatorView.findViewById(R.id.btn_going);
         btnReportUserInfo = (Button) inflateNavigatorView.findViewById(R.id.btn_userdetail);
@@ -95,9 +95,12 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         LatLng current = LocationFactory.getInstance(null).getLatLng();
         txtNavigatorDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(current));
         /* Google Map and Map View Setting */
+        MapsInitializer.initialize(this.getActivity());
+        initialMap(navMapView, googleMap);
 
-            MapsInitializer.initialize(this.getActivity());
-            initialMap(navMapView, googleMap);
+        /* Onlick Overrid Stuffs */
+        btnImGoing.setOnClickListener(this);
+        btnReportUserInfo.setOnClickListener(this);
         Log.d("nav onStart", "onStart");
         super.onStart();
     }
@@ -134,8 +137,10 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         navMapView.onLowMemory();
     }
 
-    /** Initialize Google Map */
-    public void initialMap(MapView mapView, GoogleMap googleMap){
+    /**
+     * Initialize Google Map
+     */
+    public void initialMap(MapView mapView, GoogleMap googleMap) {
         navMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -157,7 +162,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         });
     }
 
-    public void viewAccidentDataandLocation(Accident accident){
+    public void viewAccidentDataandLocation(Accident accident) {
         /* Map and Location */
         googleMap.clear();
         final LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
@@ -172,20 +177,20 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 .execute(new DirectionCallback() {
                     @Override
                     public void onDirectionSuccess(Direction direction, String rawBody) {
-                        if(direction.isOK()){
+                        if (direction.isOK()) {
                             googleMap.addPolyline(DirectionConverter.createPolyline(context, direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint(), 8, Color.RED));
-                            double midLat = ((current.latitude+des.latitude)/2d);
-                            double midLng = ((current.longitude+des.longitude)/2d);
+                            double midLat = ((current.latitude + des.latitude) / 2d);
+                            double midLng = ((current.longitude + des.longitude) / 2d);
                             float zoom = 14;
-                            if(estimatedDistance >= 100){
+                            if (estimatedDistance >= 100) {
                                 zoom = 6;
-                            } else if (estimatedDistance >= 81){
+                            } else if (estimatedDistance >= 81) {
                                 zoom = 8;
-                            } else if (estimatedDistance >= 27){
+                            } else if (estimatedDistance >= 27) {
                                 zoom = 10;
-                            } else if (estimatedDistance >= 9){
+                            } else if (estimatedDistance >= 9) {
                                 zoom = 12;
-                            } else if (estimatedDistance >= 3){
+                            } else if (estimatedDistance >= 3) {
                                 zoom = 13;
                             }
                             cameraPosition = new CameraPosition.Builder().target(new LatLng(midLat, midLng)).zoom(zoom).build();
@@ -198,10 +203,6 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                         //Location might be not existed.
                     }
                 });
-
-
-        new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getInstance(null).getSelectAccident().getUserId());
-
         destinationDetailRelativeLayout.setVisibility(View.VISIBLE);
         actionDetailRelativeLayout.setVisibility(View.VISIBLE);
         txtDestinationDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(des));
@@ -211,15 +212,14 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     /* Listener will be here. */
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
-            case  R.id.btn_going :
+        switch (view.getId()) {
+            case R.id.btn_going:
                 break;
-            case R.id.btn_userdetail :
-
+            case R.id.btn_userdetail:
+                new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getInstance(null).getSelectAccident().getUserId());
                 break;
         }
     }
-
 
 
     public static final int NAVIGATOR_PAGE = 2;

@@ -1,10 +1,19 @@
 package com.sitsenior.g40.weewhorescuer.cores;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
+import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 
 /**
  * Created by nata8ify on 5/8/2560.
@@ -12,10 +21,12 @@ import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
 
-    private Context contex;
+    private Context context;
+    private AlertDialog viewReportUserInfoDialog;
+    private Profile userProfile;
 
     public ViewReportUserInfoAsyncTask(Context contex) {
-        this.contex = contex;
+        this.context = contex;
     }
 
     @Override
@@ -26,7 +37,7 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
     @Override
     protected Void doInBackground(Long... userId) {
         /* User Data */
-        Profile userProfile = Weeworh.with(contex).getReportUserInformation(userId[0]);
+        userProfile = Weeworh.with(context).getReportUserInformation(userId[0]);
         Log.d("userProfile", userProfile.toString());
         return null;
     }
@@ -34,6 +45,28 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        showReportUserInfoDialog(userProfile);
+    }
+
+    public void showReportUserInfoDialog(Profile userProfile){
+        android.support.v7.app.AlertDialog reportUserDialog = new android.support.v7.app.AlertDialog.Builder(context)
+                .setPositiveButton(context.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).create();
+        View userInfoView = LayoutInflater.from(context).inflate(R.layout.view_userinfo, null);
+        TextView txtUInfoName = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_name));
+        txtUInfoName.setText(userProfile.getFirstName().concat(" ").concat(userProfile.getLastName()));
+        TextView txtUInfoPersonalId = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_personno));
+        txtUInfoPersonalId.setText(String.valueOf(userProfile.getPersonalId()));
+        TextView txtUInfoAddress = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_address));
+        txtUInfoAddress.setText(userProfile.getAddress1().concat(userProfile.getAddress2() != null ? "\n".concat(userProfile.getAddress2()) : ""));
+        TextView txtUInfoPhoneNo = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_phoneno));
+        txtUInfoPhoneNo.setText(userProfile.getPhoneNumber());
+        reportUserDialog.setView(userInfoView);
+        reportUserDialog.show();
     }
 
 }

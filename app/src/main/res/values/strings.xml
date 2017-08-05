@@ -55,4 +55,11 @@
     <string name="title_activity_maps">Map</string>
 
     <!--Class-->
+
+    <!-- Absolate View -->
+    <string name="vwuinfo_name">Report By : </string>
+    <string name="vwuinfo_personno">Peronal ID : </string>
+    <string name="vwuinfo_address">Reporter\'s Address : </string>
+    <string name="vwuinfo_phoneno">Phone Number : </string>
+
 </resources>

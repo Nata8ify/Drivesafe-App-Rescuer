@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linrlout_uinfo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow android:layout_height="wrap_content" android:layout_width="match_parent">
+
+            <TextView
+                style="@style/MediumBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vwuinfo_name" />
+
+            <TextView
+                style="@style/Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_uinfo_name"/>
+        </TableRow>
+
+        <TableRow android:layout_height="wrap_content" android:layout_width="match_parent">
+
+            <TextView
+                style="@style/MediumBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vwuinfo_personno" />
+
+            <TextView
+                style="@style/Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_uinfo_personno"/>
+        </TableRow>
+
+        <TableRow android:layout_height="wrap_content" android:layout_width="match_parent">
+
+            <TextView
+                style="@style/MediumBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+            android:text="@string/vwuinfo_address" />
+
+            <TextView
+                style="@style/Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_uinfo_address"/>
+        </TableRow>
+    </TableLayout>
+
+    <TableRow android:layout_height="wrap_content" android:layout_width="match_parent">
+
+        <TextView
+            style="@style/MediumBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vwuinfo_phoneno" />
+
+        <TextView
+            style="@style/Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_uinfo_phoneno"/>
+    </TableRow>
+</LinearLayout>

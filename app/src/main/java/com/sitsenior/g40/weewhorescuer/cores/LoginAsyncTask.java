@@ -43,6 +43,7 @@ public class LoginAsyncTask extends AsyncTask<String, Void, Void> {
         if (!(Profile.getInsatance().getUserId() == 0)) {
             Intent mainActivityIntent = new Intent(context, MainActivity.class);
             context.startActivity(mainActivityIntent);
+            //finished();
         } else {
             DialogUtils.getInstance(null).buildSimpleAlertDialog(context.getString(R.string.login_problem_title), context.getString(R.string.login_problem_message)).show();
         }
