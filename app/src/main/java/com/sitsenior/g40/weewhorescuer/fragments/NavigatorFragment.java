@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,9 +31,13 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.sitsenior.g40.weewhorescuer.R;
+import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
+import com.sitsenior.g40.weewhorescuer.cores.ViewReportUserInfoAsyncTask;
+import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
+import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 import org.w3c.dom.Text;
 
@@ -40,7 +45,7 @@ import org.w3c.dom.Text;
  * Created by PNattawut on 01-Aug-17.
  */
 
-public class NavigatorFragment extends Fragment {
+public class NavigatorFragment extends Fragment implements View.OnClickListener {
 
     private Context context;
 
@@ -55,6 +60,8 @@ public class NavigatorFragment extends Fragment {
     private RelativeLayout actionDetailRelativeLayout;
     private TextView txtDestinationDescription;
     private TextView txtNavigatorEstimatedDistance;
+    private Button btnImGoing;
+    private Button btnReportUserInfo;
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
@@ -75,6 +82,8 @@ public class NavigatorFragment extends Fragment {
         txtNavigatorTitle = (TextView) inflateNavigatorView.findViewById(R.id.txt_curnavtitle);
         txtNavigatorDescription = (TextView)inflateNavigatorView.findViewById(R.id.txt_curnavdesc);
         txtNavigatorEstimatedDistance = (TextView) inflateNavigatorView.findViewById(R.id.txt_estdistance);
+        btnImGoing = (Button) inflateNavigatorView.findViewById(R.id.btn_going);
+        btnReportUserInfo = (Button) inflateNavigatorView.findViewById(R.id.btn_userdetail);
         navMapView = (MapView) inflateNavigatorView.findViewById(R.id.map_navmap);
         navMapView.onCreate(savedInstanceState);
         navMapView.onResume();
@@ -149,6 +158,7 @@ public class NavigatorFragment extends Fragment {
     }
 
     public void viewAccidentDataandLocation(Accident accident){
+        /* Map and Location */
         googleMap.clear();
         final LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
         final LatLng des = new LatLng(accident.getLatitude(), accident.getLongitude());
@@ -188,10 +198,26 @@ public class NavigatorFragment extends Fragment {
                         //Location might be not existed.
                     }
                 });
+
+
+        new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getInstance(null).getSelectAccident().getUserId());
+
         destinationDetailRelativeLayout.setVisibility(View.VISIBLE);
         actionDetailRelativeLayout.setVisibility(View.VISIBLE);
         txtDestinationDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(des));
         txtNavigatorEstimatedDistance.setText(String.valueOf(estimatedDistance).concat(getString(R.string.kms)).concat(getString(R.string.mainnav_from_curposition)));
+    }
+
+    /* Listener will be here. */
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case  R.id.btn_going :
+                break;
+            case R.id.btn_userdetail :
+
+                break;
+        }
     }
 
 

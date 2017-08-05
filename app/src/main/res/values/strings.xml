@@ -45,7 +45,7 @@
     <string name="off">OFF</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="kms"> Km \(s\)</string>
+    <string name="kms">Km(s)</string>
 
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>

@@ -58,7 +58,7 @@ public class Weeworh {
         try {
             reportUserProfile = Ion.with(context)
                     .load(Url.GET_REPORT_USER_INFO)
-                    .setBodyParameter("userId", String.valueOf(userId))
+                    .setBodyParameter(Param.userId, String.valueOf(userId))
                     .as(Profile.class)
                     .get();
         } catch (InterruptedException e) {
