@@ -56,8 +56,8 @@ public class OverviewFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Accident accident = AccidentFactory.getInstance(null).getAccidentList().get(position);
                 AccidentFactory.getInstance(null).setSelectAccident(accident);
+                ((NavigatorFragment)getFragmentManager().findFragmentByTag("android:switcher:".concat(String.valueOf(R.id.vwpgr_main)).concat(":2"))).viewAccidentDataandLocation(accident);
                 MainActivity.mainViewPager.setCurrentItem(NavigatorFragment.NAVIGATOR_PAGE);
-                ((MainActivity)getActivity()).getNavigatorFragment().viewAccidentDataandLocation(accident);
             }
         });
     }

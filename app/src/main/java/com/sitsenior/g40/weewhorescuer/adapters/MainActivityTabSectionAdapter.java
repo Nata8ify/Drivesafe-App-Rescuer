@@ -27,6 +27,8 @@ public class MainActivityTabSectionAdapter extends FragmentPagerAdapter{
         this.tabTitleList.add(title);
     }
 
+
+
     @Override
     public Fragment getItem(int position) {
         return tabFragmentList.get(position);

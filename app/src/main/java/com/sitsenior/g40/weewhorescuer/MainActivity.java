@@ -20,6 +20,7 @@ import com.sitsenior.g40.weewhorescuer.fragments.ConfigurationFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(navigatorFragment, "Navigator");
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
-
+        viewPager.setOffscreenPageLimit(3);
     }
 
     public ConfigurationFragment getConfigurationFragment() {
@@ -131,4 +132,22 @@ public class MainActivity extends AppCompatActivity {
         return navigatorFragment;
     }
 
+
+    /* Override Other Listener */
+    boolean confirmOne = false;
+    @Override
+    public void onBackPressed() {
+        if(confirmOne){
+            moveTaskToBack(true);
+        } else {
+            confirmOne = !confirmOne;
+            DialogUtils.getInstance(MainActivity.this).shortToast(getResources().getString(R.string.main_double_tap_exit));
+            mainHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    confirmOne = !confirmOne;
+                }
+            }, 2000);
+        }
+    }
 }

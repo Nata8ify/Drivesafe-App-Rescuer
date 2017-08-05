@@ -1,11 +1,11 @@
 package com.sitsenior.g40.weewhorescuer.utils;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.R;
@@ -18,7 +18,7 @@ public class DialogUtils {
     private static Context context;
     private static DialogUtils dialogUtils;
 
-    public static DialogUtils getInstance(Context context){
+    public static DialogUtils getInstance(@NonNull  Context context){
         if(DialogUtils.dialogUtils == null){
             DialogUtils.dialogUtils = new DialogUtils(context);
         }
@@ -40,6 +40,23 @@ public class DialogUtils {
                         alertDialog.dismiss();
                     }
                 }).create();
+    }
+    public AlertDialog buildQuitAlertDialog(){
+        return alertDialog = new AlertDialog.Builder(context)
+                .setMessage(context.getResources().getString(R.string.warn_youre_quiting))
+                .setPositiveButton(context.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                    }
+                })
+                .setNegativeButton(context.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .create();
     }
 
     private ProgressDialog progressDialog;

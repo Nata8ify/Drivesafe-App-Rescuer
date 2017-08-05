@@ -17,6 +17,7 @@
     <string name="main_waiting_gps">Waiting for location service...</string>
     <string name="main_btn_tosetting">Go to Setting</string>
     <string name="main_btn_nope">No, and Close this Application</string>
+    <string name="main_double_tap_exit">Press back again to exit</string>
     <!-- Main - Overview -->
     <!-- Main - Navigator -->
     <string name="mainnav_curposition_title">Your Current Position is ...</string>
@@ -42,12 +43,15 @@
     <string name="acknowledge">Acknowledge</string>
     <string name="on">ON</string>
     <string name="off">OFF</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="kms"> Km \(s\)</string>
 
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>
     <string name="warn_no_location_permission">This Application need the Location Permission or else this module will not function.</string>
     <string name="warn_no_accidents">There are no accident occured by now \n(We hope it\'s still being until the end of the day or maybe long as it possible)</string>
+    <string name="warn_youre_quiting">Do you want to quit from Weeworh?</string>
     <string name="title_activity_maps">Map</string>
 
     <!--Class-->

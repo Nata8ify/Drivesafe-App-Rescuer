@@ -1,6 +1,7 @@
 package com.sitsenior.g40.weewhorescuer.fragments;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -41,6 +42,8 @@ import org.w3c.dom.Text;
 
 public class NavigatorFragment extends Fragment {
 
+    private Context context;
+
     private MapView navMapView;
     private GoogleMap googleMap;
     private CameraPosition cameraPosition;
@@ -55,47 +58,37 @@ public class NavigatorFragment extends Fragment {
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        context = getActivity().getApplicationContext();
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_navigator, container, false);
+        View inflateNavigatorView = inflater.inflate(R.layout.fragment_navigator, container, false);
+        destinationDetailRelativeLayout = (RelativeLayout)  inflateNavigatorView.findViewById(R.id.reltvlout_desposition_details);
+        actionDetailRelativeLayout = (RelativeLayout) inflateNavigatorView.findViewById(R.id.reltvlout_action);
+        txtDestinationDescription = (TextView) inflateNavigatorView.findViewById(R.id.txt_desnavdesc);
+        txtNavigatorTitle = (TextView) inflateNavigatorView.findViewById(R.id.txt_curnavtitle);
+        txtNavigatorDescription = (TextView)inflateNavigatorView.findViewById(R.id.txt_curnavdesc);
+        txtNavigatorEstimatedDistance = (TextView) inflateNavigatorView.findViewById(R.id.txt_estdistance);
+        navMapView = (MapView) inflateNavigatorView.findViewById(R.id.map_navmap);
+        navMapView.onCreate(savedInstanceState);
+        navMapView.onResume();
+        return inflateNavigatorView;
     }
 
     @Override
     public void onStart() {
         LatLng current = LocationFactory.getInstance(null).getLatLng();
-        destinationDetailRelativeLayout = (RelativeLayout)  getView().findViewById(R.id.reltvlout_desposition_details);
-        actionDetailRelativeLayout = (RelativeLayout)  getView().findViewById(R.id.reltvlout_action);
-        txtDestinationDescription = (TextView) getView().findViewById(R.id.txt_desnavdesc);
-        txtNavigatorTitle = (TextView) getView().findViewById(R.id.txt_curnavtitle);
-        txtNavigatorDescription = (TextView) getView().findViewById(R.id.txt_curnavdesc);
-        txtNavigatorEstimatedDistance = (TextView) getView().findViewById(R.id.txt_estdistance);
         txtNavigatorDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(current));
-
         /* Google Map and Map View Setting */
-        navMapView = (MapView) getView().findViewById(R.id.map_navmap);
-        navMapView.onCreate(getArguments());
-        navMapView.onResume();
-        MapsInitializer.initialize(getContext());
-        navMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                NavigatorFragment.this.googleMap = googleMap;
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                NavigatorFragment.this.googleMap.setMyLocationEnabled(true);
 
-                // For dropping a marker at a point on the Map
-                LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
-                googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title("Current Place").snippet("Your Current Place"));
-
-                // For zooming automatically to the location of the marker
-                cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-
-            }
-        });
+            MapsInitializer.initialize(this.getActivity());
+            initialMap(navMapView, googleMap);
         Log.d("nav onStart", "onStart");
         super.onStart();
     }
@@ -126,9 +119,36 @@ public class NavigatorFragment extends Fragment {
         navMapView.onDestroy();
     }
 
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        navMapView.onLowMemory();
+    }
+
+    /** Initialize Google Map */
+    public void initialMap(MapView mapView, GoogleMap googleMap){
+        navMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                NavigatorFragment.this.googleMap = googleMap;
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                NavigatorFragment.this.googleMap.setMyLocationEnabled(true);
+
+                // For dropping a marker at a point on the Map
+                LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
+                googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title("Current Place").snippet("Your Current Place"));
+
+                // For zooming automatically to the location of the marker
+                cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+            }
+        });
+    }
 
     public void viewAccidentDataandLocation(Accident accident){
-
         googleMap.clear();
         final LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
         final LatLng des = new LatLng(accident.getLatitude(), accident.getLongitude());
@@ -143,7 +163,7 @@ public class NavigatorFragment extends Fragment {
                     @Override
                     public void onDirectionSuccess(Direction direction, String rawBody) {
                         if(direction.isOK()){
-                            googleMap.addPolyline(DirectionConverter.createPolyline(getContext(), direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint(), 8, Color.RED));
+                            googleMap.addPolyline(DirectionConverter.createPolyline(context, direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint(), 8, Color.RED));
                             double midLat = ((current.latitude+des.latitude)/2d);
                             double midLng = ((current.longitude+des.longitude)/2d);
                             float zoom = 14;
@@ -173,6 +193,8 @@ public class NavigatorFragment extends Fragment {
         txtDestinationDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(des));
         txtNavigatorEstimatedDistance.setText(String.valueOf(estimatedDistance).concat(getString(R.string.kms)).concat(getString(R.string.mainnav_from_curposition)));
     }
+
+
 
     public static final int NAVIGATOR_PAGE = 2;
 }
