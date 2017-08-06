@@ -87,6 +87,8 @@ public class AccidentFactory {
         accidentList.addAll(tempAccidentList);
     }
 
+
+
     /* Getter List & Setter List */
 
     public List<Accident> getAccidentList() {

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,7 +59,9 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
 
     private RelativeLayout destinationDetailRelativeLayout;
     private RelativeLayout actionDetailRelativeLayout;
+    private ImageView imgAcctype;
     private TextView txtDestinationDescription;
+    private TextView txtAccidentType;
     private TextView txtNavigatorEstimatedDistance;
     private Button btnImGoing;
     private Button btnReportUserInfo;
@@ -78,7 +81,9 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         View inflateNavigatorView = inflater.inflate(R.layout.fragment_navigator, container, false);
         destinationDetailRelativeLayout = (RelativeLayout) inflateNavigatorView.findViewById(R.id.reltvlout_desposition_details);
         actionDetailRelativeLayout = (RelativeLayout) inflateNavigatorView.findViewById(R.id.reltvlout_action);
+        imgAcctype = (ImageView) inflateNavigatorView.findViewById(R.id.img_acctype);
         txtDestinationDescription = (TextView) inflateNavigatorView.findViewById(R.id.txt_desnavdesc);
+        txtAccidentType = (TextView) inflateNavigatorView.findViewById(R.id.txt_acctype);
         txtNavigatorTitle = (TextView) inflateNavigatorView.findViewById(R.id.txt_curnavtitle);
         txtNavigatorDescription = (TextView) inflateNavigatorView.findViewById(R.id.txt_curnavdesc);
         txtNavigatorEstimatedDistance = (TextView) inflateNavigatorView.findViewById(R.id.txt_estdistance);
@@ -205,8 +210,11 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 });
         destinationDetailRelativeLayout.setVisibility(View.VISIBLE);
         actionDetailRelativeLayout.setVisibility(View.VISIBLE);
+        Object[] accTypeProperties = getFullAccidentTypeProperties(accident.getAccType());
+        imgAcctype.setImageResource((int)accTypeProperties[1]);
+        txtAccidentType.setText((String)accTypeProperties[0]);
         txtDestinationDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(des));
-        txtNavigatorEstimatedDistance.setText(String.valueOf(estimatedDistance).concat(getString(R.string.kms)).concat(getString(R.string.mainnav_from_curposition)));
+        txtNavigatorEstimatedDistance.setText(String.valueOf(estimatedDistance).concat(" ").concat(getString(R.string.kms)).concat(" ").concat(getString(R.string.mainnav_from_curposition)));
     }
 
     /* Listener will be here. */
@@ -219,6 +227,42 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getInstance(null).getSelectAccident().getUserId());
                 break;
         }
+    }
+
+
+    /* Useful */
+    public Object[] getFullAccidentTypeProperties(byte accType){
+        Object[] accidentProps = new Object[2];
+        switch (accType){
+            case Accident.ACC_TYPE_TRAFFIC :
+                accidentProps[0] = getResources().getString(R.string.mainnav_acctype_traffic);
+                accidentProps[1] = getResources().getIdentifier("acctype_crash", "drawable", context.getPackageName());
+                break;
+            case Accident.ACC_TYPE_FIRE :
+                accidentProps[0] = getResources().getString(R.string.mainnav_acctype_fires);
+                accidentProps[1] = getResources().getIdentifier("acctype_fire", "drawable", context.getPackageName());
+                break;
+            case Accident.ACC_TYPE_PATIENT :
+                accidentProps[0] = getResources().getString(R.string.mainnav_acctype_patient);
+                accidentProps[1] = getResources().getIdentifier("acctype_patient", "drawable", context.getPackageName());
+                break;
+            case Accident.ACC_TYPE_ANIMAL :
+                accidentProps[0] = getResources().getString(R.string.mainnav_acctype_animal);
+                accidentProps[1] = getResources().getIdentifier("acctype_animal", "drawable", context.getPackageName());
+                break;
+            case Accident.ACC_TYPE_BRAWL :
+                accidentProps[0] = getResources().getString(R.string.mainnav_acctype_brawl);
+                accidentProps[1] = getResources().getIdentifier("acctype_brawl", "drawable", context.getPackageName());
+                break;
+            case Accident.ACC_TYPE_OTHER :
+                accidentProps[0] = getResources().getString(R.string.mainnav_acctype_other);
+                accidentProps[1] = getResources().getIdentifier("acctype_other", "drawable", context.getPackageName());
+                break;
+            default:
+                accidentProps[0] = getResources().getString(R.string.mainnav_acctype_unknown);
+                accidentProps[1] = getResources().getIdentifier("acctype_other", "drawable", context.getPackageName());
+        }
+        return accidentProps;
     }
 
 

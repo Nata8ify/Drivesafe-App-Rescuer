@@ -31,6 +31,13 @@
     <string name="mainnav_from_curposition"> estimated from your position.</string>
     <string name="mainnav_on_sight"> This incident may on the sight by now.</string>
     <string name="mainnav_errs">There are no Incident Around Here</string>
+    <string name="mainnav_acctype_traffic">Traffic Crash</string>
+    <string name="mainnav_acctype_fires">Fires</string>
+    <string name="mainnav_acctype_patient">Coma Patient</string>
+    <string name="mainnav_acctype_animal">Dangerous Animals / Animal Attack</string>
+    <string name="mainnav_acctype_brawl">Brawling</string>
+    <string name="mainnav_acctype_other">General Incident or Accident</string>
+    <string name="mainnav_acctype_unknown">Unknown Type</string>
     <!-- Main - Configuration -->
 
 
@@ -45,7 +52,7 @@
     <string name="off">OFF</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="kms">Km(s)</string>
+    <string name="kms"> Km(s) </string>
 
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>

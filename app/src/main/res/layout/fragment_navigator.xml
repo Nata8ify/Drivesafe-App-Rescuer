@@ -26,7 +26,8 @@
                 android:id="@+id/reltvlout_curposition_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp">
+                android:paddingTop="10dp"
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/txt_curnavtitle"
@@ -50,16 +51,52 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/reltvlout_curposition_details"
-                android:paddingTop="10dp"
-                android:visibility="gone">
+                android:paddingTop="10dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/linrlout_accinfo"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp">
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:id="@+id/img_acctype"
+                        android:src="@drawable/acctype_animal"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:layout_weight="6" android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txt_acctype"
+                            android:text="Animal Incident"
+                            android:textStyle="bold"
+                            android:textSize="18dp"/>
 
+                        <TextView
+                            android:id="@+id/txt_estdistance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_desnavdesc"
+                            android:layout_marginTop="5dp"
+                            android:text="3.14 Km(s) estimated from your position"
+                            android:textStyle="italic"/>
+                    </LinearLayout>
+                </LinearLayout>
                 <TextView
                     android:id="@+id/txt_desnavtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/mainnav_marker_desposition_title"
-                    android:textSize="22dp"
-                    android:textStyle="bold" />
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/linrlout_accinfo"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
 
                 <TextView
                     android:id="@+id/txt_desnavdesc"
@@ -69,15 +106,6 @@
                     android:layout_marginTop="5dp"
                     android:text="Loading..." />
 
-                <TextView
-                    android:id="@+id/txt_estdistance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txt_desnavdesc"
-                    android:layout_marginTop="5dp"
-                    android:text="Loading..."
-                    android:textSize="12dp"
-                    android:textStyle="italic"/>
             </RelativeLayout>
 
             <RelativeLayout
