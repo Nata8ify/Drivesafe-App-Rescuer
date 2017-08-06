@@ -197,15 +197,17 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                             double midLng = ((current.longitude + des.longitude) / 2d);
                             float zoom = 14;
                             if (estimatedDistance >= 100) {
-                                zoom = 6;
+                                zoom = 5;
                             } else if (estimatedDistance >= 81) {
-                                zoom = 8;
+                                zoom = 7;
                             } else if (estimatedDistance >= 27) {
-                                zoom = 10;
+                                zoom = 9;
                             } else if (estimatedDistance >= 9) {
-                                zoom = 12;
+                                zoom = 11;
                             } else if (estimatedDistance >= 3) {
                                 zoom = 13;
+                            } else {
+                                zoom = 15;
                             }
                             cameraPosition = new CameraPosition.Builder().target(new LatLng(midLat, midLng)).zoom(zoom).build();
                             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
