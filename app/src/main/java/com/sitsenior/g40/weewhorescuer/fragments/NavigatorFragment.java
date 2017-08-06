@@ -233,6 +233,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
+                Weeworh.with(context).setGoingCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId());
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getInstance(null).getSelectAccident().getUserId());
