@@ -26,8 +26,7 @@
                 android:id="@+id/reltvlout_curposition_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:visibility="gone">
+                android:paddingTop="10dp">
 
                 <TextView
                     android:id="@+id/txt_curnavtitle"
@@ -51,7 +50,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/reltvlout_curposition_details"
-                android:paddingTop="10dp">
+                android:paddingTop="10dp"
+                android:visibility="gone">
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

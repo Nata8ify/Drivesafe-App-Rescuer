@@ -57,6 +57,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private TextView txtNavigatorTitle;
     private TextView txtNavigatorDescription;
 
+    private RelativeLayout currentPositionDetailRelativeLayout;
     private RelativeLayout destinationDetailRelativeLayout;
     private RelativeLayout actionDetailRelativeLayout;
     private ImageView imgAcctype;
@@ -79,6 +80,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View inflateNavigatorView = inflater.inflate(R.layout.fragment_navigator, container, false);
+        currentPositionDetailRelativeLayout = (RelativeLayout) inflateNavigatorView.findViewById(R.id.reltvlout_curposition_details);
         destinationDetailRelativeLayout = (RelativeLayout) inflateNavigatorView.findViewById(R.id.reltvlout_desposition_details);
         actionDetailRelativeLayout = (RelativeLayout) inflateNavigatorView.findViewById(R.id.reltvlout_action);
         imgAcctype = (ImageView) inflateNavigatorView.findViewById(R.id.img_acctype);
@@ -154,7 +156,14 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     return;
                 }
                 NavigatorFragment.this.googleMap.setMyLocationEnabled(true);
-
+                NavigatorFragment.this.googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                    @Override
+                    public boolean onMyLocationButtonClick() {
+                        txtNavigatorDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(LocationFactory.getInstance(null).getLatLng()));
+                        currentPositionDetailRelativeLayout.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                });
                 // For dropping a marker at a point on the Map
                 LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
                 googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title("Current Place").snippet("Your Current Place"));
@@ -208,6 +217,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                         //Location might be not existed.
                     }
                 });
+
+        currentPositionDetailRelativeLayout.setVisibility(View.GONE);
         destinationDetailRelativeLayout.setVisibility(View.VISIBLE);
         actionDetailRelativeLayout.setVisibility(View.VISIBLE);
         Object[] accTypeProperties = getFullAccidentTypeProperties(accident.getAccType());
@@ -264,7 +275,6 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         }
         return accidentProps;
     }
-
 
     public static final int NAVIGATOR_PAGE = 2;
 }
