@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.adapters.MainActivityTabSectionAdapter;
+import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         LocationFactory.getInstance(this);
         AddressFactory.getInstance(this);
         mainViewPager = (ViewPager)findViewById(R.id.vwpgr_main);
+        new AccidentResultAsyncTask(Profile.getInsatance(), MainActivity.this).execute();
 
     }
 
@@ -83,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
                 if(reqLocationDialog!=null){reqLocationDialog.dismiss();}
                 setMainViewPager(mainViewPager);
                 mainProgressDialog.dismiss();
+                //If Open from fcm then it shuld be redirected automatically.
+                /*if(AccidentFactory.getInstance(null).getSelectAccident() != null){
+                    navigatorFragment.viewAccidentDataandLocation(AccidentFactory.getInstance(null).getSelectAccident());
+                }*/
                 mainHandler.removeCallbacks(this);
             }
         });

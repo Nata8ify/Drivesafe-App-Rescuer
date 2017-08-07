@@ -23,6 +23,7 @@ import com.sitsenior.g40.weewhorescuer.models.Profile;
 public class AccidentResultAsyncTask extends AsyncTask {
 
     private Context context;
+    private boolean isIgnoreView;
     private LinearLayout emptyAccidentResultLayout;
     private ListView accidentListView;
     private ListAdapter accidentListAdapter;
@@ -36,6 +37,12 @@ public class AccidentResultAsyncTask extends AsyncTask {
         this.accidentListAdapter = accidentListAdapter;
     }
 
+    public AccidentResultAsyncTask(Profile profile, Context context){
+        this.isIgnoreView = true;
+        this.profile = profile;
+        this.context = context;
+    }
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -44,13 +51,15 @@ public class AccidentResultAsyncTask extends AsyncTask {
 
     @Override
     protected Object doInBackground(Object[] params) {
-        AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(1));
+        AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(Profile.getInsatance().getUserId()));
+        if(isIgnoreView){return null;}
         accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).getAccidentList());
         return null;
     }
 
     @Override
     protected void onPostExecute(Object o) {
+        if(isIgnoreView){return;}
         try {
            accidentListView.setAdapter(accidentListAdapter);
         } catch (NullPointerException nexcp) {

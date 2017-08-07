@@ -22,7 +22,7 @@ public class FbInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         FirebaseMessaging.getInstance().subscribeToTopic("incident");
-        FirebaseMessaging.getInstance().subscribeToTopic("updatecode");
+        FirebaseMessaging.getInstance().subscribeToTopic("update");
         Log.d("TOKEN GEN ", "Refreshed token: " + refreshedToken);
     }
 }
