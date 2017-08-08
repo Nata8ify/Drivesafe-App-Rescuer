@@ -28,9 +28,11 @@ public class AccidentResultAsyncTask extends AsyncTask {
     private ListView accidentListView;
     private ListAdapter accidentListAdapter;
     private Profile profile;
+    private long userId;
 
     public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, ListView accidentListView, ListAdapter accidentListAdapter) {
         this.profile = profile;
+        this.userId = profile.getUserId();
         this.context = context;
         this.emptyAccidentResultLayout = emptyAccidentResultLayout;
         this.accidentListView = accidentListView;
@@ -40,18 +42,18 @@ public class AccidentResultAsyncTask extends AsyncTask {
     public AccidentResultAsyncTask(Profile profile, Context context){
         this.isIgnoreView = true;
         this.profile = profile;
+        this.userId = profile.getUserId();
         this.context = context;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        Log.d("profile ", profile.toString());
     }
 
     @Override
     protected Object doInBackground(Object[] params) {
-        AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(Profile.getInsatance().getUserId()));
+        AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(userId));
         if(isIgnoreView){return null;}
         accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).getAccidentList());
         return null;

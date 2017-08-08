@@ -1,5 +1,6 @@
 package com.sitsenior.g40.weewhorescuer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -59,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn_login:
                 new LoginAsyncTask(this, chkboxRememberme.isChecked()).execute(edtxtLoginUsername.getText().toString(), edtxtLoginPassword.getText().toString());
-                //startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 break;
             case R.id.btn_register:
                 //TODO
@@ -74,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         Profile.set(rememberProfile);
         if(Profile.getInsatance().getUserId() != 0){
             Log.d("LOGIN", Profile.getInsatance().toString());
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
         } else {
             Log.d("LOGIN", "No Remember Now");
         }
