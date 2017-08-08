@@ -12,6 +12,8 @@ import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 
+import io.realm.Realm;
+
 /**
  * Created by PNattawut on 04-Aug-17.
  */
@@ -19,9 +21,11 @@ import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 public class LoginAsyncTask extends AsyncTask<String, Void, Void> {
     private ProgressDialog loginLoadingProgressDialog;
     private Context context;
+    private boolean isRememberMe;
 
-    public LoginAsyncTask(Context context) {
-        this.context = context;
+    public LoginAsyncTask(Context context, boolean isRememberMe) {
+        this.context = context; this.isRememberMe = isRememberMe;
+
     }
 
     @Override
@@ -43,9 +47,18 @@ public class LoginAsyncTask extends AsyncTask<String, Void, Void> {
         if (!(Profile.getInsatance().getUserId() == 0)) {
             Intent mainActivityIntent = new Intent(context, MainActivity.class);
             context.startActivity(mainActivityIntent);
-            //finished();
+            if(isRememberMe) {rememberMe();}
         } else {
             DialogUtils.getInstance(null).buildSimpleAlertDialog(context.getString(R.string.login_problem_title), context.getString(R.string.login_problem_message)).show();
         }
+    }
+
+    public void rememberMe(){
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.getConfiguration();
+        realm.copyToRealm(Profile.getInsatance());
+        realm.commitTransaction();
+
     }
 }

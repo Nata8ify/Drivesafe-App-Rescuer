@@ -3,6 +3,7 @@ package com.sitsenior.g40.weewhorescuer;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
@@ -144,7 +145,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(confirmOne){
-            moveTaskToBack(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                finishAffinity();
+            } else {
+                finish();
+            }
         } else {
             confirmOne = !confirmOne;
             DialogUtils.getInstance(MainActivity.this).shortToast(getResources().getString(R.string.main_double_tap_exit));

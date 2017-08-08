@@ -7,11 +7,13 @@ package com.sitsenior.g40.weewhorescuer.models;
 
 import android.support.annotation.NonNull;
 
+import io.realm.RealmObject;
+
 /**
  *
  * @author PNattawut
  */
-public class Profile {
+public class Profile extends RealmObject{
     private static Profile profile;
     private long userId;
     private String firstName;
@@ -21,7 +23,7 @@ public class Profile {
     private String address1;
     private String address2;
     private int age;
-    private char gender;
+    private String gender;
 
     public static Profile getInsatance(){
         if(profile == null){
@@ -99,11 +101,11 @@ public class Profile {
         this.age = age;
     }
 
-    public char getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(char gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
