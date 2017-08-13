@@ -18,6 +18,7 @@ import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
+import com.sitsenior.g40.weewhorescuer.cores.WaitLocationAsyncTask;
 import com.sitsenior.g40.weewhorescuer.fragments.ConfigurationFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
@@ -35,8 +36,9 @@ public class MainActivity extends AppCompatActivity {
         LocationFactory.getInstance(this);
         AddressFactory.getInstance(this);
         mainViewPager = (ViewPager)findViewById(R.id.vwpgr_main);
+        mainHandler = new Handler();
         new AccidentResultAsyncTask(Profile.getInsatance(), MainActivity.this).execute();
-
+        new WaitLocationAsyncTask(MainActivity.this, mainViewPager).execute();
     }
 
 
@@ -47,53 +49,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(mainProgressDialog == null){
-        mainProgressDialog = new ProgressDialog(this);
-        mainProgressDialog.setMessage(getResources().getString(R.string.main_waiting_gps));
-        mainProgressDialog.setCancelable(false);
-        mainProgressDialog.show();}
-        mainHandler = new Handler();
-        mainRunnable = (new Runnable() {
-            private AlertDialog reqLocationDialog;
-            @Override
-            public void run() {
-                if(!LocationFactory.getInstance(null).isLocationActivated()) {
-                    if(!LocationFactory.getInstance(null).isGPSProviderEnabled() && !waitSetting) {
-                        reqLocationDialog = new AlertDialog.Builder(MainActivity.this)
-                                .setMessage(MainActivity.this.getResources().getString(R.string.warn_no_location_permission))
-                                .setNegativeButton(MainActivity.this.getResources().getString(R.string.main_btn_nope), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        MainActivity.this.finish();
-                                    }
-                                })
-                                .setPositiveButton(MainActivity.this.getResources().getString(R.string.main_btn_tosetting), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                    }
-                                })
-                                .setCancelable(false)
-                                .create();
-                        if (!waitSetting) {
-                            reqLocationDialog.show();
-                            waitSetting = true;
-                        }
-                    }
-                    mainHandler.postDelayed(this, 2000);
-                    return;
-                }
-                if(reqLocationDialog!=null){reqLocationDialog.dismiss();}
-                setMainViewPager(mainViewPager);
-                mainProgressDialog.dismiss();
-                //If Open from fcm then it shuld be redirected automatically.
-                /*if(AccidentFactory.getInstance(null).getSelectAccident() != null){
-                    navigatorFragment.viewAccidentDataandLocation(AccidentFactory.getInstance(null).getSelectAccident());
-                }*/
-                mainHandler.removeCallbacks(this);
-            }
-        });
-        mainHandler.post(mainRunnable);
+
     }
 
     private static final int REQCODE_LOCATION_SOURCE = 0x1;

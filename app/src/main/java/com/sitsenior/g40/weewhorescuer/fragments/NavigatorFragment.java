@@ -198,7 +198,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                             float zoom = 14;
                             if (estimatedDistance >= 100) {
                                 zoom = 5;
-                            } else if (estimatedDistance >= 81) {
+                            } else if (estimatedDistance >= 42) {
                                 zoom = 7;
                             } else if (estimatedDistance >= 27) {
                                 zoom = 9;
@@ -236,6 +236,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.btn_going:
                 Weeworh.with(context).setGoingCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId());
+                ((TextView) view).setText(getString(R.string.mainnav_btn_close));
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getInstance(null).getSelectAccident().getUserId());

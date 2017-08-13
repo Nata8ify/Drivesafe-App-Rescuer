@@ -27,6 +27,7 @@
     <string name="mainnav_marker_curposition_snipet">*</string>
     <string name="mainnav_marker_desposition_title">Destination</string>
     <string name="mainnav_btn_going">Copy! I\'m Going Now</string>
+    <string name="mainnav_btn_close">Rescued</string>
     <string name="mainnav_btn_userinfo">User\'s Information</string>
     <string name="mainnav_rescued">Rescued</string>
     <string name="mainnav_from_curposition"> estimated from your position.</string>
