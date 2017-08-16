@@ -70,7 +70,7 @@ public class LocationFactory {
             Toast.makeText(context, context.getResources().getString(R.string.warn_no_location_permission), Toast.LENGTH_LONG).show();
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         /*this.locationActivated = true;*/
     }
     public void deactivatedLocation(){

@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -26,11 +27,11 @@ public class AccidentResultAsyncTask extends AsyncTask {
     private boolean isIgnoreView;
     private LinearLayout emptyAccidentResultLayout;
     private ListView accidentListView;
-    private ListAdapter accidentListAdapter;
+    private ArrayAdapter accidentListAdapter;
     private Profile profile;
     private long userId;
 
-    public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, ListView accidentListView, ListAdapter accidentListAdapter) {
+    public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, ListView accidentListView, ArrayAdapter accidentListAdapter) {
         this.profile = profile;
         this.userId = profile.getUserId();
         this.context = context;

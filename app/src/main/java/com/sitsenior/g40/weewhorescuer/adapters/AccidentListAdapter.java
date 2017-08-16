@@ -30,12 +30,27 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
     private Context context;
     private int resource;
     private List<Accident> accidentList;
+    private static ArrayAdapter<Accident> accidentListAdapter;
+
+    public static ArrayAdapter<Accident> getInstance(ArrayAdapter<Accident> accidentListAdapter){
+        if(AccidentListAdapter.accidentListAdapter == null)
+            AccidentListAdapter.accidentListAdapter = accidentListAdapter;
+        if(accidentListAdapter != null)
+            AccidentListAdapter.accidentListAdapter = accidentListAdapter;
+
+        return accidentListAdapter;
+    }
 
     public AccidentListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Accident> accidentList) {
         super(context, resource, accidentList);
         this.context = context;
         this.resource = resource;
         this.accidentList = accidentList;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
     }
 
     @NonNull

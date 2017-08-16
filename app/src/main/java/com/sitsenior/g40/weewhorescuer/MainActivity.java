@@ -67,11 +67,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* Pager Set up */
+    private MainActivityTabSectionAdapter adapter;
     private ConfigurationFragment configurationFragment;
     private OverviewFragment overviewFragment;
     private NavigatorFragment navigatorFragment;
     public void setMainViewPager(ViewPager viewPager){
-        MainActivityTabSectionAdapter adapter = new MainActivityTabSectionAdapter(getSupportFragmentManager());
+        adapter = new MainActivityTabSectionAdapter(getSupportFragmentManager());
         this.configurationFragment = new ConfigurationFragment();
         this.overviewFragment = new OverviewFragment();
         this.navigatorFragment = new NavigatorFragment();
@@ -100,6 +101,10 @@ public class MainActivity extends AppCompatActivity {
     boolean confirmOne = false;
     @Override
     public void onBackPressed() {
+        if(mainViewPager.getCurrentItem() != OverviewFragment.OVERVIEW_PAGE){
+            mainViewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
+            return;
+        }
         if(confirmOne){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 finishAffinity();

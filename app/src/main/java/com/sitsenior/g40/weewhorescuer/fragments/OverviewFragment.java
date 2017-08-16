@@ -6,10 +6,13 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -19,6 +22,7 @@ import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
+import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 
@@ -28,8 +32,9 @@ import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 public class OverviewFragment extends Fragment {
     private LinearLayout emptyAccidentResultLayout;
-    private ListAdapter accidentListAdapter;
+    private ArrayAdapter accidentListAdapter;
     private ListView accidentListView;
+
     private Handler overviewHandler;
     private Runnable overviewRunnable;
 
@@ -44,7 +49,6 @@ public class OverviewFragment extends Fragment {
         super.onStart();
         accidentListView = (ListView) getView().findViewById(R.id.listvw_a_acclist);
         emptyAccidentResultLayout = (LinearLayout) getView().findViewById(R.id.linrlout_emptyacc);
-
         new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, accidentListView, accidentListAdapter).execute();
         setListener();
     }

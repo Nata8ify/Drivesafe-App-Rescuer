@@ -3,8 +3,8 @@ package com.sitsenior.g40.weewhorescuer.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -16,13 +16,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
 import com.akexorcist.googledirection.constant.TransportMode;
 import com.akexorcist.googledirection.model.Direction;
-import com.akexorcist.googledirection.util.DirectionConverter;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -38,9 +36,6 @@ import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.ViewReportUserInfoAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
-import com.sitsenior.g40.weewhorescuer.models.Profile;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -69,10 +64,13 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
+    private Handler navigationHandler;
+    private boolean isOnGoing;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        navigationHandler = new Handler();
         context = getContext();
     }
 
@@ -179,11 +177,13 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void viewAccidentDataandLocation(Accident accident) {
         /* Map and Location */
         googleMap.clear();
+        googleMap.getUiSettings().setMapToolbarEnabled(true);
         final LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
         final LatLng des = new LatLng(accident.getLatitude(), accident.getLongitude());
         final double estimatedDistance = AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(current, des);
-        googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title(getString(R.string.mainnav_marker_curposition_title)));
-        googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(getString(R.string.mainnav_marker_desposition_title)).snippet(AddressFactory.getInstance(null).getBriefLocationAddress(des)));
+        //googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title(getString(R.string.mainnav_marker_curposition_title)));
+        String desBriefAddress = AddressFactory.getInstance(null).getBriefLocationAddress(des);
+        googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(desBriefAddress.substring(0, desBriefAddress.indexOf(","))).snippet(desBriefAddress.substring(desBriefAddress.indexOf(",")+1)));
         GoogleDirection.withServerKey(N8IFY_GOOGLE_MAPS_DIRECTION_KEY)
                 .from(LocationFactory.getInstance(null).getLatLng())
                 .to(new LatLng(accident.getLatitude(), accident.getLongitude()))
@@ -192,11 +192,11 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     @Override
                     public void onDirectionSuccess(Direction direction, String rawBody) {
                         if (direction.isOK()) {
-                            googleMap.addPolyline(DirectionConverter.createPolyline(context, direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint(), 8, Color.RED));
-                            double midLat = ((current.latitude + des.latitude) / 2d);
-                            double midLng = ((current.longitude + des.longitude) / 2d);
-                            float zoom = 14;
-                            if (estimatedDistance >= 100) {
+                            //googleMap.addPolyline(DirectionConverter.createPolyline(context, direction.getRouteList().get(0).getLegList().get(0).getDirectionPoint(), 8, Color.RED));
+                            //double midLat = ((current.latitude + des.latitude) / 2d);
+                            //double midLng = ((current.longitude + des.longitude) / 2d);
+                            float zoom = 17;
+                            /*if (estimatedDistance >= 100) {
                                 zoom = 5;
                             } else if (estimatedDistance >= 42) {
                                 zoom = 7;
@@ -208,8 +208,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                                 zoom = 13;
                             } else {
                                 zoom = 15;
-                            }
-                            cameraPosition = new CameraPosition.Builder().target(new LatLng(midLat, midLng)).zoom(zoom).build();
+                            }*/
+                            cameraPosition = new CameraPosition.Builder().target(des).zoom(zoom).build();
                             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         }
                     }
@@ -235,7 +235,23 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
+                if(isOnGoing){return;}
                 Weeworh.with(context).setGoingCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId());
+                isOnGoing = true;
+                Runnable onGoingRunnable = new Runnable() {
+                    private final double CLOSEST_DISTANCE = 0.1D;
+                    @Override
+                    public void run() {
+                        if(AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getInstance(null).getSelectAccident().getLatitude(), AccidentFactory.getInstance(null).getSelectAccident().getLongitude())) <= CLOSEST_DISTANCE){
+                            isOnGoing = false;
+                            navigationHandler.removeCallbacks(this);
+                        } else {
+                                Log.d("NOT CLOESTE","NOT");
+                                navigationHandler.postDelayed(this, 10000L);
+                        }
+                    }
+                };
+                navigationHandler.post(onGoingRunnable);
                 ((TextView) view).setText(getString(R.string.mainnav_btn_close));
                 break;
             case R.id.btn_userdetail:

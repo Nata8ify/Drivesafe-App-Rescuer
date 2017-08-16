@@ -58,15 +58,29 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
                 }).create();
         View userInfoView = LayoutInflater.from(context).inflate(R.layout.view_userinfo, null);
         TextView txtUInfoName = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_name));
-        txtUInfoName.setText(userProfile.getFirstName().concat(" ").concat(userProfile.getLastName()));
+        txtUInfoName.setText(formatName(userProfile.getFirstName(), userProfile.getLastName()));
         TextView txtUInfoPersonalId = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_personno));
-        txtUInfoPersonalId.setText(String.valueOf(userProfile.getPersonalId()));
+        txtUInfoPersonalId.setText(formatPersonalId(userProfile.getPersonalId()));
         TextView txtUInfoAddress = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_address));
         txtUInfoAddress.setText(userProfile.getAddress1().concat(userProfile.getAddress2() != null ? "\n".concat(userProfile.getAddress2()) : ""));
         TextView txtUInfoPhoneNo = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_phoneno));
         txtUInfoPhoneNo.setText(userProfile.getPhoneNumber());
         reportUserDialog.setView(userInfoView);
         reportUserDialog.show();
+    }
+
+    public String formatName(String firstName, String lastName){
+        return firstName.concat(" ").concat(lastName);
+    }
+
+    public String formatPersonalId(long personalId){
+        StringBuilder formatPersonalIdBuilder = new StringBuilder(String.valueOf(personalId));
+        final String DASH = "-";
+        formatPersonalIdBuilder.insert(1,DASH);
+        formatPersonalIdBuilder.insert(6,DASH);
+        formatPersonalIdBuilder.insert(12,DASH);
+        formatPersonalIdBuilder.insert(15,DASH);
+        return  formatPersonalIdBuilder.toString();
     }
 
 }

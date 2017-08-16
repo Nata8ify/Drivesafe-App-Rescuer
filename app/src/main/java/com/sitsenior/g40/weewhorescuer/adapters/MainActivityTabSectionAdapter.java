@@ -15,6 +15,7 @@ public class MainActivityTabSectionAdapter extends FragmentPagerAdapter{
 
     private List<Fragment> tabFragmentList;
     private List<String> tabTitleList;
+    private int pageIndex;
 
     public MainActivityTabSectionAdapter(FragmentManager fm) {
         super(fm);
@@ -38,4 +39,6 @@ public class MainActivityTabSectionAdapter extends FragmentPagerAdapter{
     public int getCount() {
         return tabFragmentList.size();
     }
+
+
 }
