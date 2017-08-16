@@ -36,6 +36,7 @@ import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.ViewReportUserInfoAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
+import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -228,6 +229,14 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         txtAccidentType.setText((String)accTypeProperties[0]);
         txtDestinationDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(des));
         txtNavigatorEstimatedDistance.setText(String.valueOf(estimatedDistance).concat(" ").concat(getString(R.string.kms)).concat(" ").concat(getString(R.string.mainnav_from_curposition)));
+        if(Profile.getInsatance().getUserId() != accident.getResponsibleRescr() && accident.getResponsibleRescr() != 0){
+            btnImGoing.setVisibility(View.GONE);
+        } else {
+            btnImGoing.setText(getString(R.string.mainnav_btn_going));
+        }
+        if(Profile.getInsatance().getUserId() == accident.getResponsibleRescr() && accident.getAccCode() != Accident.ACC_CODE_A){
+            btnImGoing.setText(getString(R.string.mainnav_btn_close));
+        }
     }
 
     /* Listener will be here. */
