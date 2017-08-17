@@ -104,6 +104,24 @@ public class Weeworh {
         }
         return false;
     }
+    public boolean setRescuedCode(long accidentId){ //Code C (Closed)
+        Log.d("s",  accidentId+"");
+        try {
+            String response = Ion.with(context)
+                    .load(Url.SET_RESCUED_CODE)
+                    .setBodyParameter(Param.accidentId, String.valueOf(accidentId))
+                    .setBodyParameter(Param.responsibleRescr, String.valueOf(Profile.getInsatance().getUserId()))
+                    .asString()
+                    .get();
+            Log.d("s", response );
+            return true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     static class Url{
         public static final String HOST = "http://54.169.83.168:8080/WeeWorh-1.0-SNAPSHOT/"; //d
@@ -111,6 +129,7 @@ public class Weeworh {
         public static final String GET_TODAY_INBOUND_ACCIDENTS = HOST.concat("RescuerIn?opt=get_boundactacc");
         public static final String GET_REPORT_USER_INFO = HOST.concat("RescuerIn?opt=get_userinfo");
         public static final String SET_GOING_CODE = HOST.concat("RescuerIn?opt=set_ongoing");
+        public static final String SET_RESCUED_CODE = HOST.concat("RescuerIn?opt=set_closed");
     }
 
     class Param{

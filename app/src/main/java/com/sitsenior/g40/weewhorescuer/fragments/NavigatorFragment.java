@@ -2,14 +2,20 @@ package com.sitsenior.g40.weewhorescuer.fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,6 +35,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
@@ -66,12 +73,26 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
     private Handler navigationHandler;
+    private Runnable onGoingRunnable;
     private boolean isOnGoing;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         navigationHandler = new Handler();
+        onGoingRunnable = new Runnable() {
+            private final double CLOSEST_DISTANCE = 0.1D;
+            @Override
+            public void run() {
+                if(AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getInstance(null).getSelectAccident().getLatitude(), AccidentFactory.getInstance(null).getSelectAccident().getLongitude())) <= CLOSEST_DISTANCE){
+                    isOnGoing = false;
+                    navigationHandler.removeCallbacks(this);
+                } else {
+                    Log.d("NOT CLOESTE","NOT");
+                    navigationHandler.postDelayed(this, 10000L);
+                }
+            }
+        };
         context = getContext();
     }
 
@@ -107,6 +128,39 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         /* Onlick Overrid Stuffs */
         btnImGoing.setOnClickListener(this);
         btnReportUserInfo.setOnClickListener(this);
+
+        /* On.. stuffs */
+        MainActivity.mainViewPager.setOnTouchListener(new View.OnTouchListener() {
+            private final AlertDialog onGoingDialog = new AlertDialog.Builder(context)
+                    .setMessage(getString(R.string.mainnav_leave_nav))
+
+                    .setPositiveButton(getString(R.string.mainnav_stay_here), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.mainViewPager.setCurrentItem(NAVIGATOR_PAGE);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            MainActivity.mainViewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
+                        }
+                    })
+                    .setCancelable(false)
+                    .create();
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(AccidentFactory.getInstance(null).getSelectAccident() == null){ return false;}
+                if(MainActivity.mainViewPager.getCurrentItem() == NAVIGATOR_PAGE && AccidentFactory.getInstance(null).getSelectAccident().getAccCode() == Accident.ACC_CODE_G){
+                    if(!onGoingDialog.isShowing())
+                        onGoingDialog.show();
+                    return true;
+                } else {
+                    return false;
+                }
+
+            }
+        });
         Log.d("nav onStart", "onStart");
         super.onStart();
     }
@@ -244,22 +298,16 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
-                if(isOnGoing){return;}
+                if(isOnGoing){
+                    if(Weeworh.with(context).setRescuedCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId())) {
+                        navigationHandler.removeCallbacks(onGoingRunnable);
+                        btnImGoing.setVisibility(View.GONE);
+                        isOnGoing = false;
+                    }
+                    return;
+                }
                 Weeworh.with(context).setGoingCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId());
                 isOnGoing = true;
-                Runnable onGoingRunnable = new Runnable() {
-                    private final double CLOSEST_DISTANCE = 0.1D;
-                    @Override
-                    public void run() {
-                        if(AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getInstance(null).getSelectAccident().getLatitude(), AccidentFactory.getInstance(null).getSelectAccident().getLongitude())) <= CLOSEST_DISTANCE){
-                            isOnGoing = false;
-                            navigationHandler.removeCallbacks(this);
-                        } else {
-                                Log.d("NOT CLOESTE","NOT");
-                                navigationHandler.postDelayed(this, 10000L);
-                        }
-                    }
-                };
                 navigationHandler.post(onGoingRunnable);
                 ((TextView) view).setText(getString(R.string.mainnav_btn_close));
                 break;
@@ -268,6 +316,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 break;
         }
     }
+
 
 
     /* Useful */

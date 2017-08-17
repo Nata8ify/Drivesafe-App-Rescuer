@@ -40,6 +40,8 @@
     <string name="mainnav_acctype_brawl">Brawling</string>
     <string name="mainnav_acctype_other">General Incident or Accident</string>
     <string name="mainnav_acctype_unknown">Unknown Type</string>
+    <string name="mainnav_leave_nav">Do you want to leaving the Navigation Page?</string>
+    <string name="mainnav_stay_here">No, Let me stay</string>
     <!-- Main - Configuration -->
 
 

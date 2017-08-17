@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.adapters.MainActivityTabSectionAdapter;
@@ -64,36 +65,6 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode){
             case REQCODE_LOCATION_SOURCE : break;
         }
-    }
-
-    /* Pager Set up */
-    private MainActivityTabSectionAdapter adapter;
-    private ConfigurationFragment configurationFragment;
-    private OverviewFragment overviewFragment;
-    private NavigatorFragment navigatorFragment;
-    public void setMainViewPager(ViewPager viewPager){
-        adapter = new MainActivityTabSectionAdapter(getSupportFragmentManager());
-        this.configurationFragment = new ConfigurationFragment();
-        this.overviewFragment = new OverviewFragment();
-        this.navigatorFragment = new NavigatorFragment();
-        adapter.addFragment(configurationFragment, "Configuration");
-        adapter.addFragment(overviewFragment, "Overview");
-        adapter.addFragment(navigatorFragment, "Navigator");
-        viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
-        viewPager.setOffscreenPageLimit(3);
-    }
-
-    public ConfigurationFragment getConfigurationFragment() {
-        return configurationFragment;
-    }
-
-    public OverviewFragment getOverviewFragment() {
-        return overviewFragment;
-    }
-
-    public NavigatorFragment getNavigatorFragment() {
-        return navigatorFragment;
     }
 
 
