@@ -1,6 +1,7 @@
 package com.sitsenior.g40.weewhorescuer;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LoginAsyncTask;
+import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 
@@ -62,6 +64,9 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginAsyncTask(this, chkboxRememberme.isChecked()).execute(edtxtLoginUsername.getText().toString(), edtxtLoginPassword.getText().toString());
                 break;
             case R.id.btn_register:
+                Intent signUpIntent = new Intent(Intent.ACTION_VIEW);
+                signUpIntent.setData(Uri.parse(Weeworh.Url.RESCUER_REGISTER));
+                startActivity(signUpIntent);
                 //TODO
                 break;
         }

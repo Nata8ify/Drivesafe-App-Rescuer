@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Weeworh {
 
-    public static Weeworh weeworh;
+    private static Weeworh weeworh;
     private static Context context;
     public static Weeworh with(Context context){
         if(weeworh == null){
@@ -123,9 +123,10 @@ public class Weeworh {
         return false;
     }
 
-    static class Url{
+    public static class Url{
         public static final String HOST = "http://54.169.83.168:8080/WeeWorh-1.0-SNAPSHOT/"; //d
         public static final String RESCUER_LOGIN = HOST.concat("RescuerIn?opt=login&utyp=t");
+        public static final String RESCUER_REGISTER = HOST.concat("To?opt=rregis");
         public static final String GET_TODAY_INBOUND_ACCIDENTS = HOST.concat("RescuerIn?opt=get_boundactacc");
         public static final String GET_REPORT_USER_INFO = HOST.concat("RescuerIn?opt=get_userinfo");
         public static final String SET_GOING_CODE = HOST.concat("RescuerIn?opt=set_ongoing");
