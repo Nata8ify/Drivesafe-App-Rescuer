@@ -3,8 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="conf"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+            <TableRow>
+                <LinearLayout android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="8dp"
+                        android:text="@string/maincon_lang"/>
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spnr_langs"></Spinner>
+                </LinearLayout>
+            </TableRow>
+            <TableRow android:paddingTop="25dp">
+                <android.support.design.internal.BaselineLayout android:layout_weight="4"></android.support.design.internal.BaselineLayout>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/btn_logout"
+                    android:text="@string/maincon_logout"/>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
 </LinearLayout>

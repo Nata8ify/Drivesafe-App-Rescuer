@@ -74,7 +74,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
 
     private Handler navigationHandler;
     private Runnable onGoingRunnable;
-    private boolean isOnGoing;
+    public static boolean isOnGoing;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

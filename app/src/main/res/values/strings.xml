@@ -43,7 +43,13 @@
     <string name="mainnav_leave_nav">Do you want to leaving the Navigation Page?</string>
     <string name="mainnav_stay_here">No, Let me stay</string>
     <!-- Main - Configuration -->
-
+    <string name="maincon_lang">Language</string>
+    <string name="maincon_lockscr">Lock Screen</string>
+    <string name="maincon_logout">Logout</string>
+    <string-array name="maincon_langs">
+        <item>English</item>
+        <item>Thai</item>
+    </string-array>
 
     <!--Simple-->
     <string name="ok">OKAY</string>
