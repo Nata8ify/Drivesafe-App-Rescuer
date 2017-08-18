@@ -45,35 +45,18 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler mainHandler;
     private Runnable mainRunnable;
-    private boolean waitSetting = false;
-    private ProgressDialog mainProgressDialog;
     @Override
     protected void onStart() {
         super.onStart();
 
     }
 
-    private static final int REQCODE_LOCATION_SOURCE = 0x1;
-    private static final int REQCODE_INTERNET = 0x2;
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode != RESULT_OK){
-            waitSetting = false;
-            return;
-        }
-        switch(requestCode){
-            case REQCODE_LOCATION_SOURCE : break;
-        }
-    }
-
-
     /* Override Other Listener */
     boolean confirmOne = false;
     @Override
     public void onBackPressed() {
         if(mainViewPager.getCurrentItem() == NavigatorFragment.NAVIGATOR_PAGE && NavigatorFragment.isOnGoing){
-            Log.d(MAIN_TAG, "onBackPressed is Unauthorized");
+            Log.d(MAIN_TAG, "onBackPressed is not Allow");
             return;
         }
         if(mainViewPager.getCurrentItem() != OverviewFragment.OVERVIEW_PAGE){

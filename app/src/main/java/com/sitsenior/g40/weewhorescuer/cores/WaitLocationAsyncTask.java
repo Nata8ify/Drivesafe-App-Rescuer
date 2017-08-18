@@ -17,6 +17,7 @@ import com.sitsenior.g40.weewhorescuer.adapters.MainActivityTabSectionAdapter;
 import com.sitsenior.g40.weewhorescuer.fragments.ConfigurationFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
+import com.sitsenior.g40.weewhorescuer.models.Accident;
 
 /**
  * Created by nata8ify on 11/8/2560.
@@ -112,7 +113,9 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
 
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
-        viewPager.setOffscreenPageLimit(3);
+        if(AccidentFactory.getInstance(null).getSelectAccident() != null){
+            this.navigatorFragment.viewAccidentDataandLocation(AccidentFactory.getInstance(null).getSelectAccident());
+        }
     }
 
 }

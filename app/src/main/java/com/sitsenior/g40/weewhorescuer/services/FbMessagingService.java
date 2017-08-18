@@ -7,6 +7,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.google.gson.Gson;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
+import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 import java.sql.Date;
 import java.util.Map;
@@ -18,6 +19,7 @@ import java.util.Map;
 public class FbMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        if(Profile.getInsatance() == null){return;}
         super.onMessageReceived(remoteMessage);
         for (Map.Entry<String, String> data : remoteMessage.getData().entrySet()){
             Log.d("Entry ", data.getKey()+" : "+data.getValue());
