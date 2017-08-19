@@ -35,8 +35,11 @@ public class OverviewFragment extends Fragment {
     private ArrayAdapter accidentListAdapter;
     private ListView accidentListView;
 
+    private AccidentResultAsyncTask accAsyTask;
+
     private Handler overviewHandler;
     private Runnable overviewRunnable;
+
 
     @Nullable
     @Override
@@ -49,8 +52,25 @@ public class OverviewFragment extends Fragment {
         super.onStart();
         accidentListView = (ListView) getView().findViewById(R.id.listvw_a_acclist);
         emptyAccidentResultLayout = (LinearLayout) getView().findViewById(R.id.linrlout_emptyacc);
-        new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, accidentListView, accidentListAdapter).execute();
+        accAsyTask = new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, accidentListView, accidentListAdapter);
+        accAsyTask.execute();
+        overviewHandler = new Handler();
+        overviewRunnable = new Runnable() {
+            @Override
+            public void run() {
+                AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId()));
+                Log.d("accs-1", AccidentFactory.getInstance(null).getAccidentList().toString());
+                overviewHandler.postDelayed(this, 3000L);
+                //accAsyTask.getAccidentListAdapter().notifyDataSetChanged();
+            }
+        };
         setListener();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        overviewHandler.post(overviewRunnable);
     }
 
     public void setListener() {

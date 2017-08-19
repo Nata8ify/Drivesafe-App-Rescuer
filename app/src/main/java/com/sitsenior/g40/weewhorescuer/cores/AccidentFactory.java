@@ -25,6 +25,10 @@ public class AccidentFactory {
         if(accidentFactory == null){
             accidentFactory = new AccidentFactory();
             accidentFactory.setAccidentList(accidentList);
+        } else {
+            if(accidentList != null){
+                accidentFactory.setAccidentList(accidentList);
+            }
         }
         return accidentFactory;
     }

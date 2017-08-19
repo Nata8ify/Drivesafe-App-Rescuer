@@ -76,4 +76,20 @@ public class AccidentResultAsyncTask extends AsyncTask {
         }
         super.onPostExecute(o);
     }
+
+    public ListView getAccidentListView() {
+        return accidentListView;
+    }
+
+    public void setAccidentListView(ListView accidentListView) {
+        this.accidentListView = accidentListView;
+    }
+
+    public ArrayAdapter getAccidentListAdapter() {
+        return accidentListAdapter;
+    }
+
+    public void setAccidentListAdapter(ArrayAdapter accidentListAdapter) {
+        this.accidentListAdapter = accidentListAdapter;
+    }
 }
