@@ -51,9 +51,7 @@ public class ConfigurationFragment extends Fragment {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        realm.beginTransaction();
                         realm.where(Profile.class).findFirst().deleteFromRealm();
-                        realm.commitTransaction();
                     }
                 });
                 ((Activity)context).finish();

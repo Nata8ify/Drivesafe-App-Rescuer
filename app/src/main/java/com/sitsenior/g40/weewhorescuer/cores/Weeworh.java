@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.sitsenior.g40.weewhorescuer.R;
+import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 
@@ -114,6 +115,7 @@ public class Weeworh {
                     .asString()
                     .get();
             Log.d("s", response );
+            NavigatorFragment.isOnGoing = false;
             return true;
         } catch (InterruptedException e) {
             e.printStackTrace();

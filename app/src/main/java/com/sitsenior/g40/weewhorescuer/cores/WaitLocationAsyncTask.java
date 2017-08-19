@@ -112,6 +112,7 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
         adapter.addFragment(navigatorFragment, "Navigator");
 
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
         if(AccidentFactory.getInstance(null).getSelectAccident() != null){
             this.navigatorFragment.viewAccidentDataandLocation(AccidentFactory.getInstance(null).getSelectAccident());

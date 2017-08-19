@@ -11,17 +11,18 @@
             android:layout_height="wrap_content"
             android:padding="5dp">
             <TableRow>
-                <LinearLayout android:orientation="vertical">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="8dp"
-                        android:text="@string/maincon_lang"/>
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:text="@string/maincon_lang"
+                        android:layout_weight="1" />
                     <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/spnr_langs"></Spinner>
-                </LinearLayout>
+                        android:id="@+id/spnr_langs"
+                        android:layout_weight="1"></Spinner>
             </TableRow>
             <TableRow android:paddingTop="25dp">
                 <android.support.design.internal.BaselineLayout android:layout_weight="4"></android.support.design.internal.BaselineLayout>

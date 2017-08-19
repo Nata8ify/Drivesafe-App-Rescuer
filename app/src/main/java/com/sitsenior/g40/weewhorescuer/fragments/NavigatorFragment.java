@@ -137,7 +137,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     .setPositiveButton(getString(R.string.mainnav_stay_here), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.mainViewPager.setCurrentItem(NAVIGATOR_PAGE);
+                            MainActivity.mainViewPager.setCurrentItem(NAVIGATOR_PAGE, true);
                         }
                     })
                     .setNegativeButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
@@ -290,6 +290,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         }
         if(Profile.getInsatance().getUserId() == accident.getResponsibleRescr() && accident.getAccCode() != Accident.ACC_CODE_A){
             btnImGoing.setText(getString(R.string.mainnav_btn_close));
+            isOnGoing=true;
         }
     }
 
