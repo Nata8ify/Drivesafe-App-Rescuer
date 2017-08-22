@@ -126,7 +126,7 @@ public class Weeworh {
     }
 
     public static class Url{
-        public static final String HOST = "http://54.169.83.168:8080/WeeWorh-1.0-SNAPSHOT/"; //d
+        public static final String HOST = "http://54.254.187.201:8080/WeeWorh-1.0-SNAPSHOT/"; //d
         public static final String RESCUER_LOGIN = HOST.concat("RescuerIn?opt=login&utyp=t");
         public static final String RESCUER_REGISTER = HOST.concat("To?opt=rregis");
         public static final String GET_TODAY_INBOUND_ACCIDENTS = HOST.concat("RescuerIn?opt=get_boundactacc");
