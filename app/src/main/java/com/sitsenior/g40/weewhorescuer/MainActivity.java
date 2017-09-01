@@ -3,6 +3,7 @@ package com.sitsenior.g40.weewhorescuer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 public class MainActivity extends AppCompatActivity {
 
     public static ViewPager mainViewPager;
+    public static  TabLayout tabPage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         LocationFactory.getInstance(this);
         AddressFactory.getInstance(this);
         mainViewPager = (ViewPager)findViewById(R.id.vwpgr_main);
+        tabPage = (TabLayout)findViewById(R.id.tab_page);
         mainHandler = new Handler();
         new AccidentResultAsyncTask(Profile.getInsatance(), MainActivity.this).execute();
         new WaitLocationAsyncTask(MainActivity.this, mainViewPager).execute();

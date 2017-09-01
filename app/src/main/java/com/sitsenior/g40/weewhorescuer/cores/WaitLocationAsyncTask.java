@@ -7,11 +7,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.provider.Settings;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.adapters.MainActivityTabSectionAdapter;
 import com.sitsenior.g40.weewhorescuer.fragments.ConfigurationFragment;
@@ -106,12 +108,13 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
         this.configurationFragment = new ConfigurationFragment();
         this.overviewFragment = new OverviewFragment();
         this.navigatorFragment = new NavigatorFragment();
-        adapter.addFragment(configurationFragment, "Configuration");
-        adapter.addFragment(overviewFragment, "Overview");
-        adapter.addFragment(navigatorFragment, "Navigator");
+        adapter.addFragment(configurationFragment, context.getString(R.string.configuration));
+        adapter.addFragment(overviewFragment, context.getString(R.string.overview));
+        adapter.addFragment(navigatorFragment, context.getString(R.string.navigator));
 
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
+        MainActivity.tabPage.setupWithViewPager(viewPager);
         viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
         if(AccidentFactory.getInstance(null).getSelectAccident() != null){
             this.navigatorFragment.viewAccidentDataandLocation(AccidentFactory.getInstance(null).getSelectAccident());

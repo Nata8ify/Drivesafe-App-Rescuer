@@ -41,7 +41,7 @@ public class ConfigurationFragment extends Fragment {
         Realm.init(getContext());
         realm = Realm.getDefaultInstance();
         logoutAlertDialog = new AlertDialog.Builder(getContext())
-                .setMessage("Sure?")
+                .setMessage(getString(R.string.warn_youre_logout))
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

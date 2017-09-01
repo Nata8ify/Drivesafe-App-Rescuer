@@ -15,6 +15,9 @@
 
     <!--Main-->
     <string name="main_weeworh">WeeWorh</string>
+    <string name="overview">Overview</string>
+    <string name="configuration">Setting</string>
+    <string name="navigator">Navigator</string>
     <string name="main_waiting_gps">Waiting for location service...</string>
     <string name="main_btn_tosetting">Go to Setting</string>
     <string name="main_btn_nope">No, and Close this Application</string>
@@ -69,6 +72,7 @@
     <string name="warn_no_location_permission">This Application need the Location Permission or else this module will not function.</string>
     <string name="warn_no_accidents">There are no accident occured by now \n(We hope it\'s still being until the end of the day or maybe long as it possible)</string>
     <string name="warn_youre_quiting">Do you want to quit from Weeworh?</string>
+    <string name="warn_youre_logout">Do you want to log the system out?</string>
     <string name="title_activity_maps">Map</string>
 
     <!--Class-->
