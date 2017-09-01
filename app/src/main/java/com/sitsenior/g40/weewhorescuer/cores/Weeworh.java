@@ -1,14 +1,10 @@
 package com.sitsenior.g40.weewhorescuer.cores;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import com.google.gson.reflect.TypeToken;
-import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
-import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;

@@ -1,8 +1,6 @@
 package com.sitsenior.g40.weewhorescuer.cores;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
-import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 
 /**
  * Created by nata8ify on 5/8/2560.

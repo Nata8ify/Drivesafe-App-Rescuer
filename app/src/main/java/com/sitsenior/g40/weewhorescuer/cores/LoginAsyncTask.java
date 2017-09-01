@@ -1,12 +1,10 @@
 package com.sitsenior.g40.weewhorescuer.cores;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 
-import com.sitsenior.g40.weewhorescuer.LoginActivity;
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.models.Profile;

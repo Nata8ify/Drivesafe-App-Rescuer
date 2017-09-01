@@ -1,26 +1,16 @@
 package com.sitsenior.g40.weewhorescuer;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.sitsenior.g40.weewhorescuer.adapters.MainActivityTabSectionAdapter;
-import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.WaitLocationAsyncTask;
-import com.sitsenior.g40.weewhorescuer.fragments.ConfigurationFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
 import com.sitsenior.g40.weewhorescuer.models.Profile;

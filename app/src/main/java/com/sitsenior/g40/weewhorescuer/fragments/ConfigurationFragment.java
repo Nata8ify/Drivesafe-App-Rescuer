@@ -2,11 +2,12 @@ package com.sitsenior.g40.weewhorescuer.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +30,41 @@ public class ConfigurationFragment extends Fragment {
 
     private Context context;
 
+    private Realm realm;
     private Button logoutButton;
+    private AlertDialog logoutAlertDialog;
     private Spinner languageSpinner;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Realm.init(getContext());
+        realm = Realm.getDefaultInstance();
+        logoutAlertDialog = new AlertDialog.Builder(getContext())
+                .setMessage("Sure?")
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                Profile inAppProfile = realm.where(Profile.class).findFirst();
+                                if (inAppProfile != null) {
+                                    inAppProfile.deleteFromRealm();
+                                }
+                            }
+                        });
+                        getActivity().finish();
+                        startActivity(new Intent(getContext(), LoginActivity.class));
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .create();
         this.context = getContext();
         return inflater.inflate(R.layout.fragment_config, container, false);
     }
@@ -44,21 +74,6 @@ public class ConfigurationFragment extends Fragment {
     public void onStart() {
         super.onStart();
         logoutButton = (Button) getView().findViewById(R.id.btn_logout);
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Realm realm = Realm.getDefaultInstance();
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.where(Profile.class).findFirst().deleteFromRealm();
-                    }
-                });
-                ((Activity)context).finish();
-                startActivity(new Intent(context, LoginActivity.class));
-            }
-        });
-
         languageSpinner = (Spinner) getView().findViewById(R.id.spnr_langs);
         languageSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, context.getResources().getStringArray(R.array.maincon_langs)));
         languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -70,6 +85,16 @@ public class ConfigurationFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 //TODO
+            }
+        });
+        setListener();
+    }
+
+    private void setListener() {
+        this.logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logoutAlertDialog.show();
             }
         });
     }
