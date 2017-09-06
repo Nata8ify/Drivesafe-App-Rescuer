@@ -21,6 +21,7 @@ public class Accident {
     private double longitude;
     private double forceDetect;
     private float speedDetect;
+    private long responsibleRescr;
     /*-- accCode & accType is have very importance role.*/
     private byte accType;
     private char accCode;
@@ -31,27 +32,27 @@ public class Accident {
     public static final byte ACC_TYPE_ANIMAL = 4;
     public static final byte ACC_TYPE_PATIENT = 5;
     public static final byte ACC_TYPE_OTHER = 99;
-    
+
     /** A[Accident]: Pending for rescue */
     public static final char ACC_CODE_A = 'A';
-    
+
     /**G[Going]: Rescuer is on the way,  */
     public static final char ACC_CODE_G = 'G';
-    
+
     /**R[Resecue]: Rescuer is rescuing,  */
     public static final char ACC_CODE_R = 'R';
-    
+
     /**C[Clear]: Rescue received, marking will be cleared next time.   */
     public static final char ACC_CODE_C = 'C';
-    
+
     /**1[False on User] */
     public static final char ACC_CODE_ERRU = 'U';
-    
+
     /**2[False on System] */
     public static final char ACC_CODE_ERRS = 'S';
-    
-    
-    
+
+
+
     private static Accident accident;
 
     public Accident() {
@@ -191,6 +192,18 @@ public class Accident {
 
     public void setAccType(byte accType) {
         this.accType = accType;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getResponsibleRescr() {
+        return responsibleRescr;
+    }
+
+    public void setResponsibleRescr(long responsibleRescr) {
+        this.responsibleRescr = responsibleRescr;
     }
 
     @Override

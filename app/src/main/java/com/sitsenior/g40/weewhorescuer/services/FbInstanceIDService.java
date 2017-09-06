@@ -6,8 +6,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.io.IOException;
-
 /**
  * Created by PNattawut on 01-May-17.
  */
@@ -24,6 +22,7 @@ public class FbInstanceIDService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         FirebaseMessaging.getInstance().subscribeToTopic("incident");
+        FirebaseMessaging.getInstance().subscribeToTopic("update");
         Log.d("TOKEN GEN ", "Refreshed token: " + refreshedToken);
     }
 }

@@ -6,12 +6,53 @@
     <!--Login-->
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
+    <string name="login_rememberme">Remember Me</string>
     <string name="login_register">Register</string>
     <string name="login_login">Login</string>
-    <string name="login_nouser">Invalid User Data, Please Check your \'Username\' or \'Password\' is valid.</string>
+    <string name="login_loading">Loading...</string>
+    <string name="login_problem_title">Login is Unsuccessfuly</string>
+    <string name="login_problem_message">Please be ensured that \n\n 1. Login Data is valid (Username and Password). \n\n 2. The Internet Connection is Established. \n\n</string>
 
     <!--Main-->
-    <string name="main_wheewhor">WheeWhor</string>
+    <string name="main_weeworh">WeeWorh</string>
+    <string name="overview">Overview</string>
+    <string name="configuration">Setting</string>
+    <string name="navigator">Navigator</string>
+    <string name="main_waiting_gps">Waiting for location service...</string>
+    <string name="main_btn_tosetting">Go to Setting</string>
+    <string name="main_btn_nope">No, and Close this Application</string>
+    <string name="main_double_tap_exit">Press back again to exit</string>
+    <!-- Main - Overview -->
+    <!-- Main - Navigator -->
+    <string name="mainnav_curposition_title">Your Current Position is ...</string>
+    <string name="mainnav_navposition_title">Your Current Position is ...</string>
+    <string name="mainnav_marker_curposition_title">You\'re Here</string>
+    <string name="mainnav_marker_curposition_snipet">*</string>
+    <string name="mainnav_marker_desposition_title">Destination</string>
+    <string name="mainnav_btn_going">Copy! I\'m Going Now</string>
+    <string name="mainnav_btn_close">Rescued</string>
+    <string name="mainnav_btn_userinfo">User\'s Information</string>
+    <string name="mainnav_rescued">Rescued</string>
+    <string name="mainnav_from_curposition"> estimated from your position.</string>
+    <string name="mainnav_on_sight"> This incident may on the sight by now.</string>
+    <string name="mainnav_errs">There are no Incident Around Here</string>
+    <string name="mainnav_acctype_traffic">Traffic Crash</string>
+    <string name="mainnav_acctype_fires">Fires</string>
+    <string name="mainnav_acctype_patient">Coma Patient</string>
+    <string name="mainnav_acctype_animal">Dangerous Animals / Animal Attack</string>
+    <string name="mainnav_acctype_brawl">Brawling</string>
+    <string name="mainnav_acctype_other">General Incident or Accident</string>
+    <string name="mainnav_acctype_unknown">Unknown Type</string>
+    <string name="mainnav_leave_nav">Do you want to leaving the Navigation Page?</string>
+    <string name="mainnav_stay_here">No, Let me stay</string>
+    <!-- Main - Configuration -->
+    <string name="maincon_lang">Language</string>
+    <string name="maincon_lockscr">Lock Screen</string>
+    <string name="maincon_logout">Logout</string>
+    <string-array name="maincon_langs">
+        <item>English</item>
+        <item>Thai</item>
+    </string-array>
 
     <!--Simple-->
     <string name="ok">OKAY</string>
@@ -22,7 +63,24 @@
     <string name="acknowledge">Acknowledge</string>
     <string name="on">ON</string>
     <string name="off">OFF</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="kms"> Km(s) </string>
 
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>
+    <string name="warn_no_location_permission">This Application need the Location Permission or else this module will not function.</string>
+    <string name="warn_no_accidents">There are no accident occured by now \n(We hope it\'s still being until the end of the day or maybe long as it possible)</string>
+    <string name="warn_youre_quiting">Do you want to quit from Weeworh?</string>
+    <string name="warn_youre_logout">Do you want to log the system out?</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!--Class-->
+
+    <!-- Absolate View -->
+    <string name="vwuinfo_name">Report By : </string>
+    <string name="vwuinfo_personno">Personal ID : </string>
+    <string name="vwuinfo_address">Reporter\'s Address : </string>
+    <string name="vwuinfo_phoneno">Phone Number : </string>
+
 </resources>

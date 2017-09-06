@@ -1,9 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/map_navmap"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:padding="0dp"></com.google.android.gms.maps.MapView>
+
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="nav"/>
-</LinearLayout>
+        android:layout_below="@id/map_navmap"
+        android:paddingTop="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/reltvlout_curposition_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:id="@+id/txt_curnavtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mainnav_marker_curposition_title"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_curnavdesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_curnavtitle"
+                    android:layout_marginTop="5dp"
+                    android:text="Loading..." />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/reltvlout_desposition_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reltvlout_curposition_details"
+                android:paddingTop="10dp"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/linrlout_accinfo"
+                    android:orientation="horizontal"
+                    android:paddingBottom="16dp">
+                    <ImageView
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_weight="1"
+                        android:id="@+id/img_acctype"
+                        android:src="@drawable/acctype_animal"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="10dp"
+                        android:layout_weight="6" android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/txt_acctype"
+                            android:text="Animal Incident"
+                            android:textStyle="bold"
+                            android:textSize="18dp"/>
+
+                        <TextView
+                            android:id="@+id/txt_estdistance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_desnavdesc"
+                            android:layout_marginTop="5dp"
+                            android:text="3.14 Km(s) estimated from your position"
+                            android:textStyle="italic"/>
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/txt_desnavtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mainnav_marker_desposition_title"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/linrlout_accinfo"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
+
+                <TextView
+                    android:id="@+id/txt_desnavdesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_desnavtitle"
+                    android:layout_marginTop="5dp"
+                    android:text="Loading..." />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/reltvlout_action"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/reltvlout_desposition_details"
+                android:paddingTop="10dp"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/btn_going"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/mainnav_btn_going" />
+
+                <Button
+                    android:id="@+id/btn_userdetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btn_going"
+                    android:layout_centerHorizontal="true"
+                    android:text="@string/mainnav_btn_userinfo" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
