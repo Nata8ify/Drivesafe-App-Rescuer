@@ -53,19 +53,19 @@ public class OverviewFragment extends Fragment {
         overviewRunnable = new Runnable() {
             @Override
             public void run() {
-                AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId()));
-                Log.d("accs-1", AccidentFactory.getInstance(null).getAccidentList().toString());
+                //Refresh incident list (none 'U', 'S' and 'C')
+                AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())); // Contains Latest Incident List
                 overviewHandler.postDelayed(this, 3000L);
                 //accAsyTask.getAccidentListAdapter().notifyDataSetChanged();
             }
         };
+        overviewHandler.post(overviewRunnable);
         setListener();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        overviewHandler.post(overviewRunnable);
     }
 
     public void setListener() {
