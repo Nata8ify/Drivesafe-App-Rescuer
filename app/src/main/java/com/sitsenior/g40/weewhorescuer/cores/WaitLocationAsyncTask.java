@@ -19,6 +19,12 @@ import com.sitsenior.g40.weewhorescuer.adapters.MainActivityTabSectionAdapter;
 import com.sitsenior.g40.weewhorescuer.fragments.ConfigurationFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
+import com.sitsenior.g40.weewhorescuer.models.Accident;
+import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
+import com.sitsenior.g40.weewhorescuer.services.FbMessagingService;
+
+import io.realm.Realm;
 
 /**
  * Created by nata8ify on 11/8/2560.
@@ -36,9 +42,13 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
     private OverviewFragment overviewFragment;
     private NavigatorFragment navigatorFragment;
 
+    private Realm realm;
+
     public WaitLocationAsyncTask(Context context, ViewPager mainViewPager) {
         this.context = context;
         this.mainViewPager = mainViewPager;
+        Realm.init(this.context);
+        realm = Realm.getDefaultInstance();
     }
 
     @Override
@@ -115,9 +125,15 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
         MainActivity.tabPage.setupWithViewPager(viewPager);
+        Accident selectedAccident = AccidentFactory.getSelectAccident();
+        if(selectedAccident == null){return;}
+        AccidentFactory.setSelectAccident(AccidentFactory.getInstance(null).findByAccidentId(realm.where(AccidentBrief.class).findFirst().getAccidentId()));
         viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
-        if(AccidentFactory.getInstance(null).getSelectAccident() != null){
-            this.navigatorFragment.viewAccidentDataandLocation(AccidentFactory.getInstance(null).getSelectAccident());
+        if (selectedAccident != null) {
+            this.navigatorFragment.viewAccidentDataandLocationFromNoti(selectedAccident);
+            viewPager.setCurrentItem(NavigatorFragment.NAVIGATOR_PAGE);
+        } else {
+            Log.d("getSelectAccident", "is null");
         }
     }
 

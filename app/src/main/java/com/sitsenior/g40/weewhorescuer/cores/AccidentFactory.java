@@ -19,7 +19,7 @@ public class AccidentFactory {
     private List<Accident> rescuingAccidentList; // Accident List for Code 'R';
     private List<Accident> closedAccidentList; // Accident List for Code 'C';
 
-    private Accident selectAccident;
+    private static Accident selectAccident;
 
     public static AccidentFactory getInstance(List<Accident> accidentList){
         if(accidentFactory == null){
@@ -120,11 +120,22 @@ public class AccidentFactory {
         return closedAccidentList;
     }
 
-    public Accident getSelectAccident() {
-        return selectAccident;
+    public static Accident getSelectAccident() {
+        return AccidentFactory.selectAccident;
     }
 
-    public void setSelectAccident(Accident selectAccident) {
-        this.selectAccident = selectAccident;
+    public static void setSelectAccident(Accident selectAccident) {
+        AccidentFactory.selectAccident = selectAccident;
+    }
+
+    public Accident findByAccidentId(long accidentId){
+        Accident fromNotiAccident = null;
+        for(Accident accident : accidentList){
+            if(accident.getAccidentId() == accidentId){
+                fromNotiAccident = accident;
+                break;
+            }
+        }
+        return fromNotiAccident;
     }
 }

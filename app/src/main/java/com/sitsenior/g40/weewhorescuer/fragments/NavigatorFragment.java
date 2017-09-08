@@ -41,6 +41,9 @@ import com.sitsenior.g40.weewhorescuer.cores.ViewReportUserInfoAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
+
+import io.realm.Realm;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -72,6 +75,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private Handler navigationHandler;
     private Runnable onGoingRunnable;
     public static boolean isOnGoing;
+
+    private Realm realm;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +96,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
             }
         };
         context = getContext();
+        Realm.init(context);
+        realm = Realm.getDefaultInstance();
     }
 
     @Nullable
@@ -226,6 +233,35 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         });
     }
 
+    public void viewAccidentDataandLocationFromNoti(final Accident accident){
+        navMapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                NavigatorFragment.this.googleMap = googleMap;
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                NavigatorFragment.this.googleMap.setMyLocationEnabled(true);
+                NavigatorFragment.this.googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                    @Override
+                    public boolean onMyLocationButtonClick() {
+                        txtNavigatorDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(LocationFactory.getInstance(null).getLatLng()));
+                        currentPositionDetailRelativeLayout.setVisibility(View.VISIBLE);
+                        return false;
+                    }
+                });
+                // For dropping a marker at a point on the Map
+                LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
+                googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title("Current Place").snippet("Your Current Place"));
+
+                // For zooming automatically to the location of the marker
+                cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                viewAccidentDataandLocation(accident);
+            }
+        });
+    }
+
     public void viewAccidentDataandLocation(Accident accident) {
         /* Map and Location */
         googleMap.clear();
@@ -301,6 +337,12 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                         navigationHandler.removeCallbacks(onGoingRunnable);
                         btnImGoing.setVisibility(View.GONE);
                         isOnGoing = false;
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realm.delete(AccidentBrief.class);
+                            }
+                        });
                     }
                     return;
                 }
@@ -308,6 +350,12 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 isOnGoing = true;
                 navigationHandler.post(onGoingRunnable);
                 ((TextView) view).setText(getString(R.string.mainnav_btn_close));
+                realm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        realm.insert(new AccidentBrief(AccidentFactory.getSelectAccident()));
+                    }
+                });
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getInstance(null).getSelectAccident().getUserId());
