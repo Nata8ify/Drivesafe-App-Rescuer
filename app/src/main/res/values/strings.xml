@@ -45,6 +45,7 @@
     <string name="mainnav_acctype_unknown">Unknown Type</string>
     <string name="mainnav_leave_nav">Do you want to leaving the Navigation Page?</string>
     <string name="mainnav_stay_here">No, Let me stay</string>
+    <string name="mainnav_incident_is_near">Incident Location is on the Sight</string>
     <!-- Main - Configuration -->
     <string name="maincon_lang">Language</string>
     <string name="maincon_lockscr">Lock Screen</string>
