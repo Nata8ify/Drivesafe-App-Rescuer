@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
@@ -83,12 +84,15 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         setRetainInstance(true);
         navigationHandler = new Handler();
         onGoingRunnable = new Runnable() {
-            private final double CLOSEST_DISTANCE = 0.1D;
+            private final double CLOSEST_DISTANCE = 0.03;
             @Override
             public void run() {
                 if(AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getInstance(null).getSelectAccident().getLatitude(), AccidentFactory.getInstance(null).getSelectAccident().getLongitude())) <= CLOSEST_DISTANCE){
                     isOnGoing = false;
                     navigationHandler.removeCallbacks(this);
+                    if(Weeworh.with(context).setRescuingCode(AccidentFactory.getSelectAccident().getAccidentId())){
+                        Toast.makeText(context, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Log.d("NOT CLOESTE","NOT");
                     navigationHandler.postDelayed(this, 10000L);
