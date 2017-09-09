@@ -1,8 +1,11 @@
 package com.sitsenior.g40.weewhorescuer.cores;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,14 +48,23 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
         showReportUserInfoDialog(userProfile);
     }
 
-    public void showReportUserInfoDialog(Profile userProfile){
+    public void showReportUserInfoDialog(final Profile userProfile){
         android.support.v7.app.AlertDialog reportUserDialog = new android.support.v7.app.AlertDialog.Builder(context)
                 .setPositiveButton(context.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
-                }).create();
+                })
+                .setNegativeButton(context.getResources().getString(R.string.call), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:".concat(userProfile.getPhoneNumber())));
+                        ((Activity)context).startActivity(callIntent);
+                    }
+                })
+                .create();
         View userInfoView = LayoutInflater.from(context).inflate(R.layout.view_userinfo, null);
         TextView txtUInfoName = ((TextView) userInfoView.findViewById(R.id.txt_uinfo_name));
         txtUInfoName.setText(formatName(userProfile.getFirstName(), userProfile.getLastName()));
