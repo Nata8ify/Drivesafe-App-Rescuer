@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
 
 import java.sql.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 
@@ -29,12 +31,10 @@ import io.realm.Realm;
 
 public class FbMessagingService extends FirebaseMessagingService {
 
-    Vibrator vibrator;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(5000L);
+        Log.d("onMessageReceived ", "onMessageReceivedonMessageReceivedonMessageReceivedonMessageReceivedonMessageReceived" );
         String clickAction = remoteMessage.getNotification().getClickAction();
         String bLocation =(remoteMessage.getData().get("report_from"));
         Log.d("clickAction ", clickAction );
@@ -77,6 +77,7 @@ public class FbMessagingService extends FirebaseMessagingService {
                 realm.insert(new AccidentBrief(selectedAccident));
             }
         });*/
+        vibrate();
         super.onMessageReceived(remoteMessage);
     }
 
@@ -85,11 +86,21 @@ public class FbMessagingService extends FirebaseMessagingService {
         super.onDeletedMessages();
     }
 
-
-
     @Override
     public void onMessageSent(String s) {
 
         super.onMessageSent(s);
+    }
+
+    Vibrator vibrator;
+    public void vibrate(){
+        vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(2000L);
+        try {
+            TimeUnit.MILLISECONDS.sleep(3000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        vibrator.vibrate(2000L);
     }
 }

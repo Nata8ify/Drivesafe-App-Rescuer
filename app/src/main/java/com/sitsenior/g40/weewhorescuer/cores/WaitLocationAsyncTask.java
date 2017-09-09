@@ -93,7 +93,7 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
         } catch (Exception exp) {
             Log.d("exp", exp.getMessage());
             try {
-                Thread.sleep(3000L);
+                Thread.sleep(500L);
                 doInBackground();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -125,16 +125,11 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
         MainActivity.tabPage.setupWithViewPager(viewPager);
-        Accident selectedAccident = AccidentFactory.getSelectAccident();
-        if(selectedAccident == null){return;}
-        AccidentFactory.setSelectAccident(AccidentFactory.getInstance(null).findByAccidentId(realm.where(AccidentBrief.class).findFirst().getAccidentId()));
         viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
-        if (selectedAccident != null) {
-            this.navigatorFragment.viewAccidentDataandLocationFromNoti(selectedAccident);
-            viewPager.setCurrentItem(NavigatorFragment.NAVIGATOR_PAGE);
-        } else {
-            Log.d("getSelectAccident", "is null");
-        }
+//        Accident selectedAccident = AccidentFactory.getSelectAccident();
+//        if(selectedAccident == null){return;}
+//        AccidentFactory.setSelectAccident(AccidentFactory.getInstance(null).findByAccidentId(realm.where(AccidentBrief.class).findFirst().getAccidentId()));
+
     }
 
 }

@@ -87,7 +87,7 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
                 imgName = "acctype_brawl"; break;
             case Accident.ACC_TYPE_OTHER :
                 imgName = "acctype_other"; break;
-            default : //TODO
+            default : imgName = "acctype_other"; //TODO
         }
         return context.getResources().getIdentifier(imgName, "drawable", context.getPackageName());
     }
