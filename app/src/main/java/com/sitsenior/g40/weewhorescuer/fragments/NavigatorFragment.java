@@ -84,11 +84,10 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         setRetainInstance(true);
         navigationHandler = new Handler();
         onGoingRunnable = new Runnable() {
-            private final double CLOSEST_DISTANCE = 0.03;
+            private final double CLOSEST_DISTANCE = 0.01; // 10 Meters
             @Override
             public void run() {
                 if(AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getInstance(null).getSelectAccident().getLatitude(), AccidentFactory.getInstance(null).getSelectAccident().getLongitude())) <= CLOSEST_DISTANCE){
-                    isOnGoing = false;
                     navigationHandler.removeCallbacks(this);
                     if(Weeworh.with(context).setRescuingCode(AccidentFactory.getSelectAccident().getAccidentId())){
                         Toast.makeText(context, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
@@ -160,9 +159,9 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
             public boolean onTouch(View v, MotionEvent event) {
                 if(AccidentFactory.getInstance(null).getSelectAccident() == null){ return false;}
                 if(MainActivity.mainViewPager.getCurrentItem() == NAVIGATOR_PAGE && AccidentFactory.getInstance(null).getSelectAccident().getAccCode() == Accident.ACC_CODE_G){
-                    if(!onGoingDialog.isShowing())
-                        onGoingDialog.show();
-                    return true;
+                    if(!onGoingDialog.isShowing()){
+                        onGoingDialog.show();}
+                    return false;
                 } else {
                     return false;
                 }
@@ -276,7 +275,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         //googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title(getString(R.string.mainnav_marker_curposition_title)));
         String desBriefAddress = AddressFactory.getInstance(null).getBriefLocationAddress(des);
         googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(desBriefAddress.substring(0, desBriefAddress.indexOf(","))).snippet(desBriefAddress.substring(desBriefAddress.indexOf(",")+1)));
-        GoogleDirection.withServerKey(N8IFY_GOOGLE_MAPS_DIRECTION_KEY)
+        /*GoogleDirection.withServerKey(N8IFY_GOOGLE_MAPS_DIRECTION_KEY)
                 .from(LocationFactory.getInstance(null).getLatLng())
                 .to(new LatLng(accident.getLatitude(), accident.getLongitude()))
                 .transportMode(TransportMode.TRANSIT)
@@ -288,7 +287,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                             //double midLat = ((current.latitude + des.latitude) / 2d);
                             //double midLng = ((current.longitude + des.longitude) / 2d);
                             float zoom = 17;
-                            /*if (estimatedDistance >= 100) {
+                            *//*if (estimatedDistance >= 100) {
                                 zoom = 5;
                             } else if (estimatedDistance >= 42) {
                                 zoom = 7;
@@ -300,7 +299,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                                 zoom = 13;
                             } else {
                                 zoom = 15;
-                            }*/
+                            }*//*
                             cameraPosition = new CameraPosition.Builder().target(des).zoom(zoom).build();
                             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         }
@@ -310,7 +309,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     public void onDirectionFailure(Throwable t) {
                         //Location might be not existed.
                     }
-                });
+                });*/
 
         currentPositionDetailRelativeLayout.setVisibility(View.GONE);
         destinationDetailRelativeLayout.setVisibility(View.VISIBLE);

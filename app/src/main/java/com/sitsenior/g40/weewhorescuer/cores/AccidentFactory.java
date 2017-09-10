@@ -5,7 +5,10 @@ import com.sitsenior.g40.weewhorescuer.models.Accident;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -14,6 +17,7 @@ import java.util.List;
 public class AccidentFactory {
     private static AccidentFactory accidentFactory;
     private List<Accident> accidentList; // Accident List for Total Accidents of Today;
+    private List<Accident> rescuePendingIncident; // Accident List for Code not 'C';
     private List<Accident> awaitAccidentList; // Accident List for Code 'A';
     private List<Accident> goingForRescueAccidentList; // Accident List for Code 'G';
     private List<Accident> rescuingAccidentList; // Accident List for Code 'R';
@@ -42,6 +46,23 @@ public class AccidentFactory {
         return accidentFactory;
     }
 
+    ListIterator<Accident> accidentsItr;
+    public AccidentFactory filterNonCloseIncident(){
+        if(rescuePendingIncident == null){
+            rescuePendingIncident = new ArrayList<Accident>();
+        } else {
+            rescuePendingIncident.clear();
+        }
+        rescuePendingIncident.addAll(this.accidentList);
+        accidentsItr = rescuePendingIncident.listIterator();
+        while(accidentsItr.hasNext()){
+            if(accidentsItr.next().getAccCode() == Accident.ACC_CODE_C){
+                accidentsItr.remove();
+            }
+        }
+        return accidentFactory;
+    }
+
     public AccidentFactory filterForAwaitAccident(){
         setFilteredAccidentList(this.awaitAccidentList, Accident.ACC_CODE_A);
         return accidentFactory;
@@ -63,36 +84,17 @@ public class AccidentFactory {
     }
 
     public void setFilteredAccidentList(List<Accident> toFilterAccidentList, char accCode){
-        toFilterAccidentList = new ArrayList<>();
-        for(Accident accident : accidentList){
-            if(accident.getAccCode() == accCode){
-                toFilterAccidentList.add(accident);
+        accidentsItr = toFilterAccidentList.listIterator();
+        if(toFilterAccidentList == null) {
+            toFilterAccidentList = new ArrayList<>();
+        } else { toFilterAccidentList.clear(); }
+        toFilterAccidentList.addAll(this.accidentList);
+        while(accidentsItr.hasNext()){
+            if(accidentsItr.next().getAccCode() == accCode){
+                accidentsItr.remove();
             }
         }
     }
-
-    private static void sortByCode(List<Accident> accidentList, char[] codes){
-        Collections.sort(accidentList, new Comparator<Accident>() {
-            @Override
-            public int compare(Accident accident, Accident t1) {
-                return accident.getTime().compareTo(t1.getTime());
-            }
-        });
-        List<Accident> tempAccidentList = null;
-        for(char code : codes){
-            if(tempAccidentList == null){tempAccidentList = new ArrayList<>();}
-            for(Accident accident : accidentList){
-                if(accident.getAccCode() == code){
-                    tempAccidentList.add(accident);
-                }
-            }
-        }
-        accidentList.clear();
-        accidentList.addAll(tempAccidentList);
-    }
-
-
-
     /* Getter List & Setter List */
 
     public List<Accident> getAccidentList() {
@@ -102,6 +104,10 @@ public class AccidentFactory {
     public void setAccidentList(List<Accident> accidentList) {
         /*sortByCode(accidentList, new char[]{Accident.ACC_CODE_A, Accident.ACC_CODE_G, Accident.ACC_CODE_R});*/
         if(this.accidentList != null) {accidentList.clear(); this.accidentList.addAll(accidentList);} else{ this.accidentList = accidentList;}
+    }
+
+    public List<Accident> getRescuePendingIncident() {
+        return rescuePendingIncident;
     }
 
     public List<Accident> getAwaitAccidentList() {

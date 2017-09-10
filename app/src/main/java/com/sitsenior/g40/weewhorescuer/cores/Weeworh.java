@@ -74,6 +74,7 @@ public class Weeworh {
                     .setBodyParameter(Param.userId, String.valueOf(userId))
                     .as(TypeToken.get(new TypeToken<List<Accident>>(){}.getType()))
                     .get();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
