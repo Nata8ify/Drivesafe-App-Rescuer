@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -27,8 +28,15 @@ import com.sitsenior.g40.weewhorescuer.models.Profile;
 
 public class OverviewFragment extends Fragment {
     private LinearLayout emptyAccidentResultLayout;
+    private LinearLayout viewIncidentOptionLayout;
+    private LinearLayout viewIncidentPanelLayout;
     private ArrayAdapter accidentListAdapter;
     private ListView accidentListView;
+
+    private Button btnViewAwaitingRequest;
+    private Button btnViewGoing;
+    private Button btnViewRescuing;
+    private Button btnViewClosed;
 
     private AccidentResultAsyncTask accAsyTask;
 
@@ -47,7 +55,13 @@ public class OverviewFragment extends Fragment {
         super.onStart();
         accidentListView = (ListView) getView().findViewById(R.id.listvw_a_acclist);
         emptyAccidentResultLayout = (LinearLayout) getView().findViewById(R.id.linrlout_emptyacc);
-        accAsyTask = new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, accidentListView, accidentListAdapter);
+        viewIncidentOptionLayout = (LinearLayout) getView().findViewById(R.id.linrlout_incident_view_option);
+        viewIncidentPanelLayout = (LinearLayout) getView().findViewById(R.id.linrlout_incident_view_panel);
+        btnViewAwaitingRequest = (Button)getView().findViewById(R.id.btn_view_a);
+        btnViewGoing = (Button)getView().findViewById(R.id.btn_view_g);
+        btnViewRescuing = (Button)getView().findViewById(R.id.btn_view_r);
+        btnViewClosed = (Button)getView().findViewById(R.id.btn_view_c);
+        accAsyTask = new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, viewIncidentPanelLayout, accidentListView, accidentListAdapter);
         accAsyTask.execute();
         overviewHandler = new Handler();
         overviewRunnable = new Runnable() {
@@ -77,6 +91,33 @@ public class OverviewFragment extends Fragment {
                 AccidentFactory.getInstance(null).setSelectAccident(accident);
                 ((NavigatorFragment)getFragmentManager().findFragmentByTag("android:switcher:".concat(String.valueOf(R.id.vwpgr_main)).concat(":2"))).viewAccidentDataandLocation(accident);
                 MainActivity.mainViewPager.setCurrentItem(NavigatorFragment.NAVIGATOR_PAGE);
+            }
+        });
+        btnViewAwaitingRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnViewGoing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnViewRescuing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        btnViewClosed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }

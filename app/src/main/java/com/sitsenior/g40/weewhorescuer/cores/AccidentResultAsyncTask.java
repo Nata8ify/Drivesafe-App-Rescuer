@@ -10,7 +10,10 @@ import android.widget.ListView;
 
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.adapters.AccidentListAdapter;
+import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+
+import java.util.List;
 
 /**
  * Created by PNattawut on 02-Aug-17.
@@ -21,16 +24,19 @@ public class AccidentResultAsyncTask extends AsyncTask {
     private Context context;
     private boolean isIgnoreView;
     private LinearLayout emptyAccidentResultLayout;
+    private LinearLayout viewIncidentPanelLayout;
     private ListView accidentListView;
     private ArrayAdapter accidentListAdapter;
     private Profile profile;
     private long userId;
 
-    public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, ListView accidentListView, ArrayAdapter accidentListAdapter) {
+
+    public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, LinearLayout viewIncidentPanelLayout, ListView accidentListView, ArrayAdapter accidentListAdapter) {
         this.profile = profile;
         this.userId = profile.getUserId();
         this.context = context;
         this.emptyAccidentResultLayout = emptyAccidentResultLayout;
+        this.viewIncidentPanelLayout = viewIncidentPanelLayout;
         this.accidentListView = accidentListView;
         this.accidentListAdapter = accidentListAdapter;
     }
@@ -59,12 +65,15 @@ public class AccidentResultAsyncTask extends AsyncTask {
     protected void onPostExecute(Object o) {
         if(isIgnoreView){return;}
         try {
+            if(AccidentFactory.getInstance(null).filterNonCloseIncident().getRescuePendingIncident().isEmpty()){
+                throw new NullPointerException();
+            }
            accidentListView.setAdapter(accidentListAdapter);
         } catch (NullPointerException nexcp) {
             ((Activity) (context)).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    accidentListView.setVisibility(View.GONE);
+                    viewIncidentPanelLayout.setVisibility(View.GONE);
                     emptyAccidentResultLayout.setVisibility(View.VISIBLE);
                 }
             });
@@ -72,19 +81,4 @@ public class AccidentResultAsyncTask extends AsyncTask {
         super.onPostExecute(o);
     }
 
-    public ListView getAccidentListView() {
-        return accidentListView;
-    }
-
-    public void setAccidentListView(ListView accidentListView) {
-        this.accidentListView = accidentListView;
-    }
-
-    public ArrayAdapter getAccidentListAdapter() {
-        return accidentListAdapter;
-    }
-
-    public void setAccidentListAdapter(ArrayAdapter accidentListAdapter) {
-        this.accidentListAdapter = accidentListAdapter;
-    }
 }

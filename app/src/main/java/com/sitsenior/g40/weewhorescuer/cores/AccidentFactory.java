@@ -53,7 +53,9 @@ public class AccidentFactory {
         } else {
             rescuePendingIncident.clear();
         }
-        rescuePendingIncident.addAll(this.accidentList);
+        if(this.accidentList != null){
+            rescuePendingIncident.addAll(this.accidentList);
+        }
         accidentsItr = rescuePendingIncident.listIterator();
         while(accidentsItr.hasNext()){
             if(accidentsItr.next().getAccCode() == Accident.ACC_CODE_C){
