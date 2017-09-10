@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
+import com.sitsenior.g40.weewhorescuer.cores.AccidentRefreshAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
@@ -38,11 +39,19 @@ public class OverviewFragment extends Fragment {
     private Button btnViewRescuing;
     private Button btnViewClosed;
 
-    private AccidentResultAsyncTask accAsyTask;
+    private AccidentResultAsyncTask accResultAsyTask;
+    private AccidentRefreshAsyncTask accRefreshAsyTask;
 
     private Handler overviewHandler;
     private Runnable overviewRunnable;
 
+    public static byte accCodeButtonState;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        accCodeButtonState = Accident.ACC_CODE_A;
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -61,18 +70,34 @@ public class OverviewFragment extends Fragment {
         btnViewGoing = (Button)getView().findViewById(R.id.btn_view_g);
         btnViewRescuing = (Button)getView().findViewById(R.id.btn_view_r);
         btnViewClosed = (Button)getView().findViewById(R.id.btn_view_c);
-        accAsyTask = new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, viewIncidentPanelLayout, accidentListView, accidentListAdapter);
-        accAsyTask.execute();
+        accResultAsyTask = new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, viewIncidentPanelLayout, accidentListView, accidentListAdapter);
+        accResultAsyTask.execute();
+        accRefreshAsyTask = new AccidentRefreshAsyncTask(getContext(), accidentListAdapter);
         overviewHandler = new Handler();
-        overviewRunnable = new Runnable() {
+        /*overviewRunnable = new Runnable() {
+            @Override
+            public void run() {
+                //Refresh incident list
+                accRefreshAsyTask.execute();
+                overviewHandler.postDelayed(this, 3000L);
+            }
+        };*/
+/*        overviewRunnable = new Runnable() {
             @Override
             public void run() {
                 //Refresh incident list (none 'U', 'S' and 'C')
-                AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())); // Contains Latest Incident List
+                AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update(); // Contains Latest Incident List
                 overviewHandler.postDelayed(this, 3000L);
                 //accAsyTask.getAccidentListAdapter().notifyDataSetChanged();
             }
-        };
+        };*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(">>>>>", AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().toString()); // Contains Latest Incident List
+                overviewHandler.postDelayed(this, 3000L);
+            }
+        }).run();
         overviewHandler.post(overviewRunnable);
         setListener();
     }
@@ -96,28 +121,28 @@ public class OverviewFragment extends Fragment {
         btnViewAwaitingRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                accCodeButtonState = Accident.ACC_CODE_A;
             }
         });
 
         btnViewGoing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                accCodeButtonState = Accident.ACC_CODE_G;
             }
         });
 
         btnViewRescuing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                accCodeButtonState = Accident.ACC_CODE_R;
             }
         });
 
         btnViewClosed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                accCodeButtonState = Accident.ACC_CODE_C;
             }
         });
     }

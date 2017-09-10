@@ -37,8 +37,8 @@ public class AccidentFactory {
         return accidentFactory;
     }
 
-    public AccidentFactory addAccident(Accident accident){
-        this.accidentList.add(accident);
+    public AccidentFactory update(){
+        this.filterNonCloseIncident();
         this.filterForAwaitAccident();
         this.filterForGoingForRescueAccident();
         this.filterRescuingRescueAccident();
@@ -66,33 +66,33 @@ public class AccidentFactory {
     }
 
     public AccidentFactory filterForAwaitAccident(){
-        setFilteredAccidentList(this.awaitAccidentList, Accident.ACC_CODE_A);
+        setFilteredAccidentList(awaitAccidentList, Accident.ACC_CODE_A);
         return accidentFactory;
     }
 
     public AccidentFactory filterForGoingForRescueAccident(){
-        setFilteredAccidentList(this.goingForRescueAccidentList, Accident.ACC_CODE_G);
+        setFilteredAccidentList(goingForRescueAccidentList, Accident.ACC_CODE_G);
         return accidentFactory;
     }
 
     public AccidentFactory filterRescuingRescueAccident(){
-        setFilteredAccidentList(this.rescuingAccidentList, Accident.ACC_CODE_R);
+        setFilteredAccidentList(rescuingAccidentList, Accident.ACC_CODE_R);
         return accidentFactory;
     }
 
     public AccidentFactory filterClosedRescueAccident(){
-        setFilteredAccidentList(this.closedAccidentList, Accident.ACC_CODE_C);
+        setFilteredAccidentList(closedAccidentList, Accident.ACC_CODE_C);
         return accidentFactory;
     }
 
     public void setFilteredAccidentList(List<Accident> toFilterAccidentList, char accCode){
-        accidentsItr = toFilterAccidentList.listIterator();
         if(toFilterAccidentList == null) {
             toFilterAccidentList = new ArrayList<>();
         } else { toFilterAccidentList.clear(); }
-        toFilterAccidentList.addAll(this.accidentList);
+        if(this.accidentList != null){toFilterAccidentList.addAll(this.accidentList);}
+        accidentsItr = toFilterAccidentList.listIterator();
         while(accidentsItr.hasNext()){
-            if(accidentsItr.next().getAccCode() == accCode){
+            if(accidentsItr.next().getAccCode() != accCode){
                 accidentsItr.remove();
             }
         }
@@ -145,5 +145,17 @@ public class AccidentFactory {
             }
         }
         return fromNotiAccident;
+    }
+
+    @Override
+    public String toString() {
+        return "AccidentFactory{" +
+                "accidentList=" + accidentList +
+                "\n\n, rescuePendingIncident=" + rescuePendingIncident +
+                "\n\n, awaitAccidentList=" + awaitAccidentList +
+                "\n\n, goingForRescueAccidentList=" + goingForRescueAccidentList +
+                "\n\n, rescuingAccidentList=" + rescuingAccidentList +
+                "\n\n, closedAccidentList=" + closedAccidentList +
+                '}';
     }
 }
