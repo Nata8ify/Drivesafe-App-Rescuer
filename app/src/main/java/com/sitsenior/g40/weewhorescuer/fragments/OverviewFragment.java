@@ -17,11 +17,13 @@ import android.widget.ListView;
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
-import com.sitsenior.g40.weewhorescuer.cores.AccidentRefreshAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -31,7 +33,7 @@ public class OverviewFragment extends Fragment {
     private LinearLayout emptyAccidentResultLayout;
     private LinearLayout viewIncidentOptionLayout;
     private LinearLayout viewIncidentPanelLayout;
-    private ArrayAdapter accidentListAdapter;
+    public static ArrayAdapter accidentListAdapter;
     private ListView accidentListView;
 
     private Button btnViewAwaitingRequest;
@@ -40,7 +42,6 @@ public class OverviewFragment extends Fragment {
     private Button btnViewClosed;
 
     private AccidentResultAsyncTask accResultAsyTask;
-    private AccidentRefreshAsyncTask accRefreshAsyTask;
 
     private Handler overviewHandler;
     private Runnable overviewRunnable;
@@ -59,6 +60,7 @@ public class OverviewFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_overview, container, false);
     }
 
+    private List<Accident> rescuePendingIncidentList;
     @Override
     public void onStart() {
         super.onStart();
@@ -70,31 +72,29 @@ public class OverviewFragment extends Fragment {
         btnViewGoing = (Button)getView().findViewById(R.id.btn_view_g);
         btnViewRescuing = (Button)getView().findViewById(R.id.btn_view_r);
         btnViewClosed = (Button)getView().findViewById(R.id.btn_view_c);
-        accResultAsyTask = new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, viewIncidentPanelLayout, accidentListView, accidentListAdapter);
+        accResultAsyTask = new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, viewIncidentPanelLayout, accidentListView);
         accResultAsyTask.execute();
-        accRefreshAsyTask = new AccidentRefreshAsyncTask(getContext(), accidentListAdapter);
         overviewHandler = new Handler();
-        /*overviewRunnable = new Runnable() {
-            @Override
-            public void run() {
-                //Refresh incident list
-                accRefreshAsyTask.execute();
-                overviewHandler.postDelayed(this, 3000L);
-            }
-        };*/
-/*        overviewRunnable = new Runnable() {
-            @Override
-            public void run() {
-                //Refresh incident list (none 'U', 'S' and 'C')
-                AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update(); // Contains Latest Incident List
-                overviewHandler.postDelayed(this, 3000L);
-                //accAsyTask.getAccidentListAdapter().notifyDataSetChanged();
-            }
-        };*/
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d(">>>>>", AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().toString()); // Contains Latest Incident List
+                //Log.d(">>>>>", AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().toString()); // Contains Latest Incident List
+//                rescuePendingIncidentList = AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().getRescuePendingIncident();
+//                Log.d(">>>>>", rescuePendingIncidentList.toString()); // Contains Latest Incident List
+                if(rescuePendingIncidentList == null){rescuePendingIncidentList = new ArrayList<Accident>();}
+                rescuePendingIncidentList.clear();
+                rescuePendingIncidentList.addAll(AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().getRescuePendingIncident());
+                if(OverviewFragment.accidentListAdapter != null){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            OverviewFragment.accidentListAdapter.clear();
+                            Log.d(">>>::", rescuePendingIncidentList.toString());
+                            OverviewFragment.accidentListAdapter.addAll(rescuePendingIncidentList);
+                            OverviewFragment.accidentListAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
                 overviewHandler.postDelayed(this, 3000L);
             }
         }).run();

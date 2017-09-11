@@ -10,6 +10,7 @@ import android.widget.ListView;
 
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.adapters.AccidentListAdapter;
+import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 
@@ -26,19 +27,17 @@ public class AccidentResultAsyncTask extends AsyncTask {
     private LinearLayout emptyAccidentResultLayout;
     private LinearLayout viewIncidentPanelLayout;
     private ListView accidentListView;
-    private ArrayAdapter accidentListAdapter;
     private Profile profile;
     private long userId;
 
 
-    public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, LinearLayout viewIncidentPanelLayout, ListView accidentListView, ArrayAdapter accidentListAdapter) {
+    public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, LinearLayout viewIncidentPanelLayout, ListView accidentListView) {
         this.profile = profile;
         this.userId = profile.getUserId();
         this.context = context;
         this.emptyAccidentResultLayout = emptyAccidentResultLayout;
         this.viewIncidentPanelLayout = viewIncidentPanelLayout;
         this.accidentListView = accidentListView;
-        this.accidentListAdapter = accidentListAdapter;
     }
 
     public AccidentResultAsyncTask(Profile profile, Context context){
@@ -57,7 +56,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
     protected Object doInBackground(Object[] params) {
         AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(userId));
         if(isIgnoreView){return null;}
-        accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).filterNonCloseIncident().getRescuePendingIncident());
+        OverviewFragment.accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).filterNonCloseIncident().getRescuePendingIncident());
         return null;
     }
 
@@ -68,7 +67,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
             if(AccidentFactory.getInstance(null).filterNonCloseIncident().getRescuePendingIncident().isEmpty()){
                 throw new NullPointerException();
             }
-           accidentListView.setAdapter(accidentListAdapter);
+           accidentListView.setAdapter(OverviewFragment.accidentListAdapter);
         } catch (NullPointerException nexcp) {
             ((Activity) (context)).runOnUiThread(new Runnable() {
                 @Override

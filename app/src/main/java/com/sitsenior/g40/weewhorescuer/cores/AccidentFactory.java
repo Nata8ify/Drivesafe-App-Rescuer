@@ -46,57 +46,100 @@ public class AccidentFactory {
         return accidentFactory;
     }
 
-    ListIterator<Accident> accidentsItr;
+    ListIterator<Accident> accidentsResuePendingItr;
     public AccidentFactory filterNonCloseIncident(){
         if(rescuePendingIncident == null){
             rescuePendingIncident = new ArrayList<Accident>();
-        } else {
-            rescuePendingIncident.clear();
         }
+        rescuePendingIncident.clear();
         if(this.accidentList != null){
             rescuePendingIncident.addAll(this.accidentList);
         }
-        accidentsItr = rescuePendingIncident.listIterator();
-        while(accidentsItr.hasNext()){
-            if(accidentsItr.next().getAccCode() == Accident.ACC_CODE_C){
-                accidentsItr.remove();
+        accidentsResuePendingItr = rescuePendingIncident.listIterator();
+        while(accidentsResuePendingItr.hasNext()){
+            if(accidentsResuePendingItr.next().getAccCode() == Accident.ACC_CODE_C){
+                accidentsResuePendingItr.remove();
             }
         }
         return accidentFactory;
     }
 
+    ListIterator<Accident> accidentsAwaitingItr;
     public AccidentFactory filterForAwaitAccident(){
-        setFilteredAccidentList(awaitAccidentList, Accident.ACC_CODE_A);
-        return accidentFactory;
-    }
-
-    public AccidentFactory filterForGoingForRescueAccident(){
-        setFilteredAccidentList(goingForRescueAccidentList, Accident.ACC_CODE_G);
-        return accidentFactory;
-    }
-
-    public AccidentFactory filterRescuingRescueAccident(){
-        setFilteredAccidentList(rescuingAccidentList, Accident.ACC_CODE_R);
-        return accidentFactory;
-    }
-
-    public AccidentFactory filterClosedRescueAccident(){
-        setFilteredAccidentList(closedAccidentList, Accident.ACC_CODE_C);
-        return accidentFactory;
-    }
-
-    public void setFilteredAccidentList(List<Accident> toFilterAccidentList, char accCode){
-        if(toFilterAccidentList == null) {
-            toFilterAccidentList = new ArrayList<>();
-        } else { toFilterAccidentList.clear(); }
-        if(this.accidentList != null){toFilterAccidentList.addAll(this.accidentList);}
-        accidentsItr = toFilterAccidentList.listIterator();
-        while(accidentsItr.hasNext()){
-            if(accidentsItr.next().getAccCode() != accCode){
-                accidentsItr.remove();
+        if(awaitAccidentList == null){
+            awaitAccidentList = new ArrayList<Accident>();
+        } else {
+            awaitAccidentList.clear();
+        }
+        if(this.accidentList != null){
+            awaitAccidentList.addAll(this.accidentList);
+        }
+        accidentsAwaitingItr = awaitAccidentList.listIterator();
+        while(accidentsAwaitingItr.hasNext()){
+            if(accidentsAwaitingItr.next().getAccCode() != Accident.ACC_CODE_A){
+                accidentsAwaitingItr.remove();
             }
         }
+        return accidentFactory;
     }
+
+    ListIterator<Accident> accidentsGoingItr;
+    public AccidentFactory filterForGoingForRescueAccident(){
+        if(goingForRescueAccidentList == null){
+            goingForRescueAccidentList = new ArrayList<Accident>();
+        } else {
+            goingForRescueAccidentList.clear();
+        }
+        if(this.accidentList != null){
+            goingForRescueAccidentList.addAll(this.accidentList);
+        }
+        accidentsGoingItr = goingForRescueAccidentList.listIterator();
+        while(accidentsGoingItr.hasNext()){
+            if(accidentsGoingItr.next().getAccCode() != Accident.ACC_CODE_G){
+                accidentsGoingItr.remove();
+            }
+        }
+        return accidentFactory;
+    }
+
+    ListIterator<Accident> accidentsRescuingItr;
+    public AccidentFactory filterRescuingRescueAccident(){
+        if(rescuingAccidentList == null){
+            rescuingAccidentList = new ArrayList<Accident>();
+        } else {
+            rescuingAccidentList.clear();
+        }
+        if(this.accidentList != null){
+            rescuingAccidentList.addAll(this.accidentList);
+        }
+        accidentsRescuingItr = rescuingAccidentList.listIterator();
+        while(accidentsRescuingItr.hasNext()){
+            if(accidentsRescuingItr.next().getAccCode() != Accident.ACC_CODE_R){
+                accidentsRescuingItr.remove();
+            }
+        }
+        return accidentFactory;
+    }
+
+    ListIterator<Accident> accidentsClosedItr;
+    public AccidentFactory filterClosedRescueAccident(){
+        if(closedAccidentList == null){
+            closedAccidentList = new ArrayList<Accident>();
+        } else {
+            closedAccidentList.clear();
+        }
+        if(this.accidentList != null){
+            closedAccidentList.addAll(this.accidentList);
+        }
+        accidentsClosedItr = closedAccidentList.listIterator();
+        while(accidentsClosedItr.hasNext()){
+            if(accidentsClosedItr.next().getAccCode() != Accident.ACC_CODE_C){
+                accidentsClosedItr.remove();
+            }
+        }
+        return accidentFactory;
+    }
+
     /* Getter List & Setter List */
 
     public List<Accident> getAccidentList() {
@@ -105,7 +148,7 @@ public class AccidentFactory {
 
     public void setAccidentList(List<Accident> accidentList) {
         /*sortByCode(accidentList, new char[]{Accident.ACC_CODE_A, Accident.ACC_CODE_G, Accident.ACC_CODE_R});*/
-        if(this.accidentList != null) {accidentList.clear(); this.accidentList.addAll(accidentList);} else{ this.accidentList = accidentList;}
+        if(this.accidentList != null) {this.accidentList.clear(); this.accidentList.addAll(accidentList);} else{ this.accidentList = accidentList;}
     }
 
     public List<Accident> getRescuePendingIncident() {
@@ -150,8 +193,8 @@ public class AccidentFactory {
     @Override
     public String toString() {
         return "AccidentFactory{" +
-                "accidentList=" + accidentList +
-                "\n\n, rescuePendingIncident=" + rescuePendingIncident +
+                "\n\n, accidentList=" + accidentList +
+                "\n\n,> rescuePendingIncident=" + rescuePendingIncident +
                 "\n\n, awaitAccidentList=" + awaitAccidentList +
                 "\n\n, goingForRescueAccidentList=" + goingForRescueAccidentList +
                 "\n\n, rescuingAccidentList=" + rescuingAccidentList +

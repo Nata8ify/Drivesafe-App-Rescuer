@@ -58,7 +58,6 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View row = LayoutInflater.from(this.context).inflate(this.resource, parent, false);
         Accident accident = accidentList.get(position);
-        if(accident.getAccCode() == Accident.ACC_CODE_C) {row.setVisibility(View.GONE);return row;}
         LinearLayout accCodeBarStatus = (LinearLayout) row.findViewById(R.id.linrlout_acccodecolor);
         ImageView accidentTypeImage = (ImageView) row.findViewById(R.id.img_acctype);
         TextView txtReportTime = (TextView)row.findViewById(R.id.txt_reporttime);
@@ -96,9 +95,9 @@ public class AccidentListAdapter extends ArrayAdapter<Accident>{
     public String getColorByAccidentCode(char accCode){
         switch (accCode){
             case Accident.ACC_CODE_A : return "#bc0029";
-            case Accident.ACC_CODE_G : return "#ffb912";
-            case Accident.ACC_CODE_R : return "#ffed80";
-            case Accident.ACC_CODE_C : return "#8cff8c";
+            case Accident.ACC_CODE_G : return "#ffc107";
+            case Accident.ACC_CODE_R : return "#007bff";
+            case Accident.ACC_CODE_C : return "#28a745";
             case Accident.ACC_CODE_ERRU : return "#ddd";
             case Accident.ACC_CODE_ERRS : return "#ddd";
         }

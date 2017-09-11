@@ -208,6 +208,6 @@ public class Accident {
 
     @Override
     public String toString() {
-        return "Accident{" + "accidentId=" + accidentId + ", userId=" + userId + ", date=" + date + ", time=" + time + ", latitude=" + latitude + ", longitude=" + longitude + ", forceDetect=" + forceDetect + ", speedDetect=" + speedDetect + ", accType=" + accType + ", accCode=" + accCode + '}';
+        return "\nAccident{" + "accidentId=" + accidentId + ", userId=" + userId + ", date=" + date + ", time=" + time + ", latitude=" + latitude + ", longitude=" + longitude + ", forceDetect=" + forceDetect + ", speedDetect=" + speedDetect + ", accType=" + accType + ", accCode=" + accCode + '}';
     }
 }
