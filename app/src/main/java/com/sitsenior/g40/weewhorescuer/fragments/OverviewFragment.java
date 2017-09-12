@@ -30,11 +30,11 @@ import java.util.List;
  */
 
 public class OverviewFragment extends Fragment {
-    private LinearLayout emptyAccidentResultLayout;
-    private LinearLayout viewIncidentOptionLayout;
-    private LinearLayout viewIncidentPanelLayout;
+    public static  LinearLayout emptyAccidentResultLayout;
+    public static  LinearLayout viewIncidentOptionLayout;
+    public static  LinearLayout viewIncidentPanelLayout;
     public static ArrayAdapter accidentListAdapter;
-    private ListView accidentListView;
+    public static  ListView accidentListView;
 
     private Button btnViewAwaitingRequest;
     private Button btnViewGoing;
@@ -78,22 +78,28 @@ public class OverviewFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                //Log.d(">>>>>", AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().toString()); // Contains Latest Incident List
-//                rescuePendingIncidentList = AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().getRescuePendingIncident();
-//                Log.d(">>>>>", rescuePendingIncidentList.toString()); // Contains Latest Incident List
                 if(rescuePendingIncidentList == null){rescuePendingIncidentList = new ArrayList<Accident>();}
                 rescuePendingIncidentList.clear();
                 rescuePendingIncidentList.addAll(AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().getRescuePendingIncident());
                 if(OverviewFragment.accidentListAdapter != null){
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
                             OverviewFragment.accidentListAdapter.clear();
                             Log.d(">>>::", rescuePendingIncidentList.toString());
                             OverviewFragment.accidentListAdapter.addAll(rescuePendingIncidentList);
                             OverviewFragment.accidentListAdapter.notifyDataSetChanged();
-                        }
-                    });
+                    if(rescuePendingIncidentList.isEmpty()){
+                        Log.d(">>>::", "Nay");
+                        viewIncidentPanelLayout.setVisibility(View.GONE);
+                        emptyAccidentResultLayout.setVisibility(View.VISIBLE);
+                    } else {
+                        Log.d(">>>::", "Yea");
+                        viewIncidentPanelLayout.setVisibility(View.VISIBLE);
+                        emptyAccidentResultLayout.setVisibility(View.GONE);
+                    }
+//                        }
+//                    });
                 }
                 overviewHandler.postDelayed(this, 3000L);
             }

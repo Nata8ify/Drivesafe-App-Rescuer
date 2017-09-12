@@ -13,6 +13,7 @@ buildscript {
         // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:3.0.0'
         classpath "io.realm:realm-gradle-plugin:3.5.0"
+        classpath 'com.uphyca.gradle:gradle-android-aspectj-plugin:0.9.14'
     }
 }
 

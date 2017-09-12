@@ -73,9 +73,12 @@
     <string name="no">No</string>
     <string name="kms"> Km(s) </string>
     <string name="call"> Call to Reporter </string>
+    <string name="try_again">Try Again</string>
+    <string name="warning">Warning</string>
 
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>
+    <string name="warn_no_profile">User Profile isn\'t Available</string>
     <string name="warn_no_location_permission">This Application need the Location Permission or else this module will not function.</string>
     <string name="warn_no_accidents">There are no accident occured by now \n(We hope it\'s still being until the end of the day or maybe long as it possible)</string>
     <string name="warn_youre_quiting">Do you want to quit from Weeworh?</string>

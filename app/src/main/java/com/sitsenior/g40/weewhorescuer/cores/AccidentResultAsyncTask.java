@@ -64,9 +64,6 @@ public class AccidentResultAsyncTask extends AsyncTask {
     protected void onPostExecute(Object o) {
         if(isIgnoreView){return;}
         try {
-            if(AccidentFactory.getInstance(null).filterNonCloseIncident().getRescuePendingIncident().isEmpty()){
-                throw new NullPointerException();
-            }
            accidentListView.setAdapter(OverviewFragment.accidentListAdapter);
         } catch (NullPointerException nexcp) {
             ((Activity) (context)).runOnUiThread(new Runnable() {
@@ -77,6 +74,9 @@ public class AccidentResultAsyncTask extends AsyncTask {
                 }
             });
         }
+        OverviewFragment.emptyAccidentResultLayout = this.emptyAccidentResultLayout;
+        OverviewFragment.viewIncidentPanelLayout = this.viewIncidentPanelLayout;
+        OverviewFragment.accidentListView = this.accidentListView;
         super.onPostExecute(o);
     }
 

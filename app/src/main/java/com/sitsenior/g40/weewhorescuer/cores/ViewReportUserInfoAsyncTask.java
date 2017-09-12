@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
@@ -38,7 +39,6 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
     protected Void doInBackground(Long... userId) {
         /* User Data */
         userProfile = Weeworh.with(context).getReportUserInformation(userId[0]);
-        Log.d("userProfile", userProfile.toString());
         return null;
     }
 
@@ -49,6 +49,8 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
     }
 
     public void showReportUserInfoDialog(final Profile userProfile){
+        if(userProfile == null){
+            Toast.makeText(context, context.getString(R.string.warn_no_network), Toast.LENGTH_LONG).show();return;}
         android.support.v7.app.AlertDialog reportUserDialog = new android.support.v7.app.AlertDialog.Builder(context)
                 .setPositiveButton(context.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
                     @Override

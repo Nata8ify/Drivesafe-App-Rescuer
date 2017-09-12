@@ -8,6 +8,7 @@ import com.koushikdutta.ion.Ion;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -51,6 +52,7 @@ public class Weeworh {
     }
 
     public Profile getReportUserInformation(long userId){
+        if(!SettingUtils.isNetworkConnected(context)){return null;}
         Profile reportUserProfile = null;
         try {
             reportUserProfile = Ion.with(context)
@@ -67,10 +69,12 @@ public class Weeworh {
     }
 
     public List<Accident> getInBoundTodayIncidents(long userId){
+        if(!SettingUtils.isNetworkConnected(context)){return null;}
         List<Accident> accidents = null;
         try {
             accidents = (List<Accident>)Ion.with(context)
                     .load(Url.GET_TODAY_INBOUND_ACCIDENTS)
+                    .setTimeout(1000)
                     .setBodyParameter(Param.userId, String.valueOf(userId))
                     .as(TypeToken.get(new TypeToken<List<Accident>>(){}.getType()))
                     .get();
@@ -85,6 +89,7 @@ public class Weeworh {
 
     /* Set Incident status / Accident status */
     public boolean setGoingCode(long accidentId){
+        if(!SettingUtils.isNetworkConnected(context)){return false;}
         Log.d("s",  accidentId+"");
         try {
             String response = Ion.with(context)
@@ -104,6 +109,7 @@ public class Weeworh {
     }
 
     public boolean setRescuingCode(long accidentId){ //Code R (Rescuing)
+        if(!SettingUtils.isNetworkConnected(context)){return false;}
         Log.d("s",  accidentId+"");
         try {
             String response = Ion.with(context)
@@ -124,6 +130,7 @@ public class Weeworh {
 
     public boolean setRescuedCode(long accidentId){ //Code C (Closed)
         Log.d("s",  accidentId+"");
+        if(!SettingUtils.isNetworkConnected(context)){return false;}
         try {
             String response = Ion.with(context)
                     .load(Url.SET_RESCUED_CODE)
