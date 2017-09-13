@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,6 +79,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public static boolean isOnGoing;
 
     private Realm realm;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,15 +87,16 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         navigationHandler = new Handler();
         onGoingRunnable = new Runnable() {
             private final double CLOSEST_DISTANCE = 0.01; // 10 Meters
+
             @Override
             public void run() {
-                if(AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getInstance(null).getSelectAccident().getLatitude(), AccidentFactory.getInstance(null).getSelectAccident().getLongitude())) <= CLOSEST_DISTANCE){
+                if (AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getInstance(null).getSelectAccident().getLatitude(), AccidentFactory.getInstance(null).getSelectAccident().getLongitude())) <= CLOSEST_DISTANCE) {
                     navigationHandler.removeCallbacks(this);
-                    if(Weeworh.with(context).setRescuingCode(AccidentFactory.getSelectAccident().getAccidentId())){
+                    if (Weeworh.with(context).setRescuingCode(AccidentFactory.getSelectAccident().getAccidentId())) {
                         Toast.makeText(context, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Log.d("NOT CLOESTE","NOT");
+                    Log.d("NOT CLOESTE", "NOT");
                     navigationHandler.postDelayed(this, 10000L);
                 }
             }
@@ -137,7 +140,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         btnReportUserInfo.setOnClickListener(this);
 
         /* On.. stuffs */
-        MainActivity.mainViewPager.setOnTouchListener(new View.OnTouchListener() {
+        MainActivity.mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private final AlertDialog onGoingDialog = new AlertDialog.Builder(context)
                     .setMessage(getString(R.string.mainnav_leave_nav))
 
@@ -150,21 +153,31 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     .setNegativeButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            MainActivity.mainViewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
                         }
                     })
                     .setCancelable(false)
                     .create();
+
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(AccidentFactory.getInstance(null).getSelectAccident() == null){ return false;}
-                if(MainActivity.mainViewPager.getCurrentItem() == NAVIGATOR_PAGE && AccidentFactory.getInstance(null).getSelectAccident().getAccCode() == Accident.ACC_CODE_G){
-                    if(!onGoingDialog.isShowing()){
-                        onGoingDialog.show();}
-                    return false;
-                } else {
-                    return false;
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (AccidentFactory.getInstance(null).getSelectAccident() == null) {
+                    return;
                 }
+                if (position == OverviewFragment.OVERVIEW_PAGE && AccidentFactory.getInstance(null).getSelectAccident().getAccCode() == Accident.ACC_CODE_G) {
+                    if (!onGoingDialog.isShowing()) {
+                        onGoingDialog.show();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
@@ -232,11 +245,21 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+                try {
+                    Accident accident = AccidentFactory.getInstance(null).findByAccidentId(realm.where(AccidentBrief.class).findFirst().getAccidentId());
+                    if (accident != null) {
+                        MainActivity.mainViewPager.setCurrentItem(2);
+                        AccidentFactory.setSelectAccident(accident);
+                        viewAccidentDataandLocation(accident);
+                    }
+                } catch (NullPointerException npex) {
+
+                }
             }
         });
     }
 
-    public void viewAccidentDataandLocationFromNoti(final Accident accident){
+    public void viewAccidentDataandLocationFromNoti(final Accident accident) {
         navMapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -261,7 +284,9 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 viewAccidentDataandLocation(accident);
+
             }
+
         });
     }
 
@@ -274,7 +299,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         final double estimatedDistance = AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(current, des);
         //googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title(getString(R.string.mainnav_marker_curposition_title)));
         String desBriefAddress = AddressFactory.getInstance(null).getBriefLocationAddress(des);
-        googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(desBriefAddress.substring(0, desBriefAddress.indexOf(","))).snippet(desBriefAddress.substring(desBriefAddress.indexOf(",")+1)));
+        googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(desBriefAddress.substring(0, desBriefAddress.indexOf(","))).snippet(desBriefAddress.substring(desBriefAddress.indexOf(",") + 1)));
         GoogleDirection.withServerKey(N8IFY_GOOGLE_MAPS_DIRECTION_KEY)
                 .from(LocationFactory.getInstance(null).getLatLng())
                 .to(new LatLng(accident.getLatitude(), accident.getLongitude()))
@@ -303,6 +328,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                             cameraPosition = new CameraPosition.Builder().target(des).zoom(zoom).build();
                             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                         }
+
+
                     }
 
                     @Override
@@ -315,19 +342,21 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         destinationDetailRelativeLayout.setVisibility(View.VISIBLE);
         actionDetailRelativeLayout.setVisibility(View.VISIBLE);
         Object[] accTypeProperties = getFullAccidentTypeProperties(accident.getAccType());
-        imgAcctype.setImageResource((int)accTypeProperties[1]);
-        txtAccidentType.setText((String)accTypeProperties[0]);
+        imgAcctype.setImageResource((int) accTypeProperties[1]);
+        txtAccidentType.setText((String) accTypeProperties[0]);
         txtDestinationDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(des));
         txtNavigatorEstimatedDistance.setText(String.valueOf(estimatedDistance).concat(" ").concat(getString(R.string.kms)).concat(" ").concat(getString(R.string.mainnav_from_curposition)));
-        if(Profile.getInsatance().getUserId() != accident.getResponsibleRescr() && accident.getResponsibleRescr() != 0){
+        btnImGoing.setVisibility(View.VISIBLE);
+        if (Profile.getInsatance().getUserId() != accident.getResponsibleRescr() && accident.getResponsibleRescr() != 0) {
             btnImGoing.setVisibility(View.GONE);
         } else {
             btnImGoing.setText(getString(R.string.mainnav_btn_going));
         }
-        if(Profile.getInsatance().getUserId() == accident.getResponsibleRescr() && accident.getAccCode() != Accident.ACC_CODE_A){
+        if (Profile.getInsatance().getUserId() == accident.getResponsibleRescr() && accident.getAccCode() != Accident.ACC_CODE_A) {
             btnImGoing.setText(getString(R.string.mainnav_btn_close));
-            isOnGoing=true;
+            isOnGoing = true;
         }
+
     }
 
     /* Listener will be here. */
@@ -335,8 +364,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
-                if(isOnGoing){
-                    if(Weeworh.with(context).setRescuedCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId())) {
+                if (isOnGoing) {
+                    if (Weeworh.with(context).setRescuedCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId())) {
                         navigationHandler.removeCallbacks(onGoingRunnable);
                         btnImGoing.setVisibility(View.GONE);
                         isOnGoing = false;
@@ -344,6 +373,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                             @Override
                             public void execute(Realm realm) {
                                 realm.delete(AccidentBrief.class);
+                                AccidentFactory.setSelectAccident(null);
                             }
                         });
                     }
@@ -367,32 +397,31 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     }
 
 
-
     /* Useful */
-    public Object[] getFullAccidentTypeProperties(byte accType){
+    public Object[] getFullAccidentTypeProperties(byte accType) {
         Object[] accidentProps = new Object[2];
-        switch (accType){
-            case Accident.ACC_TYPE_TRAFFIC :
+        switch (accType) {
+            case Accident.ACC_TYPE_TRAFFIC:
                 accidentProps[0] = getResources().getString(R.string.mainnav_acctype_traffic);
                 accidentProps[1] = getResources().getIdentifier("acctype_crash", "drawable", context.getPackageName());
                 break;
-            case Accident.ACC_TYPE_FIRE :
+            case Accident.ACC_TYPE_FIRE:
                 accidentProps[0] = getResources().getString(R.string.mainnav_acctype_fires);
                 accidentProps[1] = getResources().getIdentifier("acctype_fire", "drawable", context.getPackageName());
                 break;
-            case Accident.ACC_TYPE_PATIENT :
+            case Accident.ACC_TYPE_PATIENT:
                 accidentProps[0] = getResources().getString(R.string.mainnav_acctype_patient);
                 accidentProps[1] = getResources().getIdentifier("acctype_patient", "drawable", context.getPackageName());
                 break;
-            case Accident.ACC_TYPE_ANIMAL :
+            case Accident.ACC_TYPE_ANIMAL:
                 accidentProps[0] = getResources().getString(R.string.mainnav_acctype_animal);
                 accidentProps[1] = getResources().getIdentifier("acctype_animal", "drawable", context.getPackageName());
                 break;
-            case Accident.ACC_TYPE_BRAWL :
+            case Accident.ACC_TYPE_BRAWL:
                 accidentProps[0] = getResources().getString(R.string.mainnav_acctype_brawl);
                 accidentProps[1] = getResources().getIdentifier("acctype_brawl", "drawable", context.getPackageName());
                 break;
-            case Accident.ACC_TYPE_OTHER :
+            case Accident.ACC_TYPE_OTHER:
                 accidentProps[0] = getResources().getString(R.string.mainnav_acctype_other);
                 accidentProps[1] = getResources().getIdentifier("acctype_other", "drawable", context.getPackageName());
                 break;

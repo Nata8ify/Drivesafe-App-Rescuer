@@ -113,6 +113,7 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
         setMainViewPager(this.mainViewPager);
     }
 
+
     public void setMainViewPager(ViewPager viewPager) {
         MainActivityTabSectionAdapter adapter = new MainActivityTabSectionAdapter(((AppCompatActivity) context).getSupportFragmentManager());
         this.configurationFragment = new ConfigurationFragment();
