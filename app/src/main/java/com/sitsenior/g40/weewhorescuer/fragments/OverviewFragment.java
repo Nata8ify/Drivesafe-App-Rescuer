@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
@@ -118,6 +119,8 @@ public class OverviewFragment extends Fragment {
         accidentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView textView = (TextView)view.findViewById(R.id.txt_briefaddr);
+                Log.d("textView", textView.getText().toString());
                 Accident accident = AccidentFactory.getInstance(null).getAccidentList().get(position);
                 AccidentFactory.getInstance(null).setSelectAccident(accident);
                 ((NavigatorFragment)getFragmentManager().findFragmentByTag("android:switcher:".concat(String.valueOf(R.id.vwpgr_main)).concat(":2"))).viewAccidentDataandLocation(accident);

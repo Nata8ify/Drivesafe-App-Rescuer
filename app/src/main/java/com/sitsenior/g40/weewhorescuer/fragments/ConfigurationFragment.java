@@ -11,9 +11,12 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 
 import com.sitsenior.g40.weewhorescuer.LoginActivity;
@@ -34,6 +37,7 @@ public class ConfigurationFragment extends Fragment {
     private Button logoutButton;
     private AlertDialog logoutAlertDialog;
     private Spinner languageSpinner;
+    private CheckBox chkboxKeepScreenOn;
 
     @Nullable
     @Override
@@ -75,6 +79,7 @@ public class ConfigurationFragment extends Fragment {
         super.onStart();
         logoutButton = (Button) getView().findViewById(R.id.btn_logout);
         languageSpinner = (Spinner) getView().findViewById(R.id.spnr_langs);
+        chkboxKeepScreenOn = (CheckBox) getView().findViewById(R.id.chkbox_keep_screen_on);
         languageSpinner.setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, context.getResources().getStringArray(R.array.maincon_langs)));
         languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -95,6 +100,17 @@ public class ConfigurationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 logoutAlertDialog.show();
+            }
+        });
+
+        chkboxKeepScreenOn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
             }
         });
     }

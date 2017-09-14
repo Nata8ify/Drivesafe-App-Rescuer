@@ -3,36 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp">
+
             <TableRow>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16dp"
-                        android:textStyle="bold"
-                        android:text="@string/maincon_lang"
-                        android:layout_weight="1" />
-                    <Spinner
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/spnr_langs"
-                        android:layout_weight="1"></Spinner>
-            </TableRow>
-            <TableRow android:paddingTop="25dp">
-                <android.support.design.internal.BaselineLayout android:layout_weight="4"></android.support.design.internal.BaselineLayout>
-                <Button
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/btn_logout"
-                    android:text="@string/maincon_logout"/>
+                    android:text="@string/maincon_lang"
+                    android:textSize="16dp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spnr_langs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"></Spinner>
             </TableRow>
+            <TableRow>
+                <CheckBox
+                    android:id="@+id/chkbox_keep_screen_on"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/maincon_keep_screen_on"/>
+            </TableRow>
+            <TableRow android:paddingTop="25dp">
+
+                <android.support.design.internal.BaselineLayout android:layout_weight="4"></android.support.design.internal.BaselineLayout>
+
+                <Button
+                    android:id="@+id/btn_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/maincon_logout" />
+            </TableRow>
+
+
         </TableLayout>
     </ScrollView>
 </LinearLayout>

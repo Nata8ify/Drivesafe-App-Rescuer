@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.try_again), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 })
                 .create();
