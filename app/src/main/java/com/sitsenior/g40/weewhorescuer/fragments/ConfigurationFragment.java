@@ -19,9 +19,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sitsenior.g40.weewhorescuer.LoginActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.models.extra.OperatingLocation;
 
 import io.realm.Realm;
 
@@ -56,6 +58,7 @@ public class ConfigurationFragment extends Fragment {
                                 if (inAppProfile != null) {
                                     inAppProfile.deleteFromRealm();
                                 }
+                                FirebaseMessaging.getInstance().unsubscribeFromTopic(String.valueOf( OperatingLocation.getInstance().getOrganizationId()));
                             }
                         });
                         getActivity().finish();

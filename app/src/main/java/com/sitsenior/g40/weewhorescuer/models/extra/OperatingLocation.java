@@ -8,42 +8,53 @@ package com.sitsenior.g40.weewhorescuer.models.extra;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
+import io.realm.RealmObject;
+
 /**
  *
  * @author PNattawut
  */
-public class OperatingLocation {
-    private LatLng latLng;
+public class OperatingLocation extends RealmObject{
+    private double latitude;
+    private double longitude;
     private int neutralBound;
     private int mainBound;
     private int organizationId;
 
-    public OperatingLocation(LatLng latLng, int neutralBound) {
-        this.latLng = latLng;
-        this.neutralBound = neutralBound;
+    public static OperatingLocation operatingLocation;
+
+    public static OperatingLocation getInstance(){
+        if(operatingLocation == null){
+            operatingLocation = new OperatingLocation();
+        }
+        return operatingLocation;
     }
 
-    public OperatingLocation(LatLng latLng, int neutralBound, int mainBound) {
-        this.latLng = latLng;
-        this.neutralBound = neutralBound;
-        this.mainBound = mainBound;
+    public OperatingLocation() {
     }
 
-    public OperatingLocation(LatLng latLng, int neutralBound, int mainBound, int organizationId) {
-        this.latLng = latLng;
+    public OperatingLocation(double latitude, double longitude, int neutralBound, int mainBound, int organizationId) {
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.neutralBound = neutralBound;
         this.mainBound = mainBound;
         this.organizationId = organizationId;
     }
 
-
-
-    public LatLng getLatLng() {
-        return latLng;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public int getNeutralBound() {

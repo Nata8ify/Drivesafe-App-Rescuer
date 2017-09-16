@@ -54,11 +54,18 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        if (mainProgressDialog == null) {
-            mainProgressDialog = new ProgressDialog(context);
-            mainProgressDialog.setMessage(context.getResources().getString(R.string.main_waiting_gps));
-            mainProgressDialog.setCancelable(false);
-            mainProgressDialog.show();
+        try {
+            if (mainProgressDialog == null) {
+                mainProgressDialog = new ProgressDialog(context);
+                mainProgressDialog.setMessage(context.getResources().getString(R.string.main_waiting_gps));
+                mainProgressDialog.setCancelable(false);
+                mainProgressDialog.show();
+            } else {
+                mainProgressDialog.dismiss();
+                mainProgressDialog.show();
+            }
+        } catch (Exception e){
+            onPreExecute();
         }
     }
 

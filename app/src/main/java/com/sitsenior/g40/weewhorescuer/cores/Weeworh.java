@@ -8,6 +8,7 @@ import com.koushikdutta.ion.Ion;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.models.extra.OperatingLocation;
 import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 
 import java.util.List;
@@ -66,6 +67,23 @@ public class Weeworh {
             e.printStackTrace();
         }
         return reportUserProfile;
+    }
+
+    public int getOperatingLocationIdByUserId(long userId){
+        int organizationId = 0;
+        if(!SettingUtils.isNetworkConnected(context)){return organizationId;}
+        try {
+            organizationId = Ion.with(context)
+                    .load(Url.GET_ORGANIZE_ID)
+                    .setBodyParameter(Param.userId, String.valueOf(userId))
+                    .as(Integer.class)
+                    .get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return organizationId;
     }
 
     public List<Accident> getInBoundTodayIncidents(long userId){
@@ -155,6 +173,7 @@ public class Weeworh {
         public static final String RESCUER_REGISTER = HOST.concat("To?opt=rregis");
         public static final String GET_TODAY_INBOUND_ACCIDENTS = HOST.concat("RescuerIn?opt=get_boundactacc");
         public static final String GET_REPORT_USER_INFO = HOST.concat("RescuerIn?opt=get_userinfo");
+        public static final String GET_ORGANIZE_ID = HOST.concat("RescuerIn?opt=get_organization_id");
         public static final String SET_GOING_CODE = HOST.concat("RescuerIn?opt=set_ongoing");
         public static final String SET_RESCUED_CODE = HOST.concat("RescuerIn?opt=set_closed");
         public static final String SET_RESCUING_CODE = HOST.concat("RescuerIn?opt=set_onrescue");

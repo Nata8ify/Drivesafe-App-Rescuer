@@ -4,10 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.models.extra.OperatingLocation;
 import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 
 import io.realm.Realm;
@@ -43,7 +46,12 @@ public class LoginAsyncTask extends AsyncTask<String, Void, Void> {
     protected void onPostExecute(Void aVoid) {
         loginLoadingProgressDialog.dismiss();
         if (!(Profile.getInsatance().getUserId() == 0)) {
+            //Subscribe Firebase Cloud Message (One-time Sub)
+            OperatingLocation.getInstance().setOrganizationId(Weeworh.with(context).getOperatingLocationIdByUserId(Profile.getInsatance().getUserId()));
+            FirebaseMessaging.getInstance().subscribeToTopic(String.valueOf( OperatingLocation.getInstance().getOrganizationId()));
+            Log.d("subscribeToTopic", String.valueOf( OperatingLocation.getInstance().getOrganizationId()));
             Intent mainActivityIntent = new Intent(context, MainActivity.class);
+
             context.startActivity(mainActivityIntent);
             if(isRememberMe) {rememberMe();}
         } else {
