@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         mainViewPager = (ViewPager)findViewById(R.id.vwpgr_main);
         tabPage = (TabLayout)findViewById(R.id.tab_page);
         mainHandler = new Handler();
-        new AccidentResultAsyncTask(Profile.getInsatance(), MainActivity.this).execute();
+        //new AccidentResultAsyncTask(Profile.getInsatance(), MainActivity.this).execute();
         new WaitLocationAsyncTask(MainActivity.this, mainViewPager).execute();
 
         noConnectionAlertDialog = new AlertDialog.Builder(this)

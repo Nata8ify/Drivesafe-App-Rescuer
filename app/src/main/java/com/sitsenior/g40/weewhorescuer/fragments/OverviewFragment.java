@@ -69,7 +69,7 @@ public class OverviewFragment extends Fragment {
         emptyAccidentResultLayout = (LinearLayout) getView().findViewById(R.id.linrlout_emptyacc);
         viewIncidentOptionLayout = (LinearLayout) getView().findViewById(R.id.linrlout_incident_view_option);
         viewIncidentPanelLayout = (LinearLayout) getView().findViewById(R.id.linrlout_incident_view_panel);
-        btnViewAwaitingRequest = (Button)getView().findViewById(R.id.btn_view_a);
+        btnViewAwaitingRequest = (Button) getView().findViewById(R.id.btn_view_a);
         btnViewGoing = (Button)getView().findViewById(R.id.btn_view_g);
         btnViewRescuing = (Button)getView().findViewById(R.id.btn_view_r);
         btnViewClosed = (Button)getView().findViewById(R.id.btn_view_c);
@@ -80,12 +80,15 @@ public class OverviewFragment extends Fragment {
             @Override
             public void run() {
                 if(rescuePendingIncidentList == null){rescuePendingIncidentList = new ArrayList<Accident>();}
-                rescuePendingIncidentList.clear();
-                rescuePendingIncidentList.addAll(AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().getRescuePendingIncident());
+                List<Accident> accs = AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().getRescuePendingIncident();
+                if(accs != null) {
+                    rescuePendingIncidentList.clear();
+                    rescuePendingIncidentList.addAll(accs);
+                }
                 if(OverviewFragment.accidentListAdapter != null){
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             OverviewFragment.accidentListAdapter.clear();
                             Log.d(">>>::", rescuePendingIncidentList.toString());
                             OverviewFragment.accidentListAdapter.addAll(rescuePendingIncidentList);
@@ -99,8 +102,8 @@ public class OverviewFragment extends Fragment {
                         viewIncidentPanelLayout.setVisibility(View.VISIBLE);
                         emptyAccidentResultLayout.setVisibility(View.GONE);
                     }
-//                        }
-//                    });
+                        }
+                    });
                 }
                 overviewHandler.postDelayed(this, 3000L);
             }
