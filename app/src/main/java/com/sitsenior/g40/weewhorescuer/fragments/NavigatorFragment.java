@@ -168,14 +168,14 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onPageSelected(int position) {
-                if (AccidentFactory.getInstance(null).getSelectAccident() == null) {
+                /*if (AccidentFactory.getInstance(null).getSelectAccident() == null) {
                     return;
                 }
                 if (position == OverviewFragment.OVERVIEW_PAGE && AccidentFactory.getInstance(null).getSelectAccident().getAccCode() == Accident.ACC_CODE_G) {
                     if (!onGoingDialog.isShowing()) {
                         onGoingDialog.show();
                     }
-                }
+                }*/
 
             }
 
@@ -379,13 +379,13 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                         navigationHandler.removeCallbacks(onGoingRunnable);
                         btnImGoing.setVisibility(View.GONE);
                         isOnGoing = false;
-                        /*realm.executeTransaction(new Realm.Transaction() {
+                        realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 realm.delete(AccidentBrief.class);
-                                AccidentFactory.setSelectAccident(null);
+                                //AccidentFactory.setSelectAccident(null);
                             }
-                        });*/
+                        });
                     }
                     return;
                 }
