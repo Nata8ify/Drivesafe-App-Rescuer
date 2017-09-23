@@ -34,6 +34,7 @@ public class OverviewFragment extends Fragment {
     public static  LinearLayout emptyAccidentResultLayout;
     public static  LinearLayout viewIncidentOptionLayout;
     public static  LinearLayout viewIncidentPanelLayout;
+    public static  LinearLayout rootOverviewLayout;
     public static ArrayAdapter accidentListAdapter;
     public static  ListView accidentListView;
 
@@ -68,6 +69,7 @@ public class OverviewFragment extends Fragment {
         accidentListView = (ListView) getView().findViewById(R.id.listvw_a_acclist);
         emptyAccidentResultLayout = (LinearLayout) getView().findViewById(R.id.linrlout_emptyacc);
         viewIncidentOptionLayout = (LinearLayout) getView().findViewById(R.id.linrlout_incident_view_option);
+        rootOverviewLayout = (LinearLayout) getView().findViewById(R.id.linrout_root_overview);
         viewIncidentPanelLayout = (LinearLayout) getView().findViewById(R.id.linrlout_incident_view_panel);
         btnViewAwaitingRequest = (Button) getView().findViewById(R.id.btn_view_a);
         btnViewGoing = (Button)getView().findViewById(R.id.btn_view_g);
@@ -125,7 +127,7 @@ public class OverviewFragment extends Fragment {
                 TextView textView = (TextView)view.findViewById(R.id.txt_briefaddr);
                 Log.d("textView", textView.getText().toString());
                 Accident accident = AccidentFactory.getInstance(null).getAccidentList().get(position);
-                AccidentFactory.getInstance(null).setSelectAccident(accident);
+                AccidentFactory.setSelectAccident(accident);
                 ((NavigatorFragment)getFragmentManager().findFragmentByTag("android:switcher:".concat(String.valueOf(R.id.vwpgr_main)).concat(":2"))).viewAccidentDataandLocation(accident);
                 MainActivity.mainViewPager.setCurrentItem(NavigatorFragment.NAVIGATOR_PAGE);
             }

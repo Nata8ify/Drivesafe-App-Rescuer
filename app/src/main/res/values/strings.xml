@@ -85,6 +85,7 @@
     <string name="warn_no_accidents">There are no accident occured by now \n(We hope it\'s still being until the end of the day or maybe long as it possible)</string>
     <string name="warn_youre_quiting">Do you want to quit from Weeworh?</string>
     <string name="warn_youre_logout">Do you want to log the system out?</string>
+    <string name="warn_youre_ready_to_go">You already have responsible case</string>
     <string name="warn_navigating_not_allow">On Going state is not allow you to leave this page</string>
     <string name="title_activity_maps">Map</string>
 

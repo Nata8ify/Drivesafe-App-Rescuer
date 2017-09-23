@@ -304,7 +304,9 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         //googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title(getString(R.string.mainnav_marker_curposition_title)));
         String desBriefAddress = AddressFactory.getInstance(null).getBriefLocationAddress(des);
         googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(desBriefAddress));
-        GoogleDirection.withServerKey(N8IFY_GOOGLE_MAPS_DIRECTION_KEY)
+        cameraPosition = new CameraPosition.Builder().target(des).zoom(14).build();
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+        /*GoogleDirection.withServerKey(N8IFY_GOOGLE_MAPS_DIRECTION_KEY)
                 .from(LocationFactory.getInstance(null).getLatLng())
                 .to(new LatLng(accident.getLatitude(), accident.getLongitude()))
                 .transportMode(TransportMode.TRANSIT)
@@ -340,7 +342,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     public void onDirectionFailure(Throwable t) {
                         //Location might be not existed.
                     }
-                });
+                });*/
 
         currentPositionDetailRelativeLayout.setVisibility(View.GONE);
         destinationDetailRelativeLayout.setVisibility(View.VISIBLE);
@@ -369,17 +371,21 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.btn_going:
                 if (isOnGoing) {
+                    if(realm.where(AccidentBrief.class).findFirst().getAccidentId() != AccidentFactory.getSelectAccident().getAccidentId()){
+                        Toast.makeText(context, getString(R.string.warn_youre_ready_to_go), Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     if (Weeworh.with(context).setRescuedCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId())) {
                         navigationHandler.removeCallbacks(onGoingRunnable);
                         btnImGoing.setVisibility(View.GONE);
                         isOnGoing = false;
-                        realm.executeTransaction(new Realm.Transaction() {
+                        /*realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
                                 realm.delete(AccidentBrief.class);
                                 AccidentFactory.setSelectAccident(null);
                             }
-                        });
+                        });*/
                     }
                     return;
                 }
