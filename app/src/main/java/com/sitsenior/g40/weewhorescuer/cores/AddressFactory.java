@@ -41,7 +41,7 @@ public class AddressFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "na";
+        return "Location Loading Problem.. \n(Tap this Report to view the Location on the Map)";
     }
 
     public double getEstimateDistanceFromCurrentPoint(LatLng current, LatLng des){

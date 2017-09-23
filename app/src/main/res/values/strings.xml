@@ -76,6 +76,7 @@
     <string name="call"> Call to Reporter </string>
     <string name="try_again">Try Again</string>
     <string name="warning">Warning</string>
+    <string name="progressing">In Progress</string>
 
     <!--Warning-->
     <string name="warn_no_network">A Network Connectivity isn\'t Available</string>

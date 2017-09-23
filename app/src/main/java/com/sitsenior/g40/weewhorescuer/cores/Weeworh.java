@@ -3,6 +3,8 @@ package com.sitsenior.g40.weewhorescuer.cores;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.ion.Ion;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
@@ -89,8 +91,11 @@ public class Weeworh {
     public List<Accident> getInBoundTodayIncidents(long userId){
         if(!SettingUtils.isNetworkConnected(context)){return null;}
         List<Accident> accidents = null;
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+        Ion ion = Ion.getDefault(context);
+        ion.configure().setGson(gson);
         try {
-            accidents = (List<Accident>)Ion.with(context)
+            accidents = (List<Accident>)ion.with(context)
                     .load(Url.GET_TODAY_INBOUND_ACCIDENTS)
                     .setTimeout(1000)
                     .setBodyParameter(Param.userId, String.valueOf(userId))

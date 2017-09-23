@@ -303,7 +303,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         final double estimatedDistance = AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(current, des);
         //googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title(getString(R.string.mainnav_marker_curposition_title)));
         String desBriefAddress = AddressFactory.getInstance(null).getBriefLocationAddress(des);
-        googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(desBriefAddress.substring(0, desBriefAddress.indexOf(","))).snippet(desBriefAddress.substring(desBriefAddress.indexOf(",") + 1)));
+        googleMap.addMarker(new MarkerOptions().draggable(false).position(des).title(desBriefAddress));
         GoogleDirection.withServerKey(N8IFY_GOOGLE_MAPS_DIRECTION_KEY)
                 .from(LocationFactory.getInstance(null).getLatLng())
                 .to(new LatLng(accident.getLatitude(), accident.getLongitude()))

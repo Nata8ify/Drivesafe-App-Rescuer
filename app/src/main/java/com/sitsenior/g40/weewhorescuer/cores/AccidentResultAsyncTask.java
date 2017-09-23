@@ -1,6 +1,7 @@
 package com.sitsenior.g40.weewhorescuer.cores;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
@@ -30,6 +31,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
     private Profile profile;
     private long userId;
 
+    private ProgressDialog progressDialog;
 
     public AccidentResultAsyncTask(Profile profile, Context context, LinearLayout emptyAccidentResultLayout, LinearLayout viewIncidentPanelLayout, ListView accidentListView) {
         this.profile = profile;
@@ -50,6 +52,10 @@ public class AccidentResultAsyncTask extends AsyncTask {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage(context.getString(R.string.progressing));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
     @Override
@@ -77,6 +83,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
         OverviewFragment.emptyAccidentResultLayout = this.emptyAccidentResultLayout;
         OverviewFragment.viewIncidentPanelLayout = this.viewIncidentPanelLayout;
         OverviewFragment.accidentListView = this.accidentListView;
+        progressDialog.dismiss();
         super.onPostExecute(o);
     }
 
