@@ -52,10 +52,12 @@ public class AccidentResultAsyncTask extends AsyncTask {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage(context.getString(R.string.progressing));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        if(progressDialog == null) {
+            progressDialog = new ProgressDialog(context);
+            progressDialog.setMessage(context.getString(R.string.progressing));
+            progressDialog.setCancelable(false);
+            //progressDialog.show();
+        }
     }
 
     @Override
@@ -86,7 +88,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
         OverviewFragment.emptyAccidentResultLayout = this.emptyAccidentResultLayout;
         OverviewFragment.viewIncidentPanelLayout = this.viewIncidentPanelLayout;
         OverviewFragment.accidentListView = this.accidentListView;
-        progressDialog.dismiss();
+        //progressDialog.dismiss();
         super.onPostExecute(o);
     }
 
