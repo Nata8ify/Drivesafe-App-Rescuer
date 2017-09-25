@@ -3,7 +3,9 @@ package com.sitsenior.g40.weewhorescuer.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -47,6 +49,7 @@ import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
+import com.sitsenior.g40.weewhorescuer.models.extra.ReporterProfile;
 
 import io.realm.Realm;
 
@@ -79,6 +82,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
 
     private Handler navigationHandler;
     private Runnable onGoingRunnable;
+    private Runnable updateSelectedIncidentRunnable;
     public static boolean isOnGoing;
 
     private Realm realm;
@@ -87,15 +91,23 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        context = getContext();
+        Realm.init(context);
+        realm = Realm.getDefaultInstance();
         navigationHandler = new Handler();
         onGoingRunnable = new Runnable() {
             private final double CLOSEST_DISTANCE = 0.01; // 10 Meters
 
             @Override
             public void run() {
-                if (AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getInstance(null).getSelectAccident().getLatitude(), AccidentFactory.getInstance(null).getSelectAccident().getLongitude())) <= CLOSEST_DISTANCE) {
+                if(AccidentFactory.getResponsibleAccident() == null){
                     navigationHandler.removeCallbacks(this);
-                    if (Weeworh.with(context).setRescuingCode(AccidentFactory.getSelectAccident().getAccidentId())) {
+                    return;
+                }
+                if (AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())) <= CLOSEST_DISTANCE) {
+                    navigationHandler.removeCallbacks(this);
+                    if (Weeworh.with(context).setRescuingCode(AccidentFactory.getResponsibleAccident().getAccidentId())) {
                         Toast.makeText(context, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -104,9 +116,50 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 }
             }
         };
-        context = getContext();
-        Realm.init(context);
-        realm = Realm.getDefaultInstance();
+        updateSelectedIncidentRunnable = new Runnable() {
+            @Override
+            public void run() {
+                // TODO : Get Going Incident Update
+                AccidentFactory.setResponsibleAccident(Weeworh.with(context).getIncidentById(realm.where(AccidentBrief.class).findFirst().getAccidentId()));
+                Log.d("$$$Acc", AccidentFactory.getResponsibleAccident().toString());
+                if(AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_C || AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU){
+                    navigationHandler.removeCallbacks(this);
+                   realm.executeTransaction(new Realm.Transaction() {
+                       @Override
+                       public void execute(Realm realm) {
+                           realm.delete(AccidentBrief.class);
+                       }
+                   });
+                    // TODO : Hide Rescue Button
+                    isOnGoing = false;
+                    btnImGoing.setVisibility(View.GONE);
+                    if(AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU){
+                        new AlertDialog.Builder(context)
+                                .setTitle(getString(R.string.request_cancelled))
+                                .setMessage(getString(R.string.warn_user_request_cancel))
+                                .setCancelable(false)
+                                .setPositiveButton(getString(R.string.call), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                        callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
+                                        startActivity(callIntent);
+                                    }
+                                })
+                                .setNegativeButton(getString(R.string.acknowledge), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                }).create().show();
+                    }
+                    AccidentFactory.setResponsibleAccident(null);
+                } else {
+                    navigationHandler.postDelayed(this, 5000L);
+                }
+            }
+        };
+
     }
 
     @Nullable
@@ -375,7 +428,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                         Toast.makeText(context, getString(R.string.warn_youre_ready_to_go), Toast.LENGTH_LONG).show();
                         return;
                     }
-                    if (Weeworh.with(context).setRescuedCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId())) {
+                    if (Weeworh.with(context).setRescuedCode(AccidentFactory.getSelectAccident().getAccidentId())) {
+                        AccidentFactory.setResponsibleAccident(null);
                         navigationHandler.removeCallbacks(onGoingRunnable);
                         btnImGoing.setVisibility(View.GONE);
                         isOnGoing = false;
@@ -383,15 +437,18 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                             @Override
                             public void execute(Realm realm) {
                                 realm.delete(AccidentBrief.class);
-                                //AccidentFactory.setSelectAccident(null);
+                                AccidentFactory.setResponsibleAccident(null);
                             }
                         });
                     }
                     return;
                 }
-                Weeworh.with(context).setGoingCode(AccidentFactory.getInstance(null).getSelectAccident().getAccidentId());
+                Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
+                ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
+                AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident());
                 isOnGoing = true;
                 navigationHandler.post(onGoingRunnable);
+                navigationHandler.post(updateSelectedIncidentRunnable);
                 ((TextView) view).setText(getString(R.string.mainnav_btn_close));
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
@@ -401,7 +458,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 });
                 break;
             case R.id.btn_userdetail:
-                new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getInstance(null).getSelectAccident().getUserId());
+                new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getSelectAccident().getUserId());
                 break;
         }
     }

@@ -24,6 +24,7 @@ public class AccidentFactory {
     private List<Accident> closedAccidentList; // Accident List for Code 'C';
 
     private static Accident selectAccident;
+    private static Accident responsibleAccident;
 
     public static AccidentFactory getInstance(List<Accident> accidentList){
         if(accidentFactory == null){
@@ -188,6 +189,14 @@ public class AccidentFactory {
             }
         }
         return fromNotiAccident;
+    }
+
+    public static Accident getResponsibleAccident() {
+        return responsibleAccident;
+    }
+
+    public static void setResponsibleAccident(Accident responsibleAccident) {
+        AccidentFactory.responsibleAccident = responsibleAccident;
     }
 
     @Override

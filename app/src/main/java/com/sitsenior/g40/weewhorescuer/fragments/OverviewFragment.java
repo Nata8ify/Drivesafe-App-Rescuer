@@ -88,6 +88,7 @@ public class OverviewFragment extends Fragment {
                     rescuePendingIncidentList.addAll(accs);
                 }
                 if(OverviewFragment.accidentListAdapter != null){
+                    //TODO : Handler NullPointer
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

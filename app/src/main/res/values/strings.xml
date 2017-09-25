@@ -1,100 +1,101 @@
 <resources>
     <string name="app_name">Rescuer\'s Weeworh</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">ตั้งค่า</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!--Login-->
-    <string name="login_username">Username</string>
-    <string name="login_password">Password</string>
-    <string name="login_rememberme">Remember Me</string>
-    <string name="login_register">Register</string>
-    <string name="login_login">Login</string>
-    <string name="login_loading">Loading...</string>
-    <string name="login_problem_title">Login is Unsuccessfuly</string>
-    <string name="login_problem_message">Please be ensured that \n\n 1. Login Data is valid (Username and Password). \n\n 2. The Internet Connection is Established. \n\n</string>
+    <string name="login_username">ชื่อผู้ใช้</string>
+    <string name="login_password">รหัสผ่าน</string>
+    <string name="login_rememberme">จดจำการเข้าสู้ระบบ</string>
+    <string name="login_register">ลงทะเบียน</string>
+    <string name="login_login">เข้าสู่ระบบ</string>
+    <string name="login_loading">กำลังโหลด ...</string>
+    <string name="login_problem_title">ไม่สามารถเข้าสู่ระบบได้</string>
+    <string name="login_problem_message">กรุณาตรวจสอบ \n\n 1.ชื่อผู้ใช้ หรือรหัสผ่าน \n\n 2.การเชื่อมต่ออินเทอร์เน็ต \n\n</string>
 
     <!--Main-->
     <string name="main_weeworh">WeeWorh</string>
-    <string name="overview">Overview</string>
-    <string name="configuration">Setting</string>
-    <string name="navigator">Navigator</string>
-    <string name="main_waiting_gps">Waiting for location service...</string>
-    <string name="main_btn_tosetting">Go to Setting</string>
-    <string name="main_btn_nope">No, and Close this Application</string>
-    <string name="main_double_tap_exit">Press back again to exit</string>
+    <string name="overview">ภาพรวม</string>
+    <string name="configuration">ตั้งค่า</string>
+    <string name="navigator">การติดตาม</string>
+    <string name="main_waiting_gps">กำลังรอสัญญาณพิกัดจากดาวเทียม...</string>
+    <string name="main_btn_tosetting">ไปยังหน้าตั้งค่า</string>
+    <string name="main_btn_nope">ยกเลิก และปิดแอพพลิเคชัน</string>
+    <string name="main_double_tap_exit">กดกลับอีกครั้งเพื่อออกจากแอพพลิเคชัน</string>
     <!-- Main - Overview -->
     <!-- Main - Navigator -->
-    <string name="mainnav_curposition_title">Your Current Position is ...</string>
-    <string name="mainnav_navposition_title">Your Current Position is ...</string>
-    <string name="mainnav_marker_curposition_title">You\'re Here</string>
+    <string name="mainnav_curposition_title">ตำแหน่งปัจจุบันของคุณ ...</string>
+    <string name="mainnav_navposition_title">ตำแหน่งปัจจุบันของคุณ ...</string>
+    <string name="mainnav_marker_curposition_title">คุณอยู่ที่นี่</string>
     <string name="mainnav_marker_curposition_snipet">*</string>
-    <string name="mainnav_marker_desposition_title">Destination</string>
-    <string name="mainnav_btn_going">Copy! I\'m Going Now</string>
-    <string name="mainnav_btn_close">Rescued</string>
-    <string name="mainnav_btn_userinfo">User\'s Information</string>
-    <string name="mainnav_rescued">Rescued</string>
-    <string name="mainnav_from_curposition"> estimated from your position.</string>
-    <string name="mainnav_on_sight"> This incident may on the sight by now.</string>
-    <string name="mainnav_errs">There are no Incident Around Here</string>
-    <string name="mainnav_acctype_traffic">Traffic Crash</string>
-    <string name="mainnav_acctype_fires">Fires</string>
-    <string name="mainnav_acctype_patient">Coma Patient</string>
-    <string name="mainnav_acctype_animal">Dangerous Animals / Animal Attack</string>
-    <string name="mainnav_acctype_brawl">Brawling</string>
-    <string name="mainnav_acctype_other">General Incident or Accident</string>
-    <string name="mainnav_acctype_unknown">Unknown Type</string>
-    <string name="mainnav_leave_nav">Do you want to leaving the Navigation Page?</string>
-    <string name="mainnav_stay_here">No, Let me stay</string>
-    <string name="mainnav_incident_is_near">Incident Location is on the Sight</string>
+    <string name="mainnav_marker_desposition_title">จุดหมาย</string>
+    <string name="mainnav_btn_going">รับผิดชอบเหตุนี้</string>
+    <string name="mainnav_btn_close">การช่วยเหลือเสร็จสิ้น</string>
+    <string name="mainnav_btn_userinfo">ข้อมูลผู้แจ้งเหตุ</string>
+    <string name="mainnav_from_curposition"> ระยะทางโดยประมาณจากตำแหน่งปัจจุบัน</string>
+    <string name="mainnav_on_sight"> ที่เกิดเหตุอยู่ในระยะสายตาแล้ว</string>
+    <string name="mainnav_errs">บริเวณนี้ไม่มีเหตุ</string>
+    <string name="mainnav_acctype_traffic">รถชน</string>
+    <string name="mainnav_acctype_fires">ไฟไหม้</string>
+    <string name="mainnav_acctype_patient">ผู้ป่วย</string>
+    <string name="mainnav_acctype_animal">สัตว์ร้าย</string>
+    <string name="mainnav_acctype_brawl">ทะเลาะวิวาท</string>
+    <string name="mainnav_acctype_other">อื่นๆ</string>
+    <string name="mainnav_acctype_unknown">ระบุไม่ได้</string>
+    <string name="mainnav_leave_nav">ต้องการที่จะออกจากหน้าการติดตามหรือไม่ ? </string>
+    <string name="mainnav_stay_here">ไม่ต้องการ</string>
+    <string name="mainnav_incident_is_near">กำลังเข้าใกล้ที่เกิดเหตุแล้ว</string>
     <!-- Main - Configuration -->
-    <string name="maincon_lang">Language</string>
-    <string name="maincon_keep_screen_on">Keep a Screen On</string>
-    <string name="maincon_lockscr">Lock Screen</string>
-    <string name="maincon_logout">Logout</string>
+    <string name="maincon_lang">ภาษา</string>
+    <string name="maincon_keep_screen_on">ป้องกันสลีปโหมด</string>
+    <string name="maincon_lockscr">ล็อคหน้าจอ</string>
+    <string name="maincon_logout">ออกจากระบบ</string>
     <string-array name="maincon_langs">
         <item>English</item>
-        <item>Thai</item>
+        <item>ภาษาไทย</item>
     </string-array>
 
     <!--Firebase Messaging Service-->
-    <string name="fbservice_incidet_alert">Incident Alert (Tap for more details)</string>
-    <string name="fbservice_incidet_report_from">Reported from </string>
+    <string name="fbservice_incidet_alert">มีเหตุเกิดขึ้น (กดเพื่อดูรายละเอียด)</string>
+    <string name="fbservice_incidet_report_from">แจ้งโดย </string>
 
 
     <!--Simple-->
-    <string name="ok">OKAY</string>
-    <string name="submit">Submit</string>
-    <string name="cancel">Cancel</string>
-    <string name="close">Close</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="acknowledge">Acknowledge</string>
-    <string name="on">ON</string>
-    <string name="off">OFF</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="kms"> Km(s) </string>
-    <string name="call"> Call to Reporter </string>
-    <string name="try_again">Try Again</string>
-    <string name="warning">Warning</string>
-    <string name="progressing">In Progress</string>
+    <string name="ok">โอเค</string>
+    <string name="submit">ส่ง</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="close">ปิด</string>
+    <string name="dismiss">ไม่สนใจ</string>
+    <string name="acknowledge">รับทราบ</string>
+    <string name="on">เปิด</string>
+    <string name="off">ปิด</string>
+    <string name="yes">ตกลง</string>
+    <string name="no">ไม่</string>
+    <string name="kms"> กิโลเมตร </string>
+    <string name="call"> ติดต่อกับผู้แจ้งเหตุ </string>
+    <string name="try_again">ลองอีกครั้ง</string>
+    <string name="warning">คำเตือน</string>
+    <string name="progressing">กำลังดำเนินการ</string>
+    <string name="request_cancelled">การข้อความช่วยเหลือถูกยกเลิก</string>
 
     <!--Warning-->
-    <string name="warn_no_network">A Network Connectivity isn\'t Available</string>
-    <string name="warn_no_profile">User Profile isn\'t Available</string>
-    <string name="warn_no_location_permission">This Application need the Location Permission or else this module will not function.</string>
-    <string name="warn_no_accidents">There are no accident occured by now \n(We hope it\'s still being until the end of the day or maybe long as it possible)</string>
-    <string name="warn_youre_quiting">Do you want to quit from Weeworh?</string>
-    <string name="warn_youre_logout">Do you want to log the system out?</string>
-    <string name="warn_youre_ready_to_go">You already have responsible case</string>
-    <string name="warn_navigating_not_allow">On Going state is not allow you to leave this page</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="warn_no_network">ไม่มีการเชื่อมต่ออินเทอร์เน็ต</string>
+    <string name="warn_no_profile">บัญชีผู้ใช้ไม่พร้อมใช้งาน</string>
+    <string name="warn_no_location_permission">แอพพลิเคชันนี้ต้องการการเข้าถึงสถานที่ ไม่เช่นนั้นฟังก์ชันนี้จะไม่ทำงาน</string>
+    <string name="warn_no_accidents">ขณะนี้ไม่มีเหตุเกิดขึ้น</string>
+    <string name="warn_youre_quiting">ต้องการออกจากแอพพลิเคชันหรือไม่ ? </string>
+    <string name="warn_youre_logout">ต้องการออกจากระบบหรือไม่ ? </string>
+    <string name="warn_youre_ready_to_go">คุณมีเหตุที่รับผิดชอบอยู่เเล้ว</string>
+    <string name="warn_navigating_not_allow">ในขณะปฏิบัติหน้าที่ ไม่อนุญาติให้ออกจากหน้านี้</string>
+    <string name="title_activity_maps">แผนที่</string>
+    <string name="warn_user_request_cancel">ผู้แจ้งเหตุได้ทำการยกเลิกการขอความช่วยเหลือ</string>
 
     <!--Class-->
 
     <!-- Absolate View -->
-    <string name="vwuinfo_name">Report By : </string>
-    <string name="vwuinfo_personno">Personal ID : </string>
-    <string name="vwuinfo_address">Reporter\'s Address : </string>
-    <string name="vwuinfo_phoneno">Phone Number : </string>
+    <string name="vwuinfo_name">ผู้แจ้งเหตุ : </string>
+    <string name="vwuinfo_personno">เลขประจำตัวประชาชน : </string>
+    <string name="vwuinfo_address">ที่อยู่ผู้แจ้งเหตุ : </string>
+    <string name="vwuinfo_phoneno">หมายเลขโทรศัพท์ : </string>
 
 </resources>

@@ -110,6 +110,27 @@ public class Weeworh {
         return accidents;
     }
 
+    public Accident getIncidentById(long accidentId){
+        if(!SettingUtils.isNetworkConnected(context)){return null;}
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+        Ion ion = Ion.getDefault(context);
+        ion.configure().setGson(gson);
+        try {
+            return ion.with(context)
+                    .load(Url.GET_ACCIDENTS_BY_ID)
+                    .setTimeout(1000)
+                    .setBodyParameter(Param.accidentId, String.valueOf(accidentId))
+                    .as(Accident.class)
+                    .get();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /* Set Incident status / Accident status */
     public boolean setGoingCode(long accidentId){
         if(!SettingUtils.isNetworkConnected(context)){return false;}
@@ -177,6 +198,7 @@ public class Weeworh {
         public static final String RESCUER_LOGIN = HOST.concat("RescuerIn?opt=login&utyp=t");
         public static final String RESCUER_REGISTER = HOST.concat("To?opt=rregis");
         public static final String GET_TODAY_INBOUND_ACCIDENTS = HOST.concat("RescuerIn?opt=get_boundactacc");
+        public static final String GET_ACCIDENTS_BY_ID = HOST.concat("RescuerIn?opt=get_accbyid");
         public static final String GET_REPORT_USER_INFO = HOST.concat("RescuerIn?opt=get_userinfo");
         public static final String GET_ORGANIZE_ID = HOST.concat("RescuerIn?opt=get_organization_id");
         public static final String SET_GOING_CODE = HOST.concat("RescuerIn?opt=set_ongoing");
