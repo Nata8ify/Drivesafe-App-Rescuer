@@ -40,6 +40,11 @@
             </intent-filter>
         </service>
         <service android:name=".services.GoingService">
+            <intent-filter>
+                <action android:name="com.g40.ww.action.RESCUED" />
+                <action android:name="com.g40.ww.action.CALL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </service>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

@@ -50,6 +50,7 @@ import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
 import com.sitsenior.g40.weewhorescuer.models.extra.ReporterProfile;
+import com.sitsenior.g40.weewhorescuer.services.GoingService;
 
 import io.realm.Realm;
 
@@ -345,10 +346,11 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
-                Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
+                //Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
                 ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
                 AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident());
                 btnImGoing.setVisibility(View.GONE);
+                getActivity().startService(new Intent(context, GoingService.class));
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getSelectAccident().getUserId());

@@ -31,6 +31,7 @@
     <string name="mainnav_marker_desposition_title">จุดหมาย</string>
     <string name="mainnav_btn_going">รับผิดชอบเหตุนี้</string>
     <string name="mainnav_btn_close">การช่วยเหลือเสร็จสิ้น</string>
+    <string name="mainnav_btn_false">แจ้งเหตุผิดพลาด</string>
     <string name="mainnav_btn_userinfo">ข้อมูลผู้แจ้งเหตุ</string>
     <string name="mainnav_from_curposition"> ระยะทางโดยประมาณจากตำแหน่งปัจจุบัน</string>
     <string name="mainnav_on_sight"> ที่เกิดเหตุอยู่ในระยะสายตาแล้ว</string>

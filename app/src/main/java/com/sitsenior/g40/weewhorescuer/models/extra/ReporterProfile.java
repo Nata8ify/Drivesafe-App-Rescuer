@@ -31,4 +31,6 @@ public class ReporterProfile {
     public void setProfile(Profile profile) {
         ReporterProfile.profile = profile;
     }
+
+
 }
