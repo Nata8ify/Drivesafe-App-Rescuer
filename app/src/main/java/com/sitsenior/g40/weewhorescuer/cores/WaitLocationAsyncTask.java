@@ -54,6 +54,22 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        reqLocationDialog = new AlertDialog.Builder(context)
+                .setMessage(context.getResources().getString(R.string.warn_no_location_permission))
+                .setNegativeButton(context.getResources().getString(R.string.main_btn_nope), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ((Activity) context).finish();
+                    }
+                })
+                .setPositiveButton(context.getResources().getString(R.string.main_btn_tosetting), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setCancelable(false)
+                .create();
         try {
             if (mainProgressDialog == null) {
                 mainProgressDialog = new ProgressDialog(context);
@@ -74,22 +90,6 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
         try {
             if (LocationFactory.getInstance(null).getLatLng().latitude != 0) {
                 if (!LocationFactory.getInstance(null).isGPSProviderEnabled()) {
-                    reqLocationDialog = new AlertDialog.Builder(context)
-                            .setMessage(context.getResources().getString(R.string.warn_no_location_permission))
-                            .setNegativeButton(context.getResources().getString(R.string.main_btn_nope), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    ((Activity) context).finish();
-                                }
-                            })
-                            .setPositiveButton(context.getResources().getString(R.string.main_btn_tosetting), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    context.startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                }
-                            })
-                            .setCancelable(false)
-                            .create();
                     if (!waitSetting) {
                         reqLocationDialog.show();
                         waitSetting = true;

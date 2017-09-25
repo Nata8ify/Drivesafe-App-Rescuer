@@ -6,7 +6,7 @@
     <!--Login-->
     <string name="login_username">ชื่อผู้ใช้</string>
     <string name="login_password">รหัสผ่าน</string>
-    <string name="login_rememberme">จดจำการเข้าสู้ระบบ</string>
+    <string name="login_rememberme">จดจำการเข้าสู่ระบบ</string>
     <string name="login_register">ลงทะเบียน</string>
     <string name="login_login">เข้าสู่ระบบ</string>
     <string name="login_loading">กำลังโหลด ...</string>

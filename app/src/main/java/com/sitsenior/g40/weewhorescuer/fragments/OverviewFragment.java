@@ -89,24 +89,26 @@ public class OverviewFragment extends Fragment {
                 }
                 if(OverviewFragment.accidentListAdapter != null){
                     //TODO : Handler NullPointer
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            OverviewFragment.accidentListAdapter.clear();
-                            Log.d(">>>::", rescuePendingIncidentList.toString());
-                            OverviewFragment.accidentListAdapter.addAll(rescuePendingIncidentList);
-                            OverviewFragment.accidentListAdapter.notifyDataSetChanged();
-                    if(rescuePendingIncidentList.isEmpty()){
-                        Log.d(">>>::", "Nay");
-                        viewIncidentPanelLayout.setVisibility(View.GONE);
-                        emptyAccidentResultLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        Log.d(">>>::", "Yea");
-                        viewIncidentPanelLayout.setVisibility(View.VISIBLE);
-                        emptyAccidentResultLayout.setVisibility(View.GONE);
-                    }
-                        }
-                    });
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                OverviewFragment.accidentListAdapter.clear();
+                                Log.d(">>>::", rescuePendingIncidentList.toString());
+                                OverviewFragment.accidentListAdapter.addAll(rescuePendingIncidentList);
+                                OverviewFragment.accidentListAdapter.notifyDataSetChanged();
+                                if (rescuePendingIncidentList.isEmpty()) {
+                                    Log.d(">>>::", "Nay");
+                                    viewIncidentPanelLayout.setVisibility(View.GONE);
+                                    emptyAccidentResultLayout.setVisibility(View.VISIBLE);
+                                } else {
+                                    Log.d(">>>::", "Yea");
+                                    viewIncidentPanelLayout.setVisibility(View.VISIBLE);
+                                    emptyAccidentResultLayout.setVisibility(View.GONE);
+                                }
+                            }
+                        });
+                    } catch (NullPointerException  npex){}
                 }
                 overviewHandler.postDelayed(this, 3000L);
             }

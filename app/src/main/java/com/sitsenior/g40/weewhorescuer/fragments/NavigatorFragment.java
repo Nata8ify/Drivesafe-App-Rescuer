@@ -80,9 +80,6 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
-    private Handler navigationHandler;
-    private Runnable onGoingRunnable;
-    private Runnable updateSelectedIncidentRunnable;
     public static boolean isOnGoing;
 
     private Realm realm;
@@ -95,70 +92,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         context = getContext();
         Realm.init(context);
         realm = Realm.getDefaultInstance();
-        navigationHandler = new Handler();
-        onGoingRunnable = new Runnable() {
-            private final double CLOSEST_DISTANCE = 0.01; // 10 Meters
 
-            @Override
-            public void run() {
-                if(AccidentFactory.getResponsibleAccident() == null){
-                    navigationHandler.removeCallbacks(this);
-                    return;
-                }
-                if (AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())) <= CLOSEST_DISTANCE) {
-                    navigationHandler.removeCallbacks(this);
-                    if (Weeworh.with(context).setRescuingCode(AccidentFactory.getResponsibleAccident().getAccidentId())) {
-                        Toast.makeText(context, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Log.d("NOT CLOESTE", "NOT");
-                    navigationHandler.postDelayed(this, 10000L);
-                }
-            }
-        };
-        updateSelectedIncidentRunnable = new Runnable() {
-            @Override
-            public void run() {
-                // TODO : Get Going Incident Update
-                AccidentFactory.setResponsibleAccident(Weeworh.with(context).getIncidentById(realm.where(AccidentBrief.class).findFirst().getAccidentId()));
-                Log.d("$$$Acc", AccidentFactory.getResponsibleAccident().toString());
-                if(AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_C || AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU){
-                    navigationHandler.removeCallbacks(this);
-                   realm.executeTransaction(new Realm.Transaction() {
-                       @Override
-                       public void execute(Realm realm) {
-                           realm.delete(AccidentBrief.class);
-                       }
-                   });
-                    // TODO : Hide Rescue Button
-                    isOnGoing = false;
-                    btnImGoing.setVisibility(View.GONE);
-                    if(AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU){
-                        new AlertDialog.Builder(context)
-                                .setTitle(getString(R.string.request_cancelled))
-                                .setMessage(getString(R.string.warn_user_request_cancel))
-                                .setCancelable(false)
-                                .setPositiveButton(getString(R.string.call), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                        callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
-                                        startActivity(callIntent);
-                                    }
-                                })
-                                .setNegativeButton(getString(R.string.acknowledge), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                    }
-                                }).create().show();
-                    }
-                    AccidentFactory.setResponsibleAccident(null);
-                } else {
-                    navigationHandler.postDelayed(this, 5000L);
-                }
-            }
-        };
 
     }
 
@@ -430,7 +364,6 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     }
                     if (Weeworh.with(context).setRescuedCode(AccidentFactory.getSelectAccident().getAccidentId())) {
                         AccidentFactory.setResponsibleAccident(null);
-                        navigationHandler.removeCallbacks(onGoingRunnable);
                         btnImGoing.setVisibility(View.GONE);
                         isOnGoing = false;
                         realm.executeTransaction(new Realm.Transaction() {
@@ -447,8 +380,6 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
                 AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident());
                 isOnGoing = true;
-                navigationHandler.post(onGoingRunnable);
-                navigationHandler.post(updateSelectedIncidentRunnable);
                 ((TextView) view).setText(getString(R.string.mainnav_btn_close));
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override

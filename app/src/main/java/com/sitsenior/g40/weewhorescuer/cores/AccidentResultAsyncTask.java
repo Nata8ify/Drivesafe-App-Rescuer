@@ -64,9 +64,9 @@ public class AccidentResultAsyncTask extends AsyncTask {
     protected Object doInBackground(Object[] params) {
         AccidentFactory.getInstance(Weeworh.with(this.context).getInBoundTodayIncidents(userId));
         if(isIgnoreView){return null;}
-        if(AccidentFactory.getInstance(null).filterNonCloseIncident().getRescuePendingIncident().isEmpty()){
+/*        if(AccidentFactory.getInstance(null).filterNonCloseIncident().getRescuePendingIncident().isEmpty()){
             doInBackground(null);
-        }
+        }*/
         OverviewFragment.accidentListAdapter = new AccidentListAdapter(this.context, R.layout.row_accident, AccidentFactory.getInstance(null).filterNonCloseIncident().getRescuePendingIncident());
         return null;
     }

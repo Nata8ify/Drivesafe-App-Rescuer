@@ -118,7 +118,7 @@ public class Weeworh {
         try {
             return ion.with(context)
                     .load(Url.GET_ACCIDENTS_BY_ID)
-                    .setTimeout(1000)
+                    .setTimeout(10000)
                     .setBodyParameter(Param.accidentId, String.valueOf(accidentId))
                     .as(Accident.class)
                     .get();
