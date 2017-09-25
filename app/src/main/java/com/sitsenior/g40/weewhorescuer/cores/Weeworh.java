@@ -183,7 +183,6 @@ public class Weeworh {
                     .asString()
                     .get();
             Log.d("s", response );
-            NavigatorFragment.isOnGoing = false;
             return true;
         } catch (InterruptedException e) {
             e.printStackTrace();

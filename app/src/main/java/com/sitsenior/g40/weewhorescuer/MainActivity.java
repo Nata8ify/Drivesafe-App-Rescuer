@@ -83,10 +83,10 @@ public class MainActivity extends AppCompatActivity {
     boolean confirmOne = false;
     @Override
     public void onBackPressed() {
-        if(mainViewPager.getCurrentItem() == NavigatorFragment.NAVIGATOR_PAGE && NavigatorFragment.isOnGoing){
+/*        if(mainViewPager.getCurrentItem() == NavigatorFragment.NAVIGATOR_PAGE){
             Log.d(MAIN_TAG, "onBackPressed is not Allow");
             return;
-        }
+        }*/
         if(mainViewPager.getCurrentItem() != OverviewFragment.OVERVIEW_PAGE){
             mainViewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
             return;

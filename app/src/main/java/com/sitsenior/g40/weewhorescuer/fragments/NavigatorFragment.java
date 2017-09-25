@@ -80,9 +80,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
-    public static boolean isOnGoing;
 
-    private Realm realm;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,10 +88,6 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         setRetainInstance(true);
 
         context = getContext();
-        Realm.init(context);
-        realm = Realm.getDefaultInstance();
-
-
     }
 
     @Nullable
@@ -236,7 +230,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-                try {
+/*                try {
                     Accident accident = AccidentFactory.getInstance(null).findByAccidentId(realm.where(AccidentBrief.class).findFirst().getAccidentId());
                     if (accident != null) {
                         MainActivity.mainViewPager.setCurrentItem(2);
@@ -245,7 +239,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     }
                 } catch (NullPointerException npex) {
 
-                }
+                }*/
             }
         });
     }
@@ -340,14 +334,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         txtDestinationDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(des));
         txtNavigatorEstimatedDistance.setText(String.valueOf(estimatedDistance).concat(" ").concat(getString(R.string.kms)).concat(" ").concat(getString(R.string.mainnav_from_curposition)));
         btnImGoing.setVisibility(View.VISIBLE);
-        if (Profile.getInsatance().getUserId() != accident.getResponsibleRescr() && accident.getResponsibleRescr() != 0) {
+        if (accident.getAccCode() != Accident.ACC_CODE_A) {
             btnImGoing.setVisibility(View.GONE);
-        } else {
-            btnImGoing.setText(getString(R.string.mainnav_btn_going));
-        }
-        if (Profile.getInsatance().getUserId() == accident.getResponsibleRescr() && accident.getAccCode() != Accident.ACC_CODE_A) {
-            btnImGoing.setText(getString(R.string.mainnav_btn_close));
-            isOnGoing = true;
         }
 
     }
@@ -357,36 +345,10 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
-                if (isOnGoing) {
-                    if(realm.where(AccidentBrief.class).findFirst().getAccidentId() != AccidentFactory.getSelectAccident().getAccidentId()){
-                        Toast.makeText(context, getString(R.string.warn_youre_ready_to_go), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    if (Weeworh.with(context).setRescuedCode(AccidentFactory.getSelectAccident().getAccidentId())) {
-                        AccidentFactory.setResponsibleAccident(null);
-                        btnImGoing.setVisibility(View.GONE);
-                        isOnGoing = false;
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                realm.delete(AccidentBrief.class);
-                                AccidentFactory.setResponsibleAccident(null);
-                            }
-                        });
-                    }
-                    return;
-                }
                 Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
                 ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
                 AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident());
-                isOnGoing = true;
-                ((TextView) view).setText(getString(R.string.mainnav_btn_close));
-                realm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        realm.insert(new AccidentBrief(AccidentFactory.getSelectAccident()));
-                    }
-                });
+                btnImGoing.setVisibility(View.GONE);
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getSelectAccident().getUserId());
