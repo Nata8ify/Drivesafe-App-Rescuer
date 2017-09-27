@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -56,6 +57,8 @@ public class GoingService extends IntentService {
     public static NotificationManager notificationManager;
     private NotificationCompat.Builder notificationBuilder;
 
+    private double estimatedDistance;
+
     public static final String ACTION_RESCUED = "com.g40.ww.action.RESCUED";
     public static final String ACTION_CALL = "com.g40.ww.action.CALL";
     public static final String CLOSE_INCIDENT = "com.g40.ww.action.CLOSE_INCIDENT";
@@ -85,8 +88,14 @@ public class GoingService extends IntentService {
         PendingIntent callPendingIntent = PendingIntent.getService(this, 0, new Intent(ACTION_CALL), PendingIntent.FLAG_UPDATE_CURRENT);
         notificationGoingRemoteViews.setOnClickPendingIntent(R.id.btn_set_rescued, rescuedPendingIntent);
         notificationGoingRemoteViews.setOnClickPendingIntent(R.id.btn_call, callPendingIntent);
+        notificationGoingRemoteViews.setTextViewText(R.id.txt_breif_location, AddressFactory.getInstance(this).getBriefLocationAddress(new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())));
+        notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(AccidentFactory.getResponsibleAccident().getAccCode())));
+        notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_type, getString(R.string.mrservice_acc_type).concat(" : ").concat(getIncidentTypeString(AccidentFactory.getResponsibleAccident().getAccType())));
+        notificationGoingRemoteViews.setImageViewBitmap(R.id.img_acctype, BitmapFactory.decodeResource(getResources(), getAccidentTypeImage(AccidentFactory.getResponsibleAccident().getAccType())));
         notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentTitle(getIncidentTypeString(AccidentFactory.getResponsibleAccident().getAccType()))
+                .setContentText(AddressFactory.getInstance(this).getBriefLocationAddress(new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())))
                 .setOngoing(false)
                 .setWhen(System.currentTimeMillis())
                 .setCustomBigContentView(notificationGoingRemoteViews);
@@ -120,8 +129,8 @@ public class GoingService extends IntentService {
 
             @Override
             public void run() {
-
-                if (AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())) <= CLOSEST_DISTANCE) {
+                estimatedDistance =AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude()));
+                if (estimatedDistance <= CLOSEST_DISTANCE) {
                     handler.removeCallbacks(this);
                     if (Weeworh.with(GoingService.this).setRescuingCode(AccidentFactory.getResponsibleAccident().getAccidentId())) {
                         Toast.makeText(GoingService.this, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
@@ -140,6 +149,8 @@ public class GoingService extends IntentService {
                 Log.d("$$$Acc", AccidentFactory.getResponsibleAccident().toString());
                 if (AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU) {
                     handler.removeCallbacks(this);
+                    handler.removeCallbacks(onGoingRunnable);
+                    // Run new ACT?
                     reqCancelAlertDialog.show();
                 } else {
                     handler.postDelayed(this, 5000L);
@@ -149,6 +160,7 @@ public class GoingService extends IntentService {
         // /Runnable
         startForeground(1, notificationBuilder.build());
     }
+
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
@@ -174,6 +186,11 @@ public class GoingService extends IntentService {
                     callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
                     startActivity(callIntent);
                     break;
+                case CLOSE_INCIDENT :
+                    makeToastText("Should Close");
+                    stopForeground(true);
+                    stopSelf();
+                    break;
             }
             dismissStatusBar();
         }
@@ -190,6 +207,62 @@ public class GoingService extends IntentService {
     // -Function
     private void dismissStatusBar() {
         sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+    }
+
+    private String getStatusString(char accCode) {
+        switch (accCode){
+            case Accident.ACC_CODE_A :
+                return getString(R.string.mrservice_acc_status_a);
+            case Accident.ACC_CODE_G:
+                return getString(R.string.mrservice_acc_status_g);
+            case Accident.ACC_CODE_R:
+                return getString(R.string.mrservice_acc_status_r);
+            case Accident.ACC_CODE_C:
+                return getString(R.string.mrservice_acc_status_c);
+            case Accident.ACC_CODE_ERRU:
+                return getString(R.string.mrservice_acc_status_erru);
+            case Accident.ACC_CODE_ERRS:
+                return getString(R.string.mrservice_acc_status_errs);
+            default :
+        }return getString(R.string.mrservice_acc_status_und);
+    }
+
+    private String getIncidentTypeString(byte accType) {
+        switch (accType){
+            case Accident.ACC_TYPE_TRAFFIC:
+                return getString(R.string.mrservice_acc_type_crash);
+            case Accident.ACC_TYPE_FIRE:
+                return getString(R.string.mrservice_acc_type_fire);
+            case Accident.ACC_TYPE_BRAWL:
+                return getString(R.string.mrservice_acc_type_brawl);
+            case Accident.ACC_TYPE_PATIENT:
+                return getString(R.string.mrservice_acc_type_patient);
+            case Accident.ACC_TYPE_ANIMAL:
+                return getString(R.string.mrservice_acc_type_animal);
+            case Accident.ACC_TYPE_OTHER:
+                return getString(R.string.mrservice_acc_type_other);
+            default :
+        }return getString(R.string.mrservice_acc_status_und);
+    }
+
+    public int getAccidentTypeImage(byte accType){
+        String imgName = null;
+        switch (accType){
+            case Accident.ACC_TYPE_TRAFFIC :
+                imgName = "acctype_crash"; break;
+            case Accident.ACC_TYPE_FIRE :
+                imgName = "acctype_fire"; break;
+            case Accident.ACC_TYPE_ANIMAL :
+                imgName = "acctype_animal"; break;
+            case Accident.ACC_TYPE_PATIENT :
+                imgName = "acctype_patient"; break;
+            case Accident.ACC_TYPE_BRAWL :
+                imgName = "acctype_brawl"; break;
+            case Accident.ACC_TYPE_OTHER :
+                imgName = "acctype_other"; break;
+            default : imgName = "acctype_other"; //TODO
+        }
+        return getResources().getIdentifier(imgName, "drawable", getPackageName());
     }
 
     private void makeToastText(String message){

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
@@ -173,17 +174,20 @@ public class Weeworh {
     }
 
     public boolean setRescuedCode(long accidentId){ //Code C (Closed)
-        Log.d("s",  accidentId+"");
         if(!SettingUtils.isNetworkConnected(context)){return false;}
         try {
-            String response = Ion.with(context)
+            return Boolean.valueOf(Ion.with(context)
                     .load(Url.SET_RESCUED_CODE)
                     .setBodyParameter(Param.accidentId, String.valueOf(accidentId))
                     .setBodyParameter(Param.responsibleRescr, String.valueOf(Profile.getInsatance().getUserId()))
                     .asString()
-                    .get();
-            Log.d("s", response );
-            return true;
+                    .setCallback(new FutureCallback<String>() {
+                        @Override
+                        public void onCompleted(Exception e, String result) {
+                            Log.d("$$$$",  result+"");
+                        }
+                    })
+                    .get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

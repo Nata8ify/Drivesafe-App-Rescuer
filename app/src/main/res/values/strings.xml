@@ -64,6 +64,20 @@
     <string name="mrservice_close_message">คุณต้องการยืนยันการปิดเคสช่วยเหลือนี้ใช่หรือไม่</string>
     <string name="mrservice_close_result_success">สำเร็จ</string>
     <string name="mrservice_close_result_fail">ล้มเหลว... กรุณาตรวจสอบการเชื่อมต่ออินเตอร์เน็ตและลองอีกครั้ง</string>
+    <string name="mrservice_acc_status_a">ร้องขอความช่วยเหลือ</string>
+    <string name="mrservice_acc_status_g">กำลังเดินทาง...</string>
+    <string name="mrservice_acc_status_r">อยู่ในพื้นที่แจ้งเหตุ</string>
+    <string name="mrservice_acc_status_c">ปิดเคสการช่วยเหลือแล้ว</string>
+    <string name="mrservice_acc_status_erru">ผู้แจ้งยกเลิกการขอความช่วยเหลือ</string>
+    <string name="mrservice_acc_status_errs">เการแจ้งเหตุผิดพลาก</string>
+    <string name="mrservice_acc_status_und">ไม่สามารถระบุได้</string>
+    <string name="mrservice_acc_type_crash">อุบัติเหตุจราจร</string>
+    <string name="mrservice_acc_type_fire">อัคคีภัย</string>
+    <string name="mrservice_acc_type_brawl">ไการทะเลาะวิวาท</string>
+    <string name="mrservice_acc_type_patient">ผู้ป่วยโคม่า</string>
+    <string name="mrservice_acc_type_animal">สัตว์อันตราย</string>
+    <string name="mrservice_acc_type_other">อื่นๆ</string>
+    <string name="mrservice_acc_type">ประเภทเหตุ</string>
 
     <!--Simple-->
     <string name="ok">ตกลง</string>
@@ -78,6 +92,7 @@
     <string name="no">ไม่</string>
     <string name="kms"> กิโลเมตร </string>
     <string name="call"> ติดต่อกับผู้แจ้งเหตุ </string>
+    <string name="status"> สถานะ </string>
     <string name="try_again">ลองอีกครั้ง</string>
     <string name="warning">คำเตือน</string>
     <string name="progressing">กำลังดำเนินการ</string>
