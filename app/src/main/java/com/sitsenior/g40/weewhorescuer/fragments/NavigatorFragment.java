@@ -348,9 +348,10 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
             case R.id.btn_going:
                 //Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
                 ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
-                AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident());
-                btnImGoing.setVisibility(View.GONE);
+                AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
+                 btnImGoing.setVisibility(View.GONE);
                 getActivity().startService(new Intent(context, GoingService.class));
+
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getSelectAccident().getUserId());

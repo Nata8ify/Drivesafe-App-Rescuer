@@ -59,10 +59,14 @@
     <!--Firebase Messaging Service-->
     <string name="fbservice_incidet_alert">มีเหตุเกิดขึ้น (กดเพื่อดูรายละเอียด)</string>
     <string name="fbservice_incidet_report_from">แจ้งโดย </string>
-
+    <!--Incident Monitoring Service-->
+    <string name="mrservice_close_title">กรุณายืนยันการกระทำ</string>
+    <string name="mrservice_close_message">คุณต้องการยืนยันการปิดเคสช่วยเหลือนี้ใช่หรือไม่</string>
+    <string name="mrservice_close_result_success">สำเร็จ</string>
+    <string name="mrservice_close_result_fail">ล้มเหลว... กรุณาตรวจสอบการเชื่อมต่ออินเตอร์เน็ตและลองอีกครั้ง</string>
 
     <!--Simple-->
-    <string name="ok">โอเค</string>
+    <string name="ok">ตกลง</string>
     <string name="submit">ส่ง</string>
     <string name="cancel">ยกเลิก</string>
     <string name="close">ปิด</string>
@@ -70,7 +74,7 @@
     <string name="acknowledge">รับทราบ</string>
     <string name="on">เปิด</string>
     <string name="off">ปิด</string>
-    <string name="yes">ตกลง</string>
+    <string name="yes">ใช่</string>
     <string name="no">ไม่</string>
     <string name="kms"> กิโลเมตร </string>
     <string name="call"> ติดต่อกับผู้แจ้งเหตุ </string>
@@ -90,6 +94,8 @@
     <string name="warn_navigating_not_allow">ในขณะปฏิบัติหน้าที่ ไม่อนุญาติให้ออกจากหน้านี้</string>
     <string name="title_activity_maps">แผนที่</string>
     <string name="warn_user_request_cancel">ผู้แจ้งเหตุได้ทำการยกเลิกการขอความช่วยเหลือ</string>
+    <string name="warn_user_close_incident">คุณต้องการปิดเคสช่วยเหลือนี้ใช่หรือไม่</string>
+    <string name="warn_close_incident_undone">การกระทำนี้ไม่สามารถย้อนกลับไปได้ กรุณามั่นใจในการกระทำและเลือก \"ใช่\"</string>
 
     <!--Class-->
 

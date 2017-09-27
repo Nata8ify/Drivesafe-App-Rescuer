@@ -12,10 +12,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.sitsenior.g40.weewhorescuer.CloseIncidentActivity;
+import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
@@ -50,10 +53,16 @@ public class GoingService extends IntentService {
         }
     };*/
 
+    public static NotificationManager notificationManager;
     private NotificationCompat.Builder notificationBuilder;
 
     public static final String ACTION_RESCUED = "com.g40.ww.action.RESCUED";
     public static final String ACTION_CALL = "com.g40.ww.action.CALL";
+    public static final String CLOSE_INCIDENT = "com.g40.ww.action.CLOSE_INCIDENT";
+    //-- KEY
+    public static final String RESPONSIBLE_INCIDENT_KEY = "resIncidentId";
+
+
 
     public GoingService() {
         this("GoingService");
@@ -81,8 +90,8 @@ public class GoingService extends IntentService {
                 .setOngoing(false)
                 .setWhen(System.currentTimeMillis())
                 .setCustomBigContentView(notificationGoingRemoteViews);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, notificationBuilder.build());
+//        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(1, notificationBuilder.build());
         // /View
         // -AlertDialog
         reqCancelAlertDialog = new AlertDialog.Builder(this)
@@ -138,7 +147,7 @@ public class GoingService extends IntentService {
             }
         };
         // /Runnable
-
+        startForeground(1, notificationBuilder.build());
     }
 
     @Override
@@ -150,21 +159,25 @@ public class GoingService extends IntentService {
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         if (intent.getAction() != null) {
-            switch (intent.getAction()){
-                case ACTION_RESCUED :
-                    Toast.makeText(GoingService.this,  intent.getAction(), Toast.LENGTH_LONG).show();
+            switch (intent.getAction()) {
+                case ACTION_RESCUED:
+                    Intent mainIntent = new Intent(this, CloseIncidentActivity.class);
+                    mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mainIntent.putExtra(RESPONSIBLE_INCIDENT_KEY, AccidentFactory.getResponsibleAccident().getAccidentId());
+                    mainIntent.setAction(CLOSE_INCIDENT);
+                    startActivity(mainIntent);
+                    //closeIncidentAlertDialog.show();
                     break;
-                case ACTION_CALL :
-                    Log.d("###", ReporterProfile.getInstance().toString());
-                    Toast.makeText(GoingService.this,  intent.getAction()+" : "+ReporterProfile.getInstance().getPhoneNumber(), Toast.LENGTH_LONG).show();
+                case ACTION_CALL:
                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
                     callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
                     startActivity(callIntent);
                     break;
             }
+            dismissStatusBar();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     @Override
@@ -175,7 +188,17 @@ public class GoingService extends IntentService {
 
 
     // -Function
+    private void dismissStatusBar() {
+        sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+    }
 
+    private void makeToastText(String message){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
     // /Function
 
+
+    // -Getter / Setter
+
+    // /Getter / Setter
 }

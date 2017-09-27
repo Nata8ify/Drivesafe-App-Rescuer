@@ -11,7 +11,7 @@ import java.sql.Date;
  *
  * @author PNattawut
  */
-public class Accident {
+public class Accident implements  Cloneable{
 
     private long accidentId;
     private long userId;
