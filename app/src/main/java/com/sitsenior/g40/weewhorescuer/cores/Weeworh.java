@@ -17,6 +17,10 @@ import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.GET;
+
 /**
  * Created by PNattawut on 01-Aug-17.
  */
@@ -209,7 +213,7 @@ public class Weeworh {
         public static final String SET_RESCUING_CODE = HOST.concat("RescuerIn?opt=set_onrescue");
     }
 
-    class Param{
+    public class Param{
         /*Login*/
         public static final String usrn = "usrn";
         public static final String pswd = "pswd";
@@ -223,5 +227,6 @@ public class Weeworh {
 
 
     }
+
 
 }

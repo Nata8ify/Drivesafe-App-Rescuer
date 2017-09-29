@@ -35,7 +35,6 @@ public class CloseIncidentActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        makeToastText(AccidentFactory.getResponsibleAccident().toString());
 //        makeToastText(getIntent().getExtras().getLong(GoingService.RESPONSIBLE_INCIDENT_KEY)+"");
     }
 
@@ -52,15 +51,16 @@ public class CloseIncidentActivity extends AppCompatActivity {
                 if (true) {
                     Weeworh.with(CloseIncidentActivity.this).setRescuedCode(AccidentFactory.getResponsibleAccident().getAccidentId());
                     makeToastText(getString(R.string.mrservice_close_result_success));
-                    PendingIntent closeGoingService = PendingIntent.getService(this, 0, new Intent(GoingService.CLOSE_INCIDENT), PendingIntent.FLAG_UPDATE_CURRENT);
                     Intent goingService = new Intent(this, GoingService.class);
                     goingService.setAction(GoingService.CLOSE_INCIDENT);
                     startService(goingService);
                 } else {
                     makeToastText(getString(R.string.mrservice_close_result_fail));
                 }
+                startActivity(new Intent(this, MainActivity.class));
                 break;
             case R.id.btn_close_no:
+                finish();
                 break;
         }
     }

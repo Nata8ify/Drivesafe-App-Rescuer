@@ -13,14 +13,15 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.GsonBuilder;
 import com.sitsenior.g40.weewhorescuer.CloseIncidentActivity;
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
+import com.sitsenior.g40.weewhorescuer.ReporterFalseActivity;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
@@ -28,8 +29,15 @@ import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
 import com.sitsenior.g40.weewhorescuer.models.extra.ReporterProfile;
+import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
 
 import io.realm.Realm;
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by PNattawut on 25-Sep-17.
@@ -37,10 +45,8 @@ import io.realm.Realm;
 
 public class GoingService extends IntentService {
 
-    Realm realm;
-
+    Context context;
     RemoteViews notificationGoingRemoteViews;
-    private AlertDialog reqCancelAlertDialog;
 
     private Handler handler;
     private Runnable onGoingRunnable;
@@ -54,7 +60,6 @@ public class GoingService extends IntentService {
         }
     };*/
 
-    public static NotificationManager notificationManager;
     private NotificationCompat.Builder notificationBuilder;
 
     private double estimatedDistance;
@@ -65,8 +70,8 @@ public class GoingService extends IntentService {
     //-- KEY
     public static final String RESPONSIBLE_INCIDENT_KEY = "resIncidentId";
 
-
-
+    Retrofit retrofit;
+    WeeworhRestService weeworhRestService;
     public GoingService() {
         this("GoingService");
     }
@@ -80,7 +85,13 @@ public class GoingService extends IntentService {
         super.onCreate();
         //handler.post(onGoingRunnable);
         // -Component
-        /*registerReceiver(receiver, new IntentFilter("CloseIncident"));*/
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Weeworh.Url.HOST)
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd").create()))
+                .build();
+        weeworhRestService = retrofit.create(WeeworhRestService.class);
+
+                /*registerReceiver(receiver, new IntentFilter("CloseIncident"));*/
         // /Component
         // -View
         notificationGoingRemoteViews = new RemoteViews(getPackageName(), R.layout.noti_going);
@@ -89,7 +100,7 @@ public class GoingService extends IntentService {
         notificationGoingRemoteViews.setOnClickPendingIntent(R.id.btn_set_rescued, rescuedPendingIntent);
         notificationGoingRemoteViews.setOnClickPendingIntent(R.id.btn_call, callPendingIntent);
         notificationGoingRemoteViews.setTextViewText(R.id.txt_breif_location, AddressFactory.getInstance(this).getBriefLocationAddress(new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())));
-        notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(AccidentFactory.getResponsibleAccident().getAccCode())));
+        notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(Accident.ACC_CODE_G)));
         notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_type, getString(R.string.mrservice_acc_type).concat(" : ").concat(getIncidentTypeString(AccidentFactory.getResponsibleAccident().getAccType())));
         notificationGoingRemoteViews.setImageViewBitmap(R.id.img_acctype, BitmapFactory.decodeResource(getResources(), getAccidentTypeImage(AccidentFactory.getResponsibleAccident().getAccType())));
         notificationBuilder = new NotificationCompat.Builder(this)
@@ -99,29 +110,7 @@ public class GoingService extends IntentService {
                 .setOngoing(false)
                 .setWhen(System.currentTimeMillis())
                 .setCustomBigContentView(notificationGoingRemoteViews);
-//        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(1, notificationBuilder.build());
         // /View
-        // -AlertDialog
-        reqCancelAlertDialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.request_cancelled))
-                .setMessage(getString(R.string.warn_user_request_cancel))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.call), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                        callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
-                        startActivity(callIntent);
-                    }
-                })
-                .setNegativeButton(getString(R.string.acknowledge), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).create();
-        // /AlertDialog
         // -Runnable
         handler = new Handler();
         onGoingRunnable = new Runnable() {
@@ -129,36 +118,52 @@ public class GoingService extends IntentService {
 
             @Override
             public void run() {
-                estimatedDistance =AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude()));
+                estimatedDistance = AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude()));
                 if (estimatedDistance <= CLOSEST_DISTANCE) {
                     handler.removeCallbacks(this);
-                    if (Weeworh.with(GoingService.this).setRescuingCode(AccidentFactory.getResponsibleAccident().getAccidentId())) {
-                        Toast.makeText(GoingService.this, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
-                    }
-                    Log.d("CLOES", "YEA");
+                        if (Weeworh.with(GoingService.this).setRescuingCode(AccidentFactory.getResponsibleAccident().getAccidentId())) {
+                            Toast.makeText(GoingService.this, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
+                            //notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(Accident.ACC_CODE_R)));
+                        }
                 } else {
-                    Log.d("NOT CLOESTE", "NOT");
-                    handler.postDelayed(this, 10000L);
+                    handler.postDelayed(this, 3000L);
                 }
             }
         };
         updateSelectedIncidentRunnable = new Runnable() {
             @Override
             public void run() {
-                AccidentFactory.setResponsibleAccident(Weeworh.with(GoingService.this).getIncidentById(realm.where(AccidentBrief.class).findFirst().getAccidentId()));
                 Log.d("$$$Acc", AccidentFactory.getResponsibleAccident().toString());
-                if (AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU) {
-                    handler.removeCallbacks(this);
-                    handler.removeCallbacks(onGoingRunnable);
-                    // Run new ACT?
-                    reqCancelAlertDialog.show();
-                } else {
-                    handler.postDelayed(this, 5000L);
-                }
+                weeworhRestService.getIncidetById(String.valueOf(AccidentFactory.getResponsibleAccident().getAccidentId())).enqueue(new Callback<Accident>() {
+                    @Override
+                    public void onResponse(Call<Accident> call, Response<Accident> response) {
+                        AccidentFactory.setResponsibleAccident(response.body());
+
+                        if (AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU) {
+                            handler.removeCallbacks(updateSelectedIncidentRunnable);
+                            handler.removeCallbacks(onGoingRunnable);
+                            Intent reporterCancelIntent = new Intent(GoingService.this, ReporterFalseActivity.class);
+                            reporterCancelIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(reporterCancelIntent);
+                            stop();
+                        } else {
+                            handler.postDelayed(updateSelectedIncidentRunnable, 1000L);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Accident> call, Throwable t) {
+                        makeToastText(t.toString());
+                    }
+                });
+
             }
         };
         // /Runnable
+
         startForeground(1, notificationBuilder.build());
+        handler.post(onGoingRunnable);
+        handler.post(updateSelectedIncidentRunnable);
     }
 
 
@@ -170,6 +175,7 @@ public class GoingService extends IntentService {
 
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        context = getApplicationContext();
         if (intent.getAction() != null) {
             switch (intent.getAction()) {
                 case ACTION_RESCUED:
@@ -178,7 +184,6 @@ public class GoingService extends IntentService {
                     mainIntent.putExtra(RESPONSIBLE_INCIDENT_KEY, AccidentFactory.getResponsibleAccident().getAccidentId());
                     mainIntent.setAction(CLOSE_INCIDENT);
                     startActivity(mainIntent);
-                    //closeIncidentAlertDialog.show();
                     break;
                 case ACTION_CALL:
                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -186,10 +191,8 @@ public class GoingService extends IntentService {
                     callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
                     startActivity(callIntent);
                     break;
-                case CLOSE_INCIDENT :
-                    makeToastText("Should Close");
-                    stopForeground(true);
-                    stopSelf();
+                case CLOSE_INCIDENT:
+                    stop();
                     break;
             }
             dismissStatusBar();
@@ -205,13 +208,18 @@ public class GoingService extends IntentService {
 
 
     // -Function
+    private void stop(){
+        stopForeground(true);
+        stopSelf();
+    }
+
     private void dismissStatusBar() {
         sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
 
     private String getStatusString(char accCode) {
-        switch (accCode){
-            case Accident.ACC_CODE_A :
+        switch (accCode) {
+            case Accident.ACC_CODE_A:
                 return getString(R.string.mrservice_acc_status_a);
             case Accident.ACC_CODE_G:
                 return getString(R.string.mrservice_acc_status_g);
@@ -223,12 +231,13 @@ public class GoingService extends IntentService {
                 return getString(R.string.mrservice_acc_status_erru);
             case Accident.ACC_CODE_ERRS:
                 return getString(R.string.mrservice_acc_status_errs);
-            default :
-        }return getString(R.string.mrservice_acc_status_und);
+            default:
+        }
+        return getString(R.string.mrservice_acc_status_und);
     }
 
     private String getIncidentTypeString(byte accType) {
-        switch (accType){
+        switch (accType) {
             case Accident.ACC_TYPE_TRAFFIC:
                 return getString(R.string.mrservice_acc_type_crash);
             case Accident.ACC_TYPE_FIRE:
@@ -241,31 +250,39 @@ public class GoingService extends IntentService {
                 return getString(R.string.mrservice_acc_type_animal);
             case Accident.ACC_TYPE_OTHER:
                 return getString(R.string.mrservice_acc_type_other);
-            default :
-        }return getString(R.string.mrservice_acc_status_und);
+            default:
+        }
+        return getString(R.string.mrservice_acc_status_und);
     }
 
-    public int getAccidentTypeImage(byte accType){
+    public int getAccidentTypeImage(byte accType) {
         String imgName = null;
-        switch (accType){
-            case Accident.ACC_TYPE_TRAFFIC :
-                imgName = "acctype_crash"; break;
-            case Accident.ACC_TYPE_FIRE :
-                imgName = "acctype_fire"; break;
-            case Accident.ACC_TYPE_ANIMAL :
-                imgName = "acctype_animal"; break;
-            case Accident.ACC_TYPE_PATIENT :
-                imgName = "acctype_patient"; break;
-            case Accident.ACC_TYPE_BRAWL :
-                imgName = "acctype_brawl"; break;
-            case Accident.ACC_TYPE_OTHER :
-                imgName = "acctype_other"; break;
-            default : imgName = "acctype_other"; //TODO
+        switch (accType) {
+            case Accident.ACC_TYPE_TRAFFIC:
+                imgName = "acctype_crash";
+                break;
+            case Accident.ACC_TYPE_FIRE:
+                imgName = "acctype_fire";
+                break;
+            case Accident.ACC_TYPE_ANIMAL:
+                imgName = "acctype_animal";
+                break;
+            case Accident.ACC_TYPE_PATIENT:
+                imgName = "acctype_patient";
+                break;
+            case Accident.ACC_TYPE_BRAWL:
+                imgName = "acctype_brawl";
+                break;
+            case Accident.ACC_TYPE_OTHER:
+                imgName = "acctype_other";
+                break;
+            default:
+                imgName = "acctype_other"; //TODO
         }
         return getResources().getIdentifier(imgName, "drawable", getPackageName());
     }
 
-    private void makeToastText(String message){
+    private void makeToastText(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
     // /Function

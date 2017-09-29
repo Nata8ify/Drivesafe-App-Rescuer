@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -15,22 +13,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.akexorcist.googledirection.DirectionCallback;
-import com.akexorcist.googledirection.GoogleDirection;
-import com.akexorcist.googledirection.constant.TransportMode;
-import com.akexorcist.googledirection.model.Direction;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -47,12 +36,8 @@ import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.ViewReportUserInfoAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
-import com.sitsenior.g40.weewhorescuer.models.Profile;
-import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
 import com.sitsenior.g40.weewhorescuer.models.extra.ReporterProfile;
 import com.sitsenior.g40.weewhorescuer.services.GoingService;
-
-import io.realm.Realm;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -80,7 +65,6 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private Button btnReportUserInfo;
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
-
 
 
     @Override
@@ -346,12 +330,11 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
-                //Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
+                Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
                 ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
                 AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
-                 btnImGoing.setVisibility(View.GONE);
+                btnImGoing.setVisibility(View.GONE);
                 getActivity().startService(new Intent(context, GoingService.class));
-
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getSelectAccident().getUserId());

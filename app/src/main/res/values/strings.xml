@@ -73,7 +73,7 @@
     <string name="mrservice_acc_status_und">ไม่สามารถระบุได้</string>
     <string name="mrservice_acc_type_crash">อุบัติเหตุจราจร</string>
     <string name="mrservice_acc_type_fire">อัคคีภัย</string>
-    <string name="mrservice_acc_type_brawl">ไการทะเลาะวิวาท</string>
+    <string name="mrservice_acc_type_brawl">ทะเลาะวิวาท</string>
     <string name="mrservice_acc_type_patient">ผู้ป่วยโคม่า</string>
     <string name="mrservice_acc_type_animal">สัตว์อันตราย</string>
     <string name="mrservice_acc_type_other">อื่นๆ</string>
@@ -92,6 +92,7 @@
     <string name="no">ไม่</string>
     <string name="kms"> กิโลเมตร </string>
     <string name="call"> ติดต่อกับผู้แจ้งเหตุ </string>
+    <string name="ack_call">รับทราบและติดต่อกับผู้แจ้งเหตุ </string>
     <string name="status"> สถานะ </string>
     <string name="try_again">ลองอีกครั้ง</string>
     <string name="warning">คำเตือน</string>

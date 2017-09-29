@@ -34,15 +34,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:textColor="#000"
-                android:text="Status : Going" />
+                android:textStyle="bold"
+                android:textColor="#000"/>
             <TextView
                 android:id="@+id/txt_incident_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:textColor="#000"
-                android:text="Status : Going" />
+                android:text="Status : Going"
+                android:visibility="gone"/>
         </LinearLayout>
 
     </LinearLayout>
