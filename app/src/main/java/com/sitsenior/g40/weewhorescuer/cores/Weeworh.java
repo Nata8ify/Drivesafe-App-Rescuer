@@ -139,7 +139,6 @@ public class Weeworh {
     /* Set Incident status / Accident status */
     public boolean setGoingCode(long accidentId){
         if(!SettingUtils.isNetworkConnected(context)){return false;}
-        Log.d("s",  accidentId+"");
         try {
             String response = Ion.with(context)
                     .load(Url.SET_GOING_CODE)
@@ -147,7 +146,6 @@ public class Weeworh {
                     .setBodyParameter(Param.responsibleRescr, String.valueOf(Profile.getInsatance().getUserId()))
                     .asString()
                     .get();
-            Log.d("s", response );
             return true;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -159,7 +157,6 @@ public class Weeworh {
 
     public boolean setRescuingCode(long accidentId){ //Code R (Rescuing)
         if(!SettingUtils.isNetworkConnected(context)){return false;}
-        Log.d("s",  accidentId+"");
         try {
             String response = Ion.with(context)
                     .load(Url.SET_RESCUING_CODE)
@@ -167,7 +164,6 @@ public class Weeworh {
                     .setBodyParameter(Param.responsibleRescr, String.valueOf(Profile.getInsatance().getUserId()))
                     .asString()
                     .get();
-            Log.d("s", response );
             return true;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -185,12 +181,6 @@ public class Weeworh {
                     .setBodyParameter(Param.accidentId, String.valueOf(accidentId))
                     .setBodyParameter(Param.responsibleRescr, String.valueOf(Profile.getInsatance().getUserId()))
                     .asString()
-                    .setCallback(new FutureCallback<String>() {
-                        @Override
-                        public void onCompleted(Exception e, String result) {
-                            Log.d("$$$$",  result+"");
-                        }
-                    })
                     .get());
         } catch (InterruptedException e) {
             e.printStackTrace();

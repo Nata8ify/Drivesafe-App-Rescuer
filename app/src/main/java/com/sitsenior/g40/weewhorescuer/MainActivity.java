@@ -72,16 +72,6 @@ public class MainActivity extends AppCompatActivity {
         };
         conenctivityRunnable.run();
         // -Broadcast Receiver / Register
-        closeIncidentReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                makeToastText("onReceive");
-                if (intent.getAction() != null) {
-                    makeToastText(intent.getAction());
-                }
-            }
-        };
-        registerReceiver(closeIncidentReceiver, new IntentFilter(GoingService.CLOSE_INCIDENT));
         // /Broadcast Receiver / Register
     }
 
@@ -94,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(closeIncidentReceiver);
     }
 
     /* Override Other Listener */

@@ -46,6 +46,7 @@
     <string name="mainnav_leave_nav">ต้องการที่จะออกจากหน้าการติดตามหรือไม่ ? </string>
     <string name="mainnav_stay_here">ไม่ต้องการ</string>
     <string name="mainnav_incident_is_near">กำลังเข้าใกล้ที่เกิดเหตุแล้ว</string>
+    <string name="mainnav_already_got_case">ไม่สามารถทำได้เมื่อคุณมีเหตุที่ต้องรับผิดชอบอยู่แล้ว</string>
     <!-- Main - Configuration -->
     <string name="maincon_lang">ภาษา</string>
     <string name="maincon_keep_screen_on">ป้องกันสลีปโหมด</string>

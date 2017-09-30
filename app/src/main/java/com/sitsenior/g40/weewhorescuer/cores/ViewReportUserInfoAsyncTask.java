@@ -13,8 +13,18 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.sitsenior.g40.weewhorescuer.R;
-import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.models.extra.Profile;
+import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
+
+import java.io.IOException;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by nata8ify on 5/8/2560.
@@ -25,9 +35,18 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
     private Context context;
     private AlertDialog viewReportUserInfoDialog;
     private Profile userProfile;
+    private Long userId;
+
+    private Retrofit retrofit;
+    private WeeworhRestService weeworh;
 
     public ViewReportUserInfoAsyncTask(Context contex) {
         this.context = contex;
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Weeworh.Url.HOST)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        weeworh = retrofit.create(WeeworhRestService.class);
     }
 
     @Override
@@ -38,17 +57,37 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
     @Override
     protected Void doInBackground(Long... userId) {
         /* User Data */
-        userProfile = Weeworh.with(context).getReportUserInformation(userId[0]);
+//        userProfile = Weeworh.with(context).getReportUserInformation(userId[0]);
+        this.userId = userId[0];
         return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        showReportUserInfoDialog(userProfile);
+        Log.d("$userId$", userId+"");
+        weeworh.getReporterByIncidetById(userId).enqueue(new Callback<Profile>() {
+            @Override
+            public void onResponse(Call<Profile> call, Response<Profile> response) {
+                Log.d("$$!", response.raw().toString());
+                try {
+                    //?? got 500 status but there are profile result?
+                    showReportUserInfoDialog(new Gson().fromJson(response.errorBody().string(), Profile.class));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Profile> call, Throwable t) {
+                Log.d("$$!", "Err : "+t.getMessage());
+            }
+        });
+
     }
 
     public void showReportUserInfoDialog(final Profile userProfile){
+
         if(userProfile == null){
             Toast.makeText(context, context.getString(R.string.warn_no_network), Toast.LENGTH_LONG).show();return;}
         android.support.v7.app.AlertDialog reportUserDialog = new android.support.v7.app.AlertDialog.Builder(context)

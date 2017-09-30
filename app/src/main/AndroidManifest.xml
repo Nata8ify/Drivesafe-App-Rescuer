@@ -47,7 +47,7 @@
             <intent-filter>
                 <action android:name="com.g40.ww.action.RESCUED" />
                 <action android:name="com.g40.ww.action.CALL" />
-
+                <action android:name="com.g40.ww.action.TO_MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>

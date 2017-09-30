@@ -15,6 +15,6 @@ public class WeeworhAOP {
 
     @Before("execution(* com.sitsenior.g40.weewhorescuer.cores.Weeworh.get*(..))")
     public void connectivityCheck(JoinPoint joinPoint){
-        Log.d("connectivityCheck", "connectivityCheck");
+
     }
 }

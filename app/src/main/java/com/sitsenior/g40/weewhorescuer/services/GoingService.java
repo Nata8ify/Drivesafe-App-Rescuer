@@ -66,6 +66,7 @@ public class GoingService extends IntentService {
 
     public static final String ACTION_RESCUED = "com.g40.ww.action.RESCUED";
     public static final String ACTION_CALL = "com.g40.ww.action.CALL";
+    public static final String ACTION_TO_MAIN = "com.g40.ww.action.TO_MAIN";
     public static final String CLOSE_INCIDENT = "com.g40.ww.action.CLOSE_INCIDENT";
     //-- KEY
     public static final String RESPONSIBLE_INCIDENT_KEY = "resIncidentId";
@@ -97,11 +98,11 @@ public class GoingService extends IntentService {
         notificationGoingRemoteViews = new RemoteViews(getPackageName(), R.layout.noti_going);
         PendingIntent rescuedPendingIntent = PendingIntent.getService(this, 0, new Intent(ACTION_RESCUED), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent callPendingIntent = PendingIntent.getService(this, 0, new Intent(ACTION_CALL), PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent toMainActivityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(GoingService.this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent toMainActivityPendingIntent = PendingIntent.getService(this, 0, new Intent(ACTION_TO_MAIN), PendingIntent.FLAG_UPDATE_CURRENT);
         notificationGoingRemoteViews.setOnClickPendingIntent(R.id.btn_set_rescued, rescuedPendingIntent);
         notificationGoingRemoteViews.setOnClickPendingIntent(R.id.btn_call, callPendingIntent);
         //notificationGoingRemoteViews.setOnClickPendingIntent(R.id.linrout_root_gnoti, toMainActivityPendingIntent);
-
+        //TODO Excp after no network
         notificationGoingRemoteViews.setTextViewText(R.id.txt_breif_location, AddressFactory.getInstance(this).getBriefLocationAddress(new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())));
         notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(Accident.ACC_CODE_G)));
         notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_type, getString(R.string.mrservice_acc_type).concat(" : ").concat(getIncidentTypeString(AccidentFactory.getResponsibleAccident().getAccType())));
@@ -137,8 +138,7 @@ public class GoingService extends IntentService {
         updateSelectedIncidentRunnable = new Runnable() {
             @Override
             public void run() {
-                Log.d("$$$Acc", AccidentFactory.getResponsibleAccident().toString());
-                weeworhRestService.getIncidetById(String.valueOf(AccidentFactory.getResponsibleAccident().getAccidentId())).enqueue(new Callback<Accident>() {
+                weeworhRestService.getIncidetById(AccidentFactory.getResponsibleAccident().getAccidentId()).enqueue(new Callback<Accident>() {
                     @Override
                     public void onResponse(Call<Accident> call, Response<Accident> response) {
                         AccidentFactory.setResponsibleAccident(response.body());
@@ -180,14 +180,17 @@ public class GoingService extends IntentService {
     @Override
     public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         context = getApplicationContext();
+        Intent restartIntent = new Intent(this, MainActivity.class);
+        restartIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        restartIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         if (intent.getAction() != null) {
             switch (intent.getAction()) {
                 case ACTION_RESCUED:
-                    Intent mainIntent = new Intent(this, CloseIncidentActivity.class);
-                    mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    mainIntent.putExtra(RESPONSIBLE_INCIDENT_KEY, AccidentFactory.getResponsibleAccident().getAccidentId());
-                    mainIntent.setAction(CLOSE_INCIDENT);
-                    startActivity(mainIntent);
+                    Intent closeIntent = new Intent(this, CloseIncidentActivity.class);
+                    closeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    closeIntent.putExtra(RESPONSIBLE_INCIDENT_KEY, AccidentFactory.getResponsibleAccident().getAccidentId());
+                    closeIntent.setAction(CLOSE_INCIDENT);
+                    startActivity(closeIntent);
                     break;
                 case ACTION_CALL:
                     Intent callIntent = new Intent(Intent.ACTION_DIAL);
@@ -195,8 +198,12 @@ public class GoingService extends IntentService {
                     callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
                     startActivity(callIntent);
                     break;
+                case ACTION_TO_MAIN:
+                    startActivity(restartIntent);
+                    break;
                 case CLOSE_INCIDENT:
                     stop();
+                    startActivity(restartIntent);
                     break;
             }
             dismissStatusBar();
@@ -215,6 +222,10 @@ public class GoingService extends IntentService {
     private void stop(){
         stopForeground(true);
         stopSelf();
+        handler.removeCallbacks(onGoingRunnable);
+        handler.removeCallbacks(updateSelectedIncidentRunnable);
+        AccidentFactory.setResponsibleAccident(null);
+        onDestroy();
     }
 
     private void dismissStatusBar() {

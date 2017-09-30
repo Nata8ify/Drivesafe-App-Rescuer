@@ -57,7 +57,7 @@ public class CloseIncidentActivity extends AppCompatActivity {
                 } else {
                     makeToastText(getString(R.string.mrservice_close_result_fail));
                 }
-                startActivity(new Intent(this, MainActivity.class));
+                finish();
                 break;
             case R.id.btn_close_no:
                 finish();

@@ -98,7 +98,6 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
 
             }
         } catch (Exception exp) {
-            Log.d("exp", exp.getMessage());
             try {
                 Thread.sleep(500L);
                 doInBackground(null);

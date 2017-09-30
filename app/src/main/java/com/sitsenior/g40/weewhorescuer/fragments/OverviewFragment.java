@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.GsonBuilder;
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
@@ -22,9 +23,17 @@ import com.sitsenior.g40.weewhorescuer.cores.AccidentResultAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -50,9 +59,17 @@ public class OverviewFragment extends Fragment {
 
     public static byte accCodeButtonState;
 
+    private Retrofit retrofit;
+    private WeeworhRestService weeworh;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         accCodeButtonState = Accident.ACC_CODE_A;
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Weeworh.Url.HOST)
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd").create()))
+                .build();
+        weeworh = retrofit.create(WeeworhRestService.class);
         super.onCreate(savedInstanceState);
     }
 
@@ -78,7 +95,48 @@ public class OverviewFragment extends Fragment {
         accResultAsyTask = new AccidentResultAsyncTask(Profile.getInsatance(), getContext(), emptyAccidentResultLayout, viewIncidentPanelLayout, accidentListView);
         accResultAsyTask.execute();
         overviewHandler = new Handler();
-        new Thread(new Runnable() {
+        overviewRunnable = new Runnable() {
+            @Override
+            public void run() {
+                weeworh.getInBoundTodayIncidents(Profile.getInsatance().getUserId()).enqueue(new Callback<List<Accident>>() {
+                    @Override
+                    public void onResponse(Call<List<Accident>> call, Response<List<Accident>> response) {
+                        if(rescuePendingIncidentList == null){rescuePendingIncidentList = new ArrayList<Accident>();}
+                        List<Accident> accs = AccidentFactory.getInstance(response.body()).update().getRescuePendingIncident();
+                        if(accs != null) {
+                            rescuePendingIncidentList.clear();
+                            rescuePendingIncidentList.addAll(accs);
+                        }
+                        if(OverviewFragment.accidentListAdapter != null){
+                            //TODO : Handler NullPointer
+                            try {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        OverviewFragment.accidentListAdapter.clear();
+                                        OverviewFragment.accidentListAdapter.addAll(rescuePendingIncidentList);
+                                        OverviewFragment.accidentListAdapter.notifyDataSetChanged();
+                                        if (rescuePendingIncidentList.isEmpty()) {
+                                            viewIncidentPanelLayout.setVisibility(View.GONE);
+                                            emptyAccidentResultLayout.setVisibility(View.VISIBLE);
+                                        } else {
+                                            viewIncidentPanelLayout.setVisibility(View.VISIBLE);
+                                            emptyAccidentResultLayout.setVisibility(View.GONE);
+                                        }
+                                    }
+                                });
+                            } catch (NullPointerException  npex){}
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Accident>> call, Throwable t) {
+                    }
+                });
+                overviewHandler.postDelayed(this, 3000);
+            }
+        };
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 if(rescuePendingIncidentList == null){rescuePendingIncidentList = new ArrayList<Accident>();}
@@ -94,15 +152,12 @@ public class OverviewFragment extends Fragment {
                             @Override
                             public void run() {
                                 OverviewFragment.accidentListAdapter.clear();
-                                Log.d(">>>::", rescuePendingIncidentList.toString());
                                 OverviewFragment.accidentListAdapter.addAll(rescuePendingIncidentList);
                                 OverviewFragment.accidentListAdapter.notifyDataSetChanged();
                                 if (rescuePendingIncidentList.isEmpty()) {
-                                    Log.d(">>>::", "Nay");
                                     viewIncidentPanelLayout.setVisibility(View.GONE);
                                     emptyAccidentResultLayout.setVisibility(View.VISIBLE);
                                 } else {
-                                    Log.d(">>>::", "Yea");
                                     viewIncidentPanelLayout.setVisibility(View.VISIBLE);
                                     emptyAccidentResultLayout.setVisibility(View.GONE);
                                 }
@@ -112,8 +167,9 @@ public class OverviewFragment extends Fragment {
                 }
                 overviewHandler.postDelayed(this, 3000L);
             }
-        }).run();
+        }).run();*/
         overviewHandler.post(overviewRunnable);
+
         setListener();
     }
 

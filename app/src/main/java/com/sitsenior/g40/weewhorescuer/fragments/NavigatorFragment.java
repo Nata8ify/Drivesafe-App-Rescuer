@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,8 +37,16 @@ import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.ViewReportUserInfoAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
+import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.models.extra.ReporterProfile;
 import com.sitsenior.g40.weewhorescuer.services.GoingService;
+import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by PNattawut on 01-Aug-17.
@@ -66,13 +75,20 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
+    Retrofit retrofit;
+    WeeworhRestService weeworh;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
         context = getContext();
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Weeworh.Url.HOST)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        weeworh = retrofit.create(WeeworhRestService.class);
     }
 
     @Nullable
@@ -327,7 +343,22 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
-                Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
+                if(AccidentFactory.getResponsibleAccident() != null){
+                    makeToastText(getString(R.string.mainnav_already_got_case));
+                    return;
+                }
+                //Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
+                weeworh.setGoing(Profile.getInsatance().getUserId(), AccidentFactory.getSelectAccident().getAccidentId()).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        Log.d("$$!", response.raw().toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+
+                    }
+                });
                 ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
                 AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
                 btnImGoing.setVisibility(View.GONE);
@@ -373,6 +404,10 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 accidentProps[1] = getResources().getIdentifier("acctype_other", "drawable", context.getPackageName());
         }
         return accidentProps;
+    }
+
+    private void makeToastText(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     public static final int NAVIGATOR_PAGE = 2;
