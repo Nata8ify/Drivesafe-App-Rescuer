@@ -97,8 +97,11 @@ public class GoingService extends IntentService {
         notificationGoingRemoteViews = new RemoteViews(getPackageName(), R.layout.noti_going);
         PendingIntent rescuedPendingIntent = PendingIntent.getService(this, 0, new Intent(ACTION_RESCUED), PendingIntent.FLAG_UPDATE_CURRENT);
         PendingIntent callPendingIntent = PendingIntent.getService(this, 0, new Intent(ACTION_CALL), PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent toMainActivityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(GoingService.this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         notificationGoingRemoteViews.setOnClickPendingIntent(R.id.btn_set_rescued, rescuedPendingIntent);
         notificationGoingRemoteViews.setOnClickPendingIntent(R.id.btn_call, callPendingIntent);
+        //notificationGoingRemoteViews.setOnClickPendingIntent(R.id.linrout_root_gnoti, toMainActivityPendingIntent);
+
         notificationGoingRemoteViews.setTextViewText(R.id.txt_breif_location, AddressFactory.getInstance(this).getBriefLocationAddress(new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())));
         notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(Accident.ACC_CODE_G)));
         notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_type, getString(R.string.mrservice_acc_type).concat(" : ").concat(getIncidentTypeString(AccidentFactory.getResponsibleAccident().getAccType())));
@@ -109,6 +112,7 @@ public class GoingService extends IntentService {
                 .setContentText(AddressFactory.getInstance(this).getBriefLocationAddress(new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude())))
                 .setOngoing(false)
                 .setWhen(System.currentTimeMillis())
+                .setContentIntent(toMainActivityPendingIntent)
                 .setCustomBigContentView(notificationGoingRemoteViews);
         // /View
         // -Runnable

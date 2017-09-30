@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable conenctivityRunnable;
     private Handler mainActivityHandler;
 
+    private Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +84,6 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(closeIncidentReceiver, new IntentFilter(GoingService.CLOSE_INCIDENT));
         // /Broadcast Receiver / Register
     }
-
-
-    private Handler mainHandler;
-    private Runnable mainRunnable;
 
     @Override
     protected void onStart() {

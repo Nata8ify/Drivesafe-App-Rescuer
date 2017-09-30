@@ -215,16 +215,13 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-/*                try {
-                    Accident accident = AccidentFactory.getInstance(null).findByAccidentId(realm.where(AccidentBrief.class).findFirst().getAccidentId());
-                    if (accident != null) {
-                        MainActivity.mainViewPager.setCurrentItem(2);
-                        AccidentFactory.setSelectAccident(accident);
-                        viewAccidentDataandLocation(accident);
-                    }
-                } catch (NullPointerException npex) {
 
-                }*/
+                if (AccidentFactory.getResponsibleAccident() != null) {
+                    MainActivity.mainViewPager.setCurrentItem(2);
+                    AccidentFactory.setSelectAccident(AccidentFactory.getResponsibleAccident());
+                    viewAccidentDataandLocation(AccidentFactory.getResponsibleAccident());
+                }
+
             }
         });
     }
