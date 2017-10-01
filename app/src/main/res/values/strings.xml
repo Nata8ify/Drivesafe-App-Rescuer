@@ -47,6 +47,8 @@
     <string name="mainnav_stay_here">ไม่ต้องการ</string>
     <string name="mainnav_incident_is_near">กำลังเข้าใกล้ที่เกิดเหตุแล้ว</string>
     <string name="mainnav_already_got_case">ไม่สามารถทำได้เมื่อคุณมีเหตุที่ต้องรับผิดชอบอยู่แล้ว</string>
+    <string name="mainnav_continue_rescue">ดำเนินการช่วยเหลือต่อ</string>
+    <string name="mainnav_continue_to_close">ปิดเคสการช่วยเหลือ</string>
     <!-- Main - Configuration -->
     <string name="maincon_lang">ภาษา</string>
     <string name="maincon_keep_screen_on">ป้องกันสลีปโหมด</string>
@@ -113,6 +115,7 @@
     <string name="warn_user_request_cancel">ผู้แจ้งเหตุได้ทำการยกเลิกการขอความช่วยเหลือ</string>
     <string name="warn_user_close_incident">คุณต้องการปิดเคสช่วยเหลือนี้ใช่หรือไม่</string>
     <string name="warn_close_incident_undone">การกระทำนี้ไม่สามารถย้อนกลับไปได้ กรุณามั่นใจในการกระทำและเลือก \"ใช่\"</string>
+    <string name="warn_in_responsible_found">เราพบว่าคุณยังมีเคสการช่วยเหลือที่ยังไม่เสร็จสิ้น กรุณาเลือก \n<b>\"ดำเนินการช่วยเหลือต่อ\"</b> หรือ \n<b>\"ปิดเคสการช่วยเหลือ\"</b></string>
 
     <!--Class-->
 

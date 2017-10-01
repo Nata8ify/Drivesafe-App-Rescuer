@@ -23,6 +23,9 @@ public interface WeeworhRestService{
     @POST("RescuerIn?opt=get_accbyid")
     Call<Accident> getIncidetById(@Field(Weeworh.Param.accidentId) long accidentId);
 
+    @GET("RescuerIn?opt=get_inresponsibleacc")
+    Call<Accident> getInResposibleIncidetByRescuerId(@Query(Weeworh.Param.userId) long userId);
+
     @GET("RescuerIn?opt=get_userinfo")
     Call<Profile> getReporterByIncidetById(@Query(Weeworh.Param.userId) long userId);
 
@@ -31,4 +34,5 @@ public interface WeeworhRestService{
 
     @GET("RescuerIn?opt=set_ongoing")
     Call<Boolean> setGoing(@Query((Weeworh.Param.responsibleRescr)) long responsibleRescr, @Query((Weeworh.Param.accidentId)) long accidentId);
+
 }

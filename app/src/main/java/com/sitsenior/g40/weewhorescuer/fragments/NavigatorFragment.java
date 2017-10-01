@@ -29,6 +29,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.GsonBuilder;
+import com.sitsenior.g40.weewhorescuer.CloseIncidentActivity;
 import com.sitsenior.g40.weewhorescuer.MainActivity;
 import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
@@ -75,6 +77,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
+    private AlertDialog leftButUnClosedAlertDialog;
+
     Retrofit retrofit;
     WeeworhRestService weeworh;
 
@@ -86,7 +90,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         context = getContext();
         retrofit = new Retrofit.Builder()
                 .baseUrl(Weeworh.Url.HOST)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd").create()))
                 .build();
         weeworh = retrofit.create(WeeworhRestService.class);
     }
@@ -109,6 +113,28 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         navMapView = (MapView) inflateNavigatorView.findViewById(R.id.map_navmap);
         navMapView.onCreate(savedInstanceState);
         navMapView.onResume();
+
+        leftButUnClosedAlertDialog = new AlertDialog.Builder(context)
+                .setTitle(getString(R.string.warning))
+                .setCancelable(false)
+                .setMessage(getString(R.string.warn_in_responsible_found))
+                .setPositiveButton(getString(R.string.mainnav_continue_rescue), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //todo
+                    }
+                })
+                .setNegativeButton(getString(R.string.mainnav_continue_to_close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent closeIntent = new Intent(context, CloseIncidentActivity.class);
+                        closeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        closeIntent.putExtra(GoingService.RESPONSIBLE_INCIDENT_KEY, AccidentFactory.getResponsibleAccident().getAccidentId());
+                        closeIntent.setAction(GoingService.CLOSE_INCIDENT);
+                        startActivity(closeIntent);
+                    }
+                })
+                .create();
         return inflateNavigatorView;
     }
 
@@ -236,6 +262,27 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     MainActivity.mainViewPager.setCurrentItem(2);
                     AccidentFactory.setSelectAccident(AccidentFactory.getResponsibleAccident());
                     viewAccidentDataandLocation(AccidentFactory.getResponsibleAccident());
+                } else {
+                    weeworh.getInResposibleIncidetByRescuerId(Profile.getInsatance().getUserId()).enqueue(new Callback<Accident>() {
+                        @Override
+                        public void onResponse(Call<Accident> call, Response<Accident> response) {
+                            if (response.body() != null) {
+                                AccidentFactory.setResponsibleAccident(response.body()); // used in non-close activity.
+                                AccidentFactory.setSelectAccident(AccidentFactory.getResponsibleAccident());
+                                ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
+                                getActivity().startService(new Intent(context, GoingService.class));
+                                //->>Switch to 3rd page
+                                MainActivity.mainViewPager.setCurrentItem(2);
+                                viewAccidentDataandLocation(AccidentFactory.getResponsibleAccident());
+                                leftButUnClosedAlertDialog.show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Accident> call, Throwable t) {
+                            Log.d("$$!F", t.toString() + "");
+                        }
+                    });
                 }
 
             }
@@ -343,7 +390,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_going:
-                if(AccidentFactory.getResponsibleAccident() != null){
+                if (AccidentFactory.getResponsibleAccident() != null) {
                     makeToastText(getString(R.string.mainnav_already_got_case));
                     return;
                 }

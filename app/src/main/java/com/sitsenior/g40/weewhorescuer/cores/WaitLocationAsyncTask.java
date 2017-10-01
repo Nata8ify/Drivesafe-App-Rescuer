@@ -25,6 +25,7 @@ import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
 import com.sitsenior.g40.weewhorescuer.services.FbMessagingService;
 
 import io.realm.Realm;
+import retrofit2.Retrofit;
 
 /**
  * Created by nata8ify on 11/8/2560.
@@ -42,13 +43,9 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
     private OverviewFragment overviewFragment;
     private NavigatorFragment navigatorFragment;
 
-    private Realm realm;
-
     public WaitLocationAsyncTask(Context context, ViewPager mainViewPager) {
         this.context = context;
         this.mainViewPager = mainViewPager;
-        Realm.init(this.context);
-        realm = Realm.getDefaultInstance();
     }
 
     @Override
