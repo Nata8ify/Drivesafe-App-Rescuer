@@ -81,6 +81,7 @@
     <string name="mrservice_acc_type_animal">สัตว์อันตราย</string>
     <string name="mrservice_acc_type_other">อื่นๆ</string>
     <string name="mrservice_acc_type">ประเภทเหตุ</string>
+    <string name="mrservice_already_accepted">เหตุนี้อยู่ในความรับผิดชอบของเจ้าหน้าที่อื่นแล้ว</string>
 
     <!--Simple-->
     <string name="ok">ตกลง</string>

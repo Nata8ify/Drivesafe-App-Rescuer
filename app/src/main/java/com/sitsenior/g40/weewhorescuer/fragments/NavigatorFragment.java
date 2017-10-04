@@ -394,11 +394,20 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     makeToastText(getString(R.string.mainnav_already_got_case));
                     return;
                 }
+
                 //Weeworh.with(context).setGoingCode(AccidentFactory.getSelectAccident().getAccidentId());
                 weeworh.setGoing(Profile.getInsatance().getUserId(), AccidentFactory.getSelectAccident().getAccidentId()).enqueue(new Callback<Boolean>() {
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         Log.d("$$!", response.raw().toString());
+                        if(response.body()){
+                            ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
+                            AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
+                            btnImGoing.setVisibility(View.GONE);
+                            getActivity().startService(new Intent(context, GoingService.class));
+                        } else {
+                            makeToastText(getString(R.string.mrservice_already_accepted));
+                        }
                     }
 
                     @Override
@@ -406,10 +415,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
 
                     }
                 });
-                ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
-                AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
-                btnImGoing.setVisibility(View.GONE);
-                getActivity().startService(new Intent(context, GoingService.class));
+
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getSelectAccident().getUserId());
