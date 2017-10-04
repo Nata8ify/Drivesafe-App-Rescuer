@@ -131,7 +131,7 @@ public class GoingService extends IntentService {
                             //notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(Accident.ACC_CODE_R)));
                         }
                 } else {
-                    handler.postDelayed(this, 3000L);
+                    handler.postDelayed(this, 10000L);
                 }
             }
         };

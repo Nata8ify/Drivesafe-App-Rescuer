@@ -1,10 +1,12 @@
 package com.sitsenior.g40.weewhorescuer.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -78,7 +80,8 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
     private AlertDialog leftButUnClosedAlertDialog;
-
+    private AlertDialog.Builder alreadyTakeCaseAlertDialog;
+    private com.sitsenior.g40.weewhorescuer.models.extra.Profile responsibleCaseRescuer;
     Retrofit retrofit;
     WeeworhRestService weeworh;
 
@@ -135,6 +138,14 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     }
                 })
                 .create();
+        alreadyTakeCaseAlertDialog = new AlertDialog.Builder(context)
+                .setTitle(getString(R.string.warning))
+                .setPositiveButton(context.getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
         return inflateNavigatorView;
     }
 
@@ -406,6 +417,30 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                             btnImGoing.setVisibility(View.GONE);
                             getActivity().startService(new Intent(context, GoingService.class));
                         } else {
+                            weeworh.getRescuerProfileByIncidetById(AccidentFactory.getSelectAccident().getAccidentId()).enqueue(new Callback<com.sitsenior.g40.weewhorescuer.models.extra.Profile>() {
+                                @Override
+                                public void onResponse(Call<com.sitsenior.g40.weewhorescuer.models.extra.Profile> call, Response<com.sitsenior.g40.weewhorescuer.models.extra.Profile> response) {
+                                    Log.d("$$#!", response.raw().toString());
+                                    if(response.body() == null){return;}
+                                    responsibleCaseRescuer = response.body();
+                                    alreadyTakeCaseAlertDialog.setMessage(getString(R.string.mrservice_already_accepted).concat(" \n".concat(getString(R.string.mrservice_responsbler))).concat(" : ").concat(responsibleCaseRescuer.getFirstName()+" "+responsibleCaseRescuer.getLastName()));
+                                    alreadyTakeCaseAlertDialog.setNegativeButton(context.getResources().getString(R.string.call), new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                                    callIntent.setData(Uri.parse("tel:".concat(responsibleCaseRescuer.getPhoneNumber())));
+                                                    startActivity(callIntent);
+                                                }
+                                            });
+                                    alreadyTakeCaseAlertDialog.create().show();
+                                    Log.d("$$#!", response.body().toString());
+                                }
+
+                                @Override
+                                public void onFailure(Call<com.sitsenior.g40.weewhorescuer.models.extra.Profile> call, Throwable t) {
+
+                                }
+                            });
                             makeToastText(getString(R.string.mrservice_already_accepted));
                         }
                     }

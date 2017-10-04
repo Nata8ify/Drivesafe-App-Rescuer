@@ -29,6 +29,9 @@ public interface WeeworhRestService{
     @GET("RescuerIn?opt=get_userinfo")
     Call<Profile> getReporterByIncidetById(@Query(Weeworh.Param.userId) long userId);
 
+    @GET("RescuerIn?opt=get_case_rscr")
+    Call<Profile> getRescuerProfileByIncidetById(@Query(Weeworh.Param.accidentId) long accidentId);
+
     @GET("RescuerIn?opt=get_boundactacc")
     Call<List<Accident>> getInBoundTodayIncidents(@Query(Weeworh.Param.userId) long userId);
 
