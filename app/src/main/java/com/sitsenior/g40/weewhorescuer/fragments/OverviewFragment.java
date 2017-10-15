@@ -186,7 +186,7 @@ public class OverviewFragment extends Fragment {
                 TextView textView = (TextView)view.findViewById(R.id.txt_briefaddr);
                 Accident accident = AccidentFactory.getInstance(null).getAccidentList().get(position);
                 AccidentFactory.setSelectAccident(accident);
-                ((NavigatorFragment)getFragmentManager().findFragmentByTag("android:switcher:".concat(String.valueOf(R.id.vwpgr_main)).concat(":2"))).viewAccidentDataandLocation(accident);
+                ((NavigatorFragment)getFragmentManager().findFragmentByTag("android:switcher:".concat(String.valueOf(R.id.vwpgr_main)).concat(":".concat(String.valueOf(NavigatorFragment.NAVIGATOR_PAGE))))).viewAccidentDataandLocation(accident);
                 MainActivity.mainViewPager.setCurrentItem(NavigatorFragment.NAVIGATOR_PAGE);
             }
         });
@@ -219,5 +219,5 @@ public class OverviewFragment extends Fragment {
         });
     }
 
-    public static final int OVERVIEW_PAGE = 1;
+    public static final int OVERVIEW_PAGE = 0;
 }

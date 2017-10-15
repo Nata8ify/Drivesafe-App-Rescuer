@@ -498,5 +498,5 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
-    public static final int NAVIGATOR_PAGE = 2;
+    public static final int NAVIGATOR_PAGE = 1;
 }

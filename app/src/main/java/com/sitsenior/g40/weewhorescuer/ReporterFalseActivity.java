@@ -34,6 +34,9 @@ public class ReporterFalseActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btn_call:
                 Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                if(ReporterProfile.getInstance() == null){
+
+                }
                 callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
                 startActivity(callIntent);
                 break;

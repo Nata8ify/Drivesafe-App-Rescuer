@@ -12,9 +12,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
@@ -124,7 +126,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 return true;
-            case R.id.menu_screen_on : return true;
+            case R.id.menu_screen_on :
+                Log.d("setChecked", ""+item.isChecked());
+                item.setChecked(!item.isChecked());
+                if(!item.isChecked()){
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+                return false;
             default : return super.onOptionsItemSelected(item);
         }
     }

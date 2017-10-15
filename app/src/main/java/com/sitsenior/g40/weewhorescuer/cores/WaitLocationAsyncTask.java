@@ -119,17 +119,17 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
 
     public void setMainViewPager(ViewPager viewPager) {
         MainActivityTabSectionAdapter adapter = new MainActivityTabSectionAdapter(((AppCompatActivity) context).getSupportFragmentManager());
-        this.configurationFragment = new ConfigurationFragment();
+        //this.configurationFragment = new ConfigurationFragment();
         this.overviewFragment = new OverviewFragment();
         this.navigatorFragment = new NavigatorFragment();
-        adapter.addFragment(configurationFragment, context.getString(R.string.configuration));
+       // adapter.addFragment(configurationFragment, context.getString(R.string.configuration));
         adapter.addFragment(overviewFragment, context.getString(R.string.overview));
         adapter.addFragment(navigatorFragment, context.getString(R.string.navigator));
 
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
         MainActivity.tabPage.setupWithViewPager(viewPager);
-        viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
+//        viewPager.setCurrentItem(OverviewFragment.OVERVIEW_PAGE);
 //        Accident selectedAccident = AccidentFactory.getSelectAccident();
 //        if(selectedAccident == null){return;}
 //        AccidentFactory.setSelectAccident(AccidentFactory.getInstance(null).findByAccidentId(realm.where(AccidentBrief.class).findFirst().getAccidentId()));
