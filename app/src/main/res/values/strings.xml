@@ -52,6 +52,15 @@
     <string name="mainnav_find_nearest_hospital">ค้นหาโรงพยาบาลใกล้เคียง</string>
     <string name="mainnav_result_nearest_hospital_tiitle">ผลลัพธ์ของโรงพยาบาลใกล้เคียง</string>
     <string name="mainnav_no_result_nearest_hospital_tiitle">ไม่พบผลลัพธ์ของโรงพยาบาลใกล้เคียงในฐานข้อมูลระบบ</string>
+    <!-- Main - Register Hospital  -->
+    <string name="mainnav_register_hospital_name">ชื่อโรงพยาบาล</string>
+    <string name="mainnav_register_hospital">จดจำโรงพยาบบาล</string>
+    <string name="mainnav_register_hospital_alreadey_regis1">เราพบว่าตำแหน่งปัจจุบันของคุณนั้นอยู่ใกล้กับ</string>
+    <string name="mainnav_register_hospital_alreadey_regis2">แล้วระบบจะทำการเก็บค่าความแม่นยำเมื่อคุณ \'ส่ง\' พิกัดปัจจุบัน</string>
+    <string name="mainnav_register_hospital_success">การจดจำโรงพยาบาลสำเร็จเรียบร้อย</string>
+    <string name="mainnav_register_hospital_fail">โรงพยาบาลนี้ได้ถูกบันทึกลงฐานข้อมูลเรียบร้อยแล้ว</string>
+    <string name="mainnav_current_geo">พิกัดปัจจุบัน : </string>
+
     <!-- Main - Configuration -->
     <string name="maincon_lang">ภาษา</string>
     <string name="maincon_keep_screen_on">ป้องกันสลีปโหมด</string>

@@ -30,12 +30,18 @@ public class LocationFactory {
     private static LatLng latLng;
     private boolean locationActivated;
 
+    //Current Lat&Lng Geo
+    public static double latitude;
+    public static double longitude;
+
     public LocationFactory() {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 setLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
                 locationActivated = true;
             }
 
