@@ -26,7 +26,7 @@
     <!-- Main - Navigator -->
     <string name="mainnav_curposition_title">ตำแหน่งปัจจุบันของคุณ ...</string>
     <string name="mainnav_navposition_title">ตำแหน่งปัจจุบันของคุณ ...</string>
-    <string name="mainnav_marker_curposition_title">คุณอยู่ที่นี่</string>
+    <string name="mainnav_marker_curposition_title">ตำแหน่งปัจจุบัน</string>
     <string name="mainnav_marker_curposition_snipet">*</string>
     <string name="mainnav_marker_desposition_title">จุดหมาย</string>
     <string name="mainnav_btn_going">รับผิดชอบเหตุนี้</string>
@@ -49,6 +49,9 @@
     <string name="mainnav_already_got_case">ไม่สามารถทำได้เมื่อคุณมีเหตุที่ต้องรับผิดชอบอยู่แล้ว</string>
     <string name="mainnav_continue_rescue">ดำเนินการช่วยเหลือต่อ</string>
     <string name="mainnav_continue_to_close">ปิดเคสการช่วยเหลือ</string>
+    <string name="mainnav_find_nearest_hospital">ค้นหาโรงพยาบาลใกล้เคียง</string>
+    <string name="mainnav_result_nearest_hospital_tiitle">ผลลัพธ์ของโรงพยาบาลใกล้เคียง</string>
+    <string name="mainnav_no_result_nearest_hospital_tiitle">ไม่พบผลลัพธ์ของโรงพยาบาลใกล้เคียงในฐานข้อมูลระบบ</string>
     <!-- Main - Configuration -->
     <string name="maincon_lang">ภาษา</string>
     <string name="maincon_keep_screen_on">ป้องกันสลีปโหมด</string>
@@ -103,6 +106,7 @@
     <string name="warning">คำเตือน</string>
     <string name="progressing">กำลังดำเนินการ</string>
     <string name="request_cancelled">การข้อความช่วยเหลือถูกยกเลิก</string>
+    <string name="kilometer">กิโลเมตร</string>
 
     <!--Warning-->
     <string name="warn_no_network">ไม่มีการเชื่อมต่ออินเทอร์เน็ต</string>

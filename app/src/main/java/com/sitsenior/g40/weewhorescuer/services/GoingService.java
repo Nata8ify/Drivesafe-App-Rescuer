@@ -164,10 +164,10 @@ public class GoingService extends IntentService {
             }
         };
         // /Runnable
-
-        startForeground(1, notificationBuilder.build());
         handler.post(onGoingRunnable);
         handler.post(updateSelectedIncidentRunnable);
+        startForeground(1, notificationBuilder.build());
+
     }
 
 

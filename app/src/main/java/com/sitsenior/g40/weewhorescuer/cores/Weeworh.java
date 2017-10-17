@@ -11,6 +11,7 @@ import com.koushikdutta.ion.Ion;
 import com.sitsenior.g40.weewhorescuer.fragments.NavigatorFragment;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.models.extra.HospitalDistance;
 import com.sitsenior.g40.weewhorescuer.models.extra.OperatingLocation;
 import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 
@@ -190,6 +191,29 @@ public class Weeworh {
         return false;
     }
 
+    public List<HospitalDistance> getNearestHospital(double latitude, double longitude){
+        if(!SettingUtils.isNetworkConnected(context)){return null;}
+        List<HospitalDistance> hospitalDistances= null;
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+        Ion ion = Ion.getDefault(context);
+        ion.configure().setGson(gson);
+        try {
+            hospitalDistances = (List<HospitalDistance>)ion.with(context)
+                    .load(Url.GET_NEAREST_HOSPITAL)
+                    .setTimeout(10000)
+                    .setBodyParameter(Param.latitude, String.valueOf(latitude))
+                    .setBodyParameter(Param.longitude, String.valueOf(longitude))
+                    .as(TypeToken.get(new TypeToken<List<HospitalDistance>>(){}.getType()))
+                    .get();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return hospitalDistances;
+    }
+
     public static class Url{
         public static final String HOST = "http://54.254.142.3:8080/WeeWorh-1.0-SNAPSHOT/"; //d
         public static final String RESCUER_LOGIN = HOST.concat("RescuerIn?opt=login&utyp=t");
@@ -201,6 +225,7 @@ public class Weeworh {
         public static final String SET_GOING_CODE = HOST.concat("RescuerIn?opt=set_ongoing");
         public static final String SET_RESCUED_CODE = HOST.concat("RescuerIn?opt=set_closed");
         public static final String SET_RESCUING_CODE = HOST.concat("RescuerIn?opt=set_onrescue");
+        public static final String GET_NEAREST_HOSPITAL = HOST.concat("RescuerIn?opt=get_nearest_hospital");
     }
 
     public class Param{
@@ -214,7 +239,11 @@ public class Weeworh {
         /* Accident / Incident Param */
         public static final String accidentId = "accidentId";
         public static final String responsibleRescr = "responsibleRescr";
+        public static final String latitude = "latitude";
+        public static final String longitude = "longitude";
 
+        /* Hospital */
+        public static final String hospitalName = "name";
 
     }
 

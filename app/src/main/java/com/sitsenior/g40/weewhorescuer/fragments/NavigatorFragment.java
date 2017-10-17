@@ -1,7 +1,6 @@
 package com.sitsenior.g40.weewhorescuer.fragments;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,13 +37,17 @@ import com.sitsenior.g40.weewhorescuer.R;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
+import com.sitsenior.g40.weewhorescuer.cores.NearestHospitalAdapter;
 import com.sitsenior.g40.weewhorescuer.cores.ViewReportUserInfoAsyncTask;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
+import com.sitsenior.g40.weewhorescuer.models.extra.HospitalDistance;
 import com.sitsenior.g40.weewhorescuer.models.extra.ReporterProfile;
 import com.sitsenior.g40.weewhorescuer.services.GoingService;
 import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,15 +79,20 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
     private TextView txtNavigatorEstimatedDistance;
     private Button btnImGoing;
     private Button btnReportUserInfo;
+    private Button btnFindNearestHospital;
     private static final String N8IFY_GOOGLE_MAPS_API_KEY = "AIzaSyBz4yyNYqj3KNAl_cn2DpbIEne_45J9KTQ";
     private static final String N8IFY_GOOGLE_MAPS_DIRECTION_KEY = "AIzaSyAUyVikwoN9vvsV8vHvqj98g-Nxq0WtDAg";
 
     private AlertDialog leftButUnClosedAlertDialog;
+    private AlertDialog nearestHospitalAlertDialog;
     private AlertDialog.Builder alreadyTakeCaseAlertDialog;
     private com.sitsenior.g40.weewhorescuer.models.extra.Profile responsibleCaseRescuer;
     Retrofit retrofit;
     WeeworhRestService weeworh;
 
+    private double cuurentLat;
+    private double cuurentLng;
+    private List<HospitalDistance> hospitalDistances ;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +121,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         txtNavigatorEstimatedDistance = (TextView) inflateNavigatorView.findViewById(R.id.txt_estdistance);
         btnImGoing = (Button) inflateNavigatorView.findViewById(R.id.btn_going);
         btnReportUserInfo = (Button) inflateNavigatorView.findViewById(R.id.btn_userdetail);
+        btnFindNearestHospital = (Button) inflateNavigatorView.findViewById(R.id.btn_nearest_hospital);
         navMapView = (MapView) inflateNavigatorView.findViewById(R.id.map_navmap);
         navMapView.onCreate(savedInstanceState);
         navMapView.onResume();
@@ -160,7 +169,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         /* Onlick Overrid Stuffs */
         btnImGoing.setOnClickListener(this);
         btnReportUserInfo.setOnClickListener(this);
-
+        btnFindNearestHospital.setOnClickListener(this);
         /* On.. stuffs */
         MainActivity.mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private final AlertDialog onGoingDialog = new AlertDialog.Builder(context)
@@ -411,7 +420,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         Log.d("$$!", response.raw().toString());
-                        if(response.body()){
+                        if (response.body()) {
                             ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
                             AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
                             btnImGoing.setVisibility(View.GONE);
@@ -420,20 +429,20 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                             weeworh.getRescuerProfileByIncidetById(AccidentFactory.getSelectAccident().getAccidentId()).enqueue(new Callback<com.sitsenior.g40.weewhorescuer.models.extra.Profile>() {
                                 @Override
                                 public void onResponse(Call<com.sitsenior.g40.weewhorescuer.models.extra.Profile> call, Response<com.sitsenior.g40.weewhorescuer.models.extra.Profile> response) {
-                                    Log.d("$$#!", response.raw().toString());
-                                    if(response.body() == null){return;}
+                                    if (response.body() == null) {
+                                        return;
+                                    }
                                     responsibleCaseRescuer = response.body();
-                                    alreadyTakeCaseAlertDialog.setMessage(getString(R.string.mrservice_already_accepted).concat(" \n".concat(getString(R.string.mrservice_responsbler))).concat(" : ").concat(responsibleCaseRescuer.getFirstName()+" "+responsibleCaseRescuer.getLastName()));
+                                    alreadyTakeCaseAlertDialog.setMessage(getString(R.string.mrservice_already_accepted).concat(" \n".concat(getString(R.string.mrservice_responsbler))).concat(" : ").concat(responsibleCaseRescuer.getFirstName() + " " + responsibleCaseRescuer.getLastName()));
                                     alreadyTakeCaseAlertDialog.setNegativeButton(context.getResources().getString(R.string.call), new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                                    callIntent.setData(Uri.parse("tel:".concat(responsibleCaseRescuer.getPhoneNumber())));
-                                                    startActivity(callIntent);
-                                                }
-                                            });
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                            callIntent.setData(Uri.parse("tel:".concat(responsibleCaseRescuer.getPhoneNumber())));
+                                            startActivity(callIntent);
+                                        }
+                                    });
                                     alreadyTakeCaseAlertDialog.create().show();
-                                    Log.d("$$#!", response.body().toString());
                                 }
 
                                 @Override
@@ -454,6 +463,31 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                 break;
             case R.id.btn_userdetail:
                 new ViewReportUserInfoAsyncTask(context).execute(AccidentFactory.getSelectAccident().getUserId());
+                break;
+            case R.id.btn_nearest_hospital:
+                cuurentLat = LocationFactory.getInstance(null).getLatLng().latitude;
+                cuurentLng = LocationFactory.getInstance(null).getLatLng().longitude;
+                hospitalDistances = Weeworh.with(context).getNearestHospital(cuurentLat, cuurentLng);
+                if (hospitalDistances == null) {
+                    makeToastText(getString(R.string.warn_no_network));
+                    return;
+                }
+                if (hospitalDistances.isEmpty()) {
+                    makeToastText(getString(R.string.mainnav_no_result_nearest_hospital_tiitle));
+                    return;
+                }
+                nearestHospitalAlertDialog = new AlertDialog.Builder(context)
+                        .setTitle(getString(R.string.mainnav_result_nearest_hospital_tiitle))
+                        .setAdapter(new NearestHospitalAdapter(context, R.layout.row_nearest_hospital, hospitalDistances), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String uri = "http://maps.google.com/maps?saddr=" + cuurentLat + "," + cuurentLng + "&daddr=" + hospitalDistances.get(which).getHospital().getLatitude() + "," + hospitalDistances.get(which).getHospital().getLongitude();
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                                startActivity(intent);
+                            }
+                        })
+                        .create();
+                nearestHospitalAlertDialog.show();
                 break;
         }
     }

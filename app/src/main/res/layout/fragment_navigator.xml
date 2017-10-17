@@ -43,8 +43,14 @@
                     android:layout_below="@+id/txt_curnavtitle"
                     android:layout_marginTop="5dp"
                     android:text="Loading..." />
-            </RelativeLayout>
 
+
+            </RelativeLayout>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_nearest_hospital"
+                android:text="@string/mainnav_find_nearest_hospital"/>
             <RelativeLayout
                 android:id="@+id/reltvlout_desposition_details"
                 android:layout_width="match_parent"

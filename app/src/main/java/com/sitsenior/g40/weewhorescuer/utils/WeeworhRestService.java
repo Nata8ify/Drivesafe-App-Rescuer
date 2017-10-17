@@ -2,6 +2,8 @@ package com.sitsenior.g40.weewhorescuer.utils;
 
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
+import com.sitsenior.g40.weewhorescuer.models.extra.Hospital;
+import com.sitsenior.g40.weewhorescuer.models.extra.HospitalDistance;
 import com.sitsenior.g40.weewhorescuer.models.extra.Profile;
 
 import java.util.List;
@@ -38,4 +40,9 @@ public interface WeeworhRestService{
     @GET("RescuerIn?opt=set_ongoing")
     Call<Boolean> setGoing(@Query((Weeworh.Param.responsibleRescr)) long responsibleRescr, @Query((Weeworh.Param.accidentId)) long accidentId);
 
+    @GET("HospitalSetting?opt=register_hospital")
+    Call<Hospital> registerHospital(@Query(Weeworh.Param.hospitalName) String name, @Query(Weeworh.Param.latitude) double latitude,@Query(Weeworh.Param.longitude) double longitude);
+
+    @GET("RescuerIn?opt=get_nearest_hospital")
+    Call<HospitalDistance> getNearestHospital(@Query(Weeworh.Param.latitude) double latitude, @Query(Weeworh.Param.longitude) double longitude);
 }
