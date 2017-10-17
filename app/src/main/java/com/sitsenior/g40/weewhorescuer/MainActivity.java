@@ -147,7 +147,8 @@ public class MainActivity extends AppCompatActivity {
                         if(hospital != null){
                             messageTextView.setText(getString(R.string.mainnav_register_hospital_alreadey_regis1).concat(" \"").concat(hospital.getName()).concat("\" ").concat(getString(R.string.mainnav_register_hospital_alreadey_regis2)));
                             hospitalNameEditText.setText(hospital.getName());
-                            hospitalNameEditText.setEnabled(false);
+                        } else {
+                            hospitalNameEditText.setEnabled(true);
                         }
                     }
 

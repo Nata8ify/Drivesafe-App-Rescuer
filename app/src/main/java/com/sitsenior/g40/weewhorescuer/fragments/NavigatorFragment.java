@@ -467,27 +467,40 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
             case R.id.btn_nearest_hospital:
                 cuurentLat = LocationFactory.getInstance(null).getLatLng().latitude;
                 cuurentLng = LocationFactory.getInstance(null).getLatLng().longitude;
-                hospitalDistances = Weeworh.with(context).getNearestHospital(cuurentLat, cuurentLng);
-                if (hospitalDistances == null) {
-                    makeToastText(getString(R.string.warn_no_network));
-                    return;
-                }
-                if (hospitalDistances.isEmpty()) {
-                    makeToastText(getString(R.string.mainnav_no_result_nearest_hospital_tiitle));
-                    return;
-                }
-                nearestHospitalAlertDialog = new AlertDialog.Builder(context)
-                        .setTitle(getString(R.string.mainnav_result_nearest_hospital_tiitle))
-                        .setAdapter(new NearestHospitalAdapter(context, R.layout.row_nearest_hospital, hospitalDistances), new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String uri = "http://maps.google.com/maps?saddr=" + cuurentLat + "," + cuurentLng + "&daddr=" + hospitalDistances.get(which).getHospital().getLatitude() + "," + hospitalDistances.get(which).getHospital().getLongitude();
-                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                                startActivity(intent);
-                            }
-                        })
-                        .create();
-                nearestHospitalAlertDialog.show();
+                //hospitalDistances = Weeworh.with(context).getNearestHospital(cuurentLat, cuurentLng);
+                weeworh.getNearestHospitals(cuurentLat, cuurentLng).enqueue(new Callback<List<HospitalDistance>>() {
+                    @Override
+                    public void onResponse(Call<List<HospitalDistance>> call, Response<List<HospitalDistance>> response) {
+                        hospitalDistances = response.body();
+                        if (hospitalDistances == null) {
+                            makeToastText(getString(R.string.warn_no_network));
+                            return;
+                        }
+                        if (hospitalDistances.isEmpty()) {
+                            makeToastText(getString(R.string.mainnav_no_result_nearest_hospital_tiitle));
+                            return;
+                        }
+
+                        nearestHospitalAlertDialog = new AlertDialog.Builder(context)
+                                .setTitle(getString(R.string.mainnav_result_nearest_hospital_tiitle))
+                                .setAdapter(new NearestHospitalAdapter(context, R.layout.row_nearest_hospital, hospitalDistances), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        String uri = "http://maps.google.com/maps?saddr=" + cuurentLat + "," + cuurentLng + "&daddr=" + hospitalDistances.get(which).getHospital().getLatitude() + "," + hospitalDistances.get(which).getHospital().getLongitude();
+                                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                                        startActivity(intent);
+                                    }
+                                })
+                                .create();
+                        nearestHospitalAlertDialog.show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<HospitalDistance>> call, Throwable t) {
+
+                    }
+                });
+
                 break;
         }
     }
