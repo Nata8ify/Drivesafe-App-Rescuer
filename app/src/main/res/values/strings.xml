@@ -54,12 +54,12 @@
     <string name="mainnav_no_result_nearest_hospital_tiitle">ไม่พบผลลัพธ์ของโรงพยาบาลใกล้เคียงในฐานข้อมูลระบบ</string>
     <!-- Main - Register Hospital  -->
     <string name="mainnav_register_hospital_name">ชื่อโรงพยาบาล</string>
-    <string name="mainnav_register_hospital">จดจำโรงพยาบบาล</string>
+    <string name="mainnav_register_hospital">จดจำโรงพยาบาล</string>
     <string name="mainnav_register_hospital_alreadey_regis1">เราพบว่าตำแหน่งปัจจุบันของคุณนั้นอยู่ใกล้กับ</string>
-    <string name="mainnav_register_hospital_alreadey_regis2">แล้วระบบจะทำการเก็บค่าความแม่นยำเมื่อคุณ \'ส่ง\' พิกัดปัจจุบัน</string>
+    <string name="mainnav_register_hospital_alreadey_regis2">ระบบจะทำการเก็บค่าความแม่นยำเมื่อคุณ \'ส่ง\' พิกัดปัจจุบัน</string>
     <string name="mainnav_register_hospital_success">การจดจำโรงพยาบาลสำเร็จเรียบร้อย</string>
     <string name="mainnav_register_hospital_fail">โรงพยาบาลนี้ได้ถูกบันทึกลงฐานข้อมูลเรียบร้อยแล้ว</string>
-    <string name="mainnav_current_geo">พิกัดปัจจุบัน : </string>
+    <string name="mainnav_current_geo">\n<u>พิกัดปัจจุบัน</u> : </string>
 
     <!-- Main - Configuration -->
     <string name="maincon_lang">ภาษา</string>
@@ -116,6 +116,7 @@
     <string name="progressing">กำลังดำเนินการ</string>
     <string name="request_cancelled">การข้อความช่วยเหลือถูกยกเลิก</string>
     <string name="kilometer">กิโลเมตร</string>
+    <string name="current_position">ตำแหน่งปัจจุบัน</string>
 
     <!--Warning-->
     <string name="warn_no_network">ไม่มีการเชื่อมต่ออินเทอร์เน็ต</string>

@@ -43,7 +43,7 @@ public class NearestHospitalAdapter extends ArrayAdapter<HospitalDistance> {
         TextView txtName = (TextView)row.findViewById(R.id.txt_hospital_name);
         TextView txtDistance = (TextView)row.findViewById(R.id.txt_hospital_distance);
         txtName.setText(hospital.getName());
-        txtDistance.setText(String.valueOf(distance).substring(0, String.valueOf(distance).indexOf(".")+3).concat(" ").concat(context.getString(R.string.kilometer)));
+        txtDistance.setText((distance <= 0.1)?context.getString(R.string.current_position):(String.valueOf(distance).substring(0, String.valueOf(distance).indexOf(".")+3).concat(" ").concat(context.getString(R.string.kilometer))));
         return row;
     }
 }
