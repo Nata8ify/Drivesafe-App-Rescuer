@@ -10,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,6 +30,7 @@ import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.models.extra.Hospital;
+import com.sitsenior.g40.weewhorescuer.models.extra.HospitalDistance;
 import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
@@ -137,6 +139,23 @@ public class MainActivity extends AppCompatActivity {
                 final TextView currentGeoTextView = ((TextView) view.findViewById(R.id.txtCurrentGeo));
                 final EditText hospitalNameEditText = ((EditText) view.findViewById(R.id.edtxt_hospital_name));
                 final Button submitButton = ((Button) view.findViewById(R.id.btn_submit_regis_hospital));
+                weeworh.getNearestHospitalOne( LocationFactory.latitude, LocationFactory.longitude).enqueue(new Callback<Hospital>() {
+                    @Override
+                    public void onResponse(Call<Hospital> call, Response<Hospital> response) {
+                        Log.d("%$%$", response.raw().toString());
+                        Hospital hospital = response.body();
+                        if(hospital != null){
+                            messageTextView.setText(getString(R.string.mainnav_register_hospital_alreadey_regis1).concat(" \"").concat(hospital.getName()).concat("\" ").concat(getString(R.string.mainnav_register_hospital_alreadey_regis2)));
+                            hospitalNameEditText.setText(hospital.getName());
+                            hospitalNameEditText.setEnabled(false);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Hospital> call, Throwable t) {
+                        Log.d("%$%$#", call.request().url().toString());
+                    }
+                });
                 submitButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -144,22 +163,16 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<Hospital> call, Response<Hospital> response) {
                                 Hospital hospital = response.body();
-    /*                    if(hospital != null){
-                            messageTextView.setText(getString(R.string.mainnav_register_hospital_alreadey_regis1).concat(" \"").concat(hospital.getName()).concat("\" ").concat(getString(R.string.mainnav_register_hospital_alreadey_regis2)));
-                            hospitalNameEditText.setText(hospital.getName());
-                            hospitalNameEditText.setEnabled(false);
-                        }*/
                                 if (hospital.getScore() == 0) {
                                     makeToastText(getString(R.string.mainnav_register_hospital_success));
                                 } else {
                                     makeToastText(getString(R.string.mainnav_register_hospital_fail));
                                 }
-                                
-                            }
 
+                            }
                             @Override
                             public void onFailure(Call<Hospital> call, Throwable t) {
-
+                                makeToastText(getString(R.string.warn_unhandler_exception));
                             }
                         });
                     }

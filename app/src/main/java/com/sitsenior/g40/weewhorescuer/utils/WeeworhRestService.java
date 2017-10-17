@@ -45,4 +45,8 @@ public interface WeeworhRestService{
 
     @GET("RescuerIn?opt=get_nearest_hospital")
     Call<HospitalDistance> getNearestHospital(@Query(Weeworh.Param.latitude) double latitude, @Query(Weeworh.Param.longitude) double longitude);
+
+    @GET("HospitalSetting?opt=get_nearest_hospital_one")
+    Call<Hospital> getNearestHospitalOne(@Query(Weeworh.Param.latitude) double latitude, @Query(Weeworh.Param.longitude) double longitude);
+
 }

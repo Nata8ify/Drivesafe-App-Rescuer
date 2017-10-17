@@ -132,6 +132,7 @@
     <string name="warn_close_incident_undone">การกระทำนี้ไม่สามารถย้อนกลับไปได้ กรุณามั่นใจในการกระทำและเลือก \"ใช่\"</string>
     <string name="warn_in_responsible_found">เราพบว่าคุณยังมีเคสการช่วยเหลือที่ยังไม่เสร็จสิ้น กรุณาเลือก \n<b>\"ดำเนินการช่วยเหลือต่อ\"</b> หรือ \n<b>\"ปิดเคสการช่วยเหลือ\"</b></string>
     <string name="warn_responsible_logout">ระบบไม่อนุญาตการออกจากระบบเมื่อยังมีเคสการช่วยเหลือ</string>
+    <string name="warn_unhandler_exception">การทำงานผิดพลาด กรุณาติดต่อผู้พัฒนา</string>
 
     <!--Class-->
 
