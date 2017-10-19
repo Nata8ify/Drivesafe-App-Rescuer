@@ -2,6 +2,7 @@ package com.sitsenior.g40.weewhorescuer.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.support.v4.app.ActivityCompat;
@@ -23,6 +24,16 @@ public class SettingUtils {
     /* Aasking User For Granting Some Permission  */
     public static void requestPermission(Context context){
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET}, REQ_CODE_ACCESS_FINE_LOCATION);
+    }
+
+    /* Check if Service is Running or not*/
+    public static boolean isServiceRunning(Class<?> clazz, Context context){
+        for(ActivityManager.RunningServiceInfo info : ((ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE)).getRunningServices(Integer.MAX_VALUE)){
+            if(clazz.getName().equals(info.service.getClassName())){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

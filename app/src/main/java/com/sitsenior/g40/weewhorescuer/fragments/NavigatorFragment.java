@@ -309,36 +309,6 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
         });
     }
 
-    public void viewAccidentDataandLocationFromNoti(final Accident accident) {
-        navMapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                NavigatorFragment.this.googleMap = googleMap;
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                NavigatorFragment.this.googleMap.setMyLocationEnabled(true);
-                NavigatorFragment.this.googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-                    @Override
-                    public boolean onMyLocationButtonClick() {
-                        txtNavigatorDescription.setText(AddressFactory.getInstance(null).getBriefLocationAddress(LocationFactory.getInstance(null).getLatLng()));
-                        currentPositionDetailRelativeLayout.setVisibility(View.VISIBLE);
-                        return false;
-                    }
-                });
-                // For dropping a marker at a point on the Map
-                LatLng current = new LatLng(LocationFactory.getInstance(null).getLatLng().latitude, LocationFactory.getInstance(null).getLatLng().longitude);
-                googleMap.addMarker(new MarkerOptions().draggable(false).position(current).title("Current Place").snippet("Your Current Place"));
-
-                // For zooming automatically to the location of the marker
-                cameraPosition = new CameraPosition.Builder().target(current).zoom(14).build();
-                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                viewAccidentDataandLocation(accident);
-
-            }
-
-        });
-    }
 
     public void viewAccidentDataandLocation(Accident accident) {
         /* Map and Location */

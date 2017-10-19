@@ -136,38 +136,6 @@ public class OverviewFragment extends Fragment {
                 overviewHandler.postDelayed(this, 3000);
             }
         };
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if(rescuePendingIncidentList == null){rescuePendingIncidentList = new ArrayList<Accident>();}
-                List<Accident> accs = AccidentFactory.getInstance(Weeworh.with(getContext()).getInBoundTodayIncidents(Profile.getInsatance().getUserId())).update().getRescuePendingIncident();
-                if(accs != null) {
-                    rescuePendingIncidentList.clear();
-                    rescuePendingIncidentList.addAll(accs);
-                }
-                if(OverviewFragment.accidentListAdapter != null){
-                    //TODO : Handler NullPointer
-                    try {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                OverviewFragment.accidentListAdapter.clear();
-                                OverviewFragment.accidentListAdapter.addAll(rescuePendingIncidentList);
-                                OverviewFragment.accidentListAdapter.notifyDataSetChanged();
-                                if (rescuePendingIncidentList.isEmpty()) {
-                                    viewIncidentPanelLayout.setVisibility(View.GONE);
-                                    emptyAccidentResultLayout.setVisibility(View.VISIBLE);
-                                } else {
-                                    viewIncidentPanelLayout.setVisibility(View.VISIBLE);
-                                    emptyAccidentResultLayout.setVisibility(View.GONE);
-                                }
-                            }
-                        });
-                    } catch (NullPointerException  npex){}
-                }
-                overviewHandler.postDelayed(this, 3000L);
-            }
-        }).run();*/
         overviewHandler.post(overviewRunnable);
 
         setListener();

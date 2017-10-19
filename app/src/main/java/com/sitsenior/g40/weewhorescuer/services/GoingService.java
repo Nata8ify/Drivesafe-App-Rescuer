@@ -143,7 +143,7 @@ public class GoingService extends IntentService {
                     public void onResponse(Call<Accident> call, Response<Accident> response) {
                         AccidentFactory.setResponsibleAccident(response.body());
 
-                        if (AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU) {
+                        if (AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU) { //<--$ERR : Null Pointer
                             handler.removeCallbacks(updateSelectedIncidentRunnable);
                             handler.removeCallbacks(onGoingRunnable);
                             Intent reporterCancelIntent = new Intent(GoingService.this, ReporterFalseActivity.class);

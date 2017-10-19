@@ -31,6 +31,7 @@ import com.sitsenior.g40.weewhorescuer.fragments.OverviewFragment;
 import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.models.extra.Hospital;
 import com.sitsenior.g40.weewhorescuer.models.extra.HospitalDistance;
+import com.sitsenior.g40.weewhorescuer.services.GoingService;
 import com.sitsenior.g40.weewhorescuer.utils.DialogUtils;
 import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     public static ViewPager mainViewPager;
     public static TabLayout tabPage;
 
+    private AlertDialog leftButUnClosedAlertDialog;
     private AlertDialog noConnectionAlertDialog;
     private BroadcastReceiver closeIncidentReceiver;
 
@@ -80,6 +82,28 @@ public class MainActivity extends AppCompatActivity {
         tabPage = (TabLayout) findViewById(R.id.tab_page);
         mainHandler = new Handler();
         new WaitLocationAsyncTask(MainActivity.this, mainViewPager).execute();
+
+        leftButUnClosedAlertDialog = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.warning))
+                .setCancelable(false)
+                .setMessage(getString(R.string.warn_in_responsible_found))
+                .setPositiveButton(getString(R.string.mainnav_continue_rescue), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //todo
+                    }
+                })
+                .setNegativeButton(getString(R.string.mainnav_continue_to_close), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent closeIntent = new Intent(MainActivity.this, CloseIncidentActivity.class);
+                        closeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        closeIntent.putExtra(GoingService.RESPONSIBLE_INCIDENT_KEY, AccidentFactory.getResponsibleAccident().getAccidentId());
+                        closeIntent.setAction(GoingService.CLOSE_INCIDENT);
+                        startActivity(closeIntent);
+                    }
+                })
+                .create();
 // -AlertDialog
         noConnectionAlertDialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.warning))
@@ -96,8 +120,17 @@ public class MainActivity extends AppCompatActivity {
         conenctivityRunnable = new Runnable() {
             @Override
             public void run() {
-                if (!SettingUtils.isNetworkConnected(MainActivity.this)) {
-                    noConnectionAlertDialog.show();
+                try {
+                    if (!SettingUtils.isNetworkConnected(MainActivity.this)) {
+                        noConnectionAlertDialog.show();
+                    } else {
+                        /*if(SettingUtils.isServiceRunning(GoingService.class, MainActivity.this)){
+
+                        }*/
+                    }
+                } catch (Exception exc){
+                    //NullPointer, WindowLeaked
+                    //makeToastText(getString(R.string.warn_no_network));
                 }
                 mainActivityHandler.postDelayed(this, 3000);
             }
@@ -238,6 +271,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void makeToastText(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

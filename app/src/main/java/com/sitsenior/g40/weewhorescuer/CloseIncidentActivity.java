@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.sitsenior.g40.weewhorescuer.cores.AccidentFactory;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.services.GoingService;
+import com.sitsenior.g40.weewhorescuer.utils.SettingUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,13 +42,17 @@ public class CloseIncidentActivity extends AppCompatActivity {
     // -Function
 
     private void makeToastText(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @OnClick({R.id.btn_close_yes, R.id.btn_close_no})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_close_yes:
+                if (!SettingUtils.isNetworkConnected(CloseIncidentActivity.this)) {
+                    makeToastText(getString(R.string.warn_no_network));
+                    return;
+                }
                 if (true) {
                     Weeworh.with(CloseIncidentActivity.this).setRescuedCode(AccidentFactory.getResponsibleAccident().getAccidentId());
                     makeToastText(getString(R.string.mrservice_close_result_success));
