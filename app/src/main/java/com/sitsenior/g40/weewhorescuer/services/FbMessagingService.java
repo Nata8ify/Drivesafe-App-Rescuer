@@ -45,6 +45,7 @@ public class FbMessagingService extends FirebaseMessagingService {
         nBuilder.setContentTitle(getString(R.string.fbservice_incidet_alert));
         nBuilder.setContentText(getString(R.string.fbservice_incidet_report_from).concat(bLocation));
         nBuilder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_ONE_SHOT));
+        nBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
         Notification notification = nBuilder.build();
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notification);

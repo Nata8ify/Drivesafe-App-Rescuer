@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                         noConnectionAlertDialog.show();
                     } else {
                         /*if(SettingUtils.isServiceRunning(GoingService.class, MainActivity.this)){
-
+//<< FI
                         }*/
                     }
                 } catch (Exception exc){

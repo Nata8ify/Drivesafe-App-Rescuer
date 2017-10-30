@@ -193,10 +193,14 @@ public class GoingService extends IntentService {
                     startActivity(closeIntent);
                     break;
                 case ACTION_CALL:
-                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
-                    startActivity(callIntent);
+                    if(ReporterProfile.getInstance() != null) {
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
+                        startActivity(callIntent);
+                    } else {
+                        makeToastText("ไม่พบหมายเลขโทรศัพท์ผู้ใช้งาน");
+                    }
                     break;
                 case ACTION_TO_MAIN:
                     startActivity(restartIntent);
