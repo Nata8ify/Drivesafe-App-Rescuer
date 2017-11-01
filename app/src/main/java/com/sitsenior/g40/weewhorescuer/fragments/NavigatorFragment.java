@@ -92,7 +92,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
 
     private double cuurentLat;
     private double cuurentLng;
-    private List<HospitalDistance> hospitalDistances ;
+    private List<HospitalDistance> hospitalDistances;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -390,43 +390,58 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                     @Override
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         Log.d("$$!", response.raw().toString());
-                        if (response.body()) {
-                            ReporterProfile.setInstance(Weeworh.with(context).getReportUserInformation(AccidentFactory.getSelectAccident().getUserId()));
-                            AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
-                            btnImGoing.setVisibility(View.GONE);
-                            getActivity().startService(new Intent(context, GoingService.class));
-                        } else {
-                            weeworh.getRescuerProfileByIncidetById(AccidentFactory.getSelectAccident().getAccidentId()).enqueue(new Callback<com.sitsenior.g40.weewhorescuer.models.extra.Profile>() {
-                                @Override
-                                public void onResponse(Call<com.sitsenior.g40.weewhorescuer.models.extra.Profile> call, Response<com.sitsenior.g40.weewhorescuer.models.extra.Profile> response) {
-                                    if (response.body() == null) {
-                                        return;
+                        try {
+                            if (response.body()) {
+                                weeworh.getProfileOfReporterByIncidetById(AccidentFactory.getSelectAccident().getUserId()).enqueue(new Callback<Profile>() {
+                                    @Override
+                                    public void onResponse(Call<Profile> call, Response<Profile> response) {
+                                        Log.d("@!!#", response.body().toString());
+                                        ReporterProfile.setInstance(response.body());
                                     }
-                                    responsibleCaseRescuer = response.body();
-                                    alreadyTakeCaseAlertDialog.setMessage(getString(R.string.mrservice_already_accepted).concat(" \n".concat(getString(R.string.mrservice_responsbler))).concat(" : ").concat(responsibleCaseRescuer.getFirstName() + " " + responsibleCaseRescuer.getLastName()));
-                                    alreadyTakeCaseAlertDialog.setNegativeButton(context.getResources().getString(R.string.call), new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                                            callIntent.setData(Uri.parse("tel:".concat(responsibleCaseRescuer.getPhoneNumber())));
-                                            startActivity(callIntent);
+
+                                    @Override
+                                    public void onFailure(Call<Profile> call, Throwable t) {
+
+                                    }
+                                });
+                                AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
+                                btnImGoing.setVisibility(View.GONE);
+                                getActivity().startService(new Intent(context, GoingService.class));
+                            } else {
+                                weeworh.getRescuerProfileByIncidetById(AccidentFactory.getSelectAccident().getAccidentId()).enqueue(new Callback<com.sitsenior.g40.weewhorescuer.models.extra.Profile>() {
+                                    @Override
+                                    public void onResponse(Call<com.sitsenior.g40.weewhorescuer.models.extra.Profile> call, Response<com.sitsenior.g40.weewhorescuer.models.extra.Profile> response) {
+                                        if (response.body() == null) {
+                                            return;
                                         }
-                                    });
-                                    alreadyTakeCaseAlertDialog.create().show();
-                                }
+                                        responsibleCaseRescuer = response.body();
+                                        alreadyTakeCaseAlertDialog.setMessage(getString(R.string.mrservice_already_accepted).concat(" \n".concat(getString(R.string.mrservice_responsbler))).concat(" : ").concat(responsibleCaseRescuer.getFirstName() + " " + responsibleCaseRescuer.getLastName()));
+                                        alreadyTakeCaseAlertDialog.setNegativeButton(context.getResources().getString(R.string.call), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                                                callIntent.setData(Uri.parse("tel:".concat(responsibleCaseRescuer.getPhoneNumber())));
+                                                startActivity(callIntent);
+                                            }
+                                        });
+                                        alreadyTakeCaseAlertDialog.create().show();
+                                    }
 
-                                @Override
-                                public void onFailure(Call<com.sitsenior.g40.weewhorescuer.models.extra.Profile> call, Throwable t) {
+                                    @Override
+                                    public void onFailure(Call<com.sitsenior.g40.weewhorescuer.models.extra.Profile> call, Throwable t) {
 
-                                }
-                            });
-                            makeToastText(getString(R.string.mrservice_already_accepted));
+                                    }
+                                });
+                                makeToastText(getString(R.string.mrservice_already_accepted));
+                            }
+                        } catch (NullPointerException e) {
+                            //makeToastText("");
                         }
                     }
 
                     @Override
                     public void onFailure(Call<Boolean> call, Throwable t) {
-
+                        makeToastText("การร้องขอข้อมูลล้มเหลว");
                     }
                 });
 

@@ -26,9 +26,14 @@ import com.sitsenior.g40.weewhorescuer.models.Profile;
 import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
 
 import java.io.IOException;
+import java.net.CookieManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.JavaNetCookieJar;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,13 +64,18 @@ public class OverviewFragment extends Fragment {
 
     public static byte accCodeButtonState;
 
+    private OkHttpClient client;
     private Retrofit retrofit;
     private WeeworhRestService weeworh;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         accCodeButtonState = Accident.ACC_CODE_A;
+        client = new OkHttpClient.Builder()
+                .cookieJar(new JavaNetCookieJar(new CookieManager()))
+                .build();
         retrofit = new Retrofit.Builder()
+                .client(client)
                 .baseUrl(Weeworh.Url.HOST)
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd").create()))
                 .build();

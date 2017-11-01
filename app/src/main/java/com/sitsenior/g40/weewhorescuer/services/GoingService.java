@@ -1,17 +1,14 @@
 package com.sitsenior.g40.weewhorescuer.services;
 
 import android.app.IntentService;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -27,12 +24,9 @@ import com.sitsenior.g40.weewhorescuer.cores.AddressFactory;
 import com.sitsenior.g40.weewhorescuer.cores.LocationFactory;
 import com.sitsenior.g40.weewhorescuer.cores.Weeworh;
 import com.sitsenior.g40.weewhorescuer.models.Accident;
-import com.sitsenior.g40.weewhorescuer.models.extra.AccidentBrief;
 import com.sitsenior.g40.weewhorescuer.models.extra.ReporterProfile;
 import com.sitsenior.g40.weewhorescuer.utils.WeeworhRestService;
 
-import io.realm.Realm;
-import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,6 +67,9 @@ public class GoingService extends IntentService {
 
     Retrofit retrofit;
     WeeworhRestService weeworhRestService;
+
+    private boolean isCallbackRemoved;
+
     public GoingService() {
         this("GoingService");
     }
@@ -91,7 +88,7 @@ public class GoingService extends IntentService {
                 .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd").create()))
                 .build();
         weeworhRestService = retrofit.create(WeeworhRestService.class);
-
+        isCallbackRemoved = false;
                 /*registerReceiver(receiver, new IntentFilter("CloseIncident"));*/
         // /Component
         // -View
@@ -126,10 +123,10 @@ public class GoingService extends IntentService {
                 estimatedDistance = AddressFactory.getInstance(null).getEstimateDistanceFromCurrentPoint(LocationFactory.getInstance(null).getLatLng(), new LatLng(AccidentFactory.getResponsibleAccident().getLatitude(), AccidentFactory.getResponsibleAccident().getLongitude()));
                 if (estimatedDistance <= CLOSEST_DISTANCE) {
                     handler.removeCallbacks(this);
-                        if (Weeworh.with(GoingService.this).setRescuingCode(AccidentFactory.getResponsibleAccident().getAccidentId())) {
-                            Toast.makeText(GoingService.this, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
-                            //notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(Accident.ACC_CODE_R)));
-                        }
+                    if (Weeworh.with(GoingService.this).setRescuingCode(AccidentFactory.getResponsibleAccident().getAccidentId())) {
+                        Toast.makeText(GoingService.this, getString(R.string.mainnav_incident_is_near), Toast.LENGTH_LONG).show();
+                        //notificationGoingRemoteViews.setTextViewText(R.id.txt_incident_status, getString(R.string.status).concat(" : ").concat(getStatusString(Accident.ACC_CODE_R)));
+                    }
                 } else {
                     handler.postDelayed(this, 10000L);
                 }
@@ -141,8 +138,8 @@ public class GoingService extends IntentService {
                 weeworhRestService.getIncidetById(AccidentFactory.getResponsibleAccident().getAccidentId()).enqueue(new Callback<Accident>() {
                     @Override
                     public void onResponse(Call<Accident> call, Response<Accident> response) {
+                        if(isCallbackRemoved){Log.d("!!!~", "do stop()");AccidentFactory.setResponsibleAccident(null);return;}
                         AccidentFactory.setResponsibleAccident(response.body());
-
                         if (AccidentFactory.getResponsibleAccident().getAccCode() == Accident.ACC_CODE_ERRU) { //<--$ERR : Null Pointer
                             handler.removeCallbacks(updateSelectedIncidentRunnable);
                             handler.removeCallbacks(onGoingRunnable);
@@ -186,6 +183,10 @@ public class GoingService extends IntentService {
         if (intent.getAction() != null) {
             switch (intent.getAction()) {
                 case ACTION_RESCUED:
+                    if(AccidentFactory.getResponsibleAccident() == null){
+                        //TODO Something make getResponsible not null.
+                        break;
+                    }
                     Intent closeIntent = new Intent(this, CloseIncidentActivity.class);
                     closeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     closeIntent.putExtra(RESPONSIBLE_INCIDENT_KEY, AccidentFactory.getResponsibleAccident().getAccidentId());
@@ -193,14 +194,14 @@ public class GoingService extends IntentService {
                     startActivity(closeIntent);
                     break;
                 case ACTION_CALL:
-                    if(ReporterProfile.getInstance() != null) {
-                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                        callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
                         callIntent.setData(Uri.parse("tel:".concat(ReporterProfile.getInstance().getPhoneNumber())));
-                        startActivity(callIntent);
-                    } else {
-                        makeToastText("ไม่พบหมายเลขโทรศัพท์ผู้ใช้งาน");
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
                     }
+                    startActivity(callIntent);
                     break;
                 case ACTION_TO_MAIN:
                     startActivity(restartIntent);
@@ -223,12 +224,14 @@ public class GoingService extends IntentService {
 
 
     // -Function
-    private void stop(){
-        stopForeground(true);
-        stopSelf();
+    private void stop() {
+        Log.d("!!!~", "do stop()");
+        isCallbackRemoved = true;
         handler.removeCallbacks(onGoingRunnable);
         handler.removeCallbacks(updateSelectedIncidentRunnable);
         AccidentFactory.setResponsibleAccident(null);
+        stopForeground(true);
+        stopSelf();
         onDestroy();
     }
 

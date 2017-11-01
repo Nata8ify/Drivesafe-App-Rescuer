@@ -70,12 +70,7 @@ public class ViewReportUserInfoAsyncTask extends AsyncTask<Long, Void, Void> {
             @Override
             public void onResponse(Call<Profile> call, Response<Profile> response) {
                 Log.d("$$!", response.raw().toString());
-                try {
-                    //?? got 500 status but there are profile result?
-                    showReportUserInfoDialog(new Gson().fromJson(response.errorBody().string(), Profile.class));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    showReportUserInfoDialog(response.body());
             }
 
             @Override

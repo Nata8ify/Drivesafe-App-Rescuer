@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.NotificationCompat;
@@ -45,7 +46,8 @@ public class FbMessagingService extends FirebaseMessagingService {
         nBuilder.setContentTitle(getString(R.string.fbservice_incidet_alert));
         nBuilder.setContentText(getString(R.string.fbservice_incidet_report_from).concat(bLocation));
         nBuilder.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_ONE_SHOT));
-        nBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+        nBuilder.setVibrate(new long[] { 1000, 1000, 1000});
+        nBuilder.setSound(Uri.parse("android.resource://".concat(getPackageName()).concat("/")+R.raw.bongo));
         Notification notification = nBuilder.build();
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notification);
