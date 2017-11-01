@@ -84,7 +84,7 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        try {
+/*        try {
             if (LocationFactory.getInstance(null).getLatLng().latitude != 0) {
                 if (!LocationFactory.getInstance(null).isGPSProviderEnabled()) {
                     if (!waitSetting) {
@@ -101,7 +101,17 @@ public class WaitLocationAsyncTask extends AsyncTask<Void, Void, Void> {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
+        while(LocationFactory.getInstance(null).getLatLng() == null){if(LocationFactory.getInstance(null).getLatLng() != null){break;}}
+            if (LocationFactory.getInstance(null).getLatLng().latitude != 0) {
+                if (!LocationFactory.getInstance(null).isGPSProviderEnabled()) {
+                    if (!waitSetting) {
+                        reqLocationDialog.show();
+                        waitSetting = true;
+                    }
+                }
+
+            }
 
         return null;
     }
