@@ -135,7 +135,9 @@ public class OverviewFragment extends Fragment {
                                         }
                                     }
                                 });
-                            } catch (NullPointerException  npex){}
+                            } catch (Exception  npex){
+                                npex.printStackTrace();
+                            }
                         }
                     }
 
@@ -154,6 +156,12 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        overviewHandler.removeCallbacks(overviewRunnable);
+        super.onDestroy();
     }
 
     public void setListener() {

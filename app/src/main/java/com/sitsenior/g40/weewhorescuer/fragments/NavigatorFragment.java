@@ -400,9 +400,7 @@ public class NavigatorFragment extends Fragment implements View.OnClickListener 
                                     }
 
                                     @Override
-                                    public void onFailure(Call<Profile> call, Throwable t) {
-
-                                    }
+                                    public void onFailure(Call<Profile> call, Throwable t) {}
                                 });
                                 AccidentFactory.setResponsibleAccident(AccidentFactory.getSelectAccident()); // used in non-close activity.
                                 btnImGoing.setVisibility(View.GONE);

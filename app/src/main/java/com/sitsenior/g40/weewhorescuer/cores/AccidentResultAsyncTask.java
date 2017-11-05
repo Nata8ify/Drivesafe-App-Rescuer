@@ -75,7 +75,12 @@ public class AccidentResultAsyncTask extends AsyncTask {
     protected void onPostExecute(Object o) {
         if(isIgnoreView){return;}
         try {
-           accidentListView.setAdapter(OverviewFragment.accidentListAdapter);
+            ((Activity) (context)).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    accidentListView.setAdapter(OverviewFragment.accidentListAdapter);
+                }
+            });
         } catch (NullPointerException nexcp) {
             ((Activity) (context)).runOnUiThread(new Runnable() {
                 @Override
