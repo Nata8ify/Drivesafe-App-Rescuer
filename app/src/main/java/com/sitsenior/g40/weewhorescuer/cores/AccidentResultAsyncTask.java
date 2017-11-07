@@ -56,7 +56,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage(context.getString(R.string.progressing));
             progressDialog.setCancelable(false);
-            //progressDialog.show();
+            progressDialog.show();
         }
     }
 
@@ -93,7 +93,7 @@ public class AccidentResultAsyncTask extends AsyncTask {
         OverviewFragment.emptyAccidentResultLayout = this.emptyAccidentResultLayout;
         OverviewFragment.viewIncidentPanelLayout = this.viewIncidentPanelLayout;
         OverviewFragment.accidentListView = this.accidentListView;
-        //progressDialog.dismiss();
+        progressDialog.dismiss();
         super.onPostExecute(o);
     }
 
