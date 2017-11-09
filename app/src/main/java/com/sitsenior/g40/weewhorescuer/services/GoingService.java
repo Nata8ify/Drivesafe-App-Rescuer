@@ -225,14 +225,19 @@ public class GoingService extends IntentService {
 
     // -Function
     private void stop() {
-        Log.d("!!!~", "do stop()");
-        isCallbackRemoved = true;
-        handler.removeCallbacks(onGoingRunnable);
-        handler.removeCallbacks(updateSelectedIncidentRunnable);
-        AccidentFactory.setResponsibleAccident(null);
-        stopForeground(true);
-        stopSelf();
-        onDestroy();
+        try {
+            Log.d("!!!~", "do stop()");
+            isCallbackRemoved = true;
+            handler.removeCallbacks(onGoingRunnable);
+            handler.removeCallbacks(updateSelectedIncidentRunnable);
+            AccidentFactory.setResponsibleAccident(null);
+            stopForeground(true);
+            stopSelf();
+            onDestroy();
+        } catch(Exception e){
+            e.printStackTrace();
+            makeToastText("");
+        }
     }
 
     private void dismissStatusBar() {
