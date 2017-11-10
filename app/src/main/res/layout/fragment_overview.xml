@@ -16,39 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="6"></ListView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/linrlout_incident_view_option"
-            android:orientation="horizontal"
-            android:visibility="gone">
-            <Button
-                android:id="@+id/btn_view_a"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="A" />
-            <Button
-                android:id="@+id/btn_view_g"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="G" />
-            <Button
-                android:id="@+id/btn_view_r"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="R" />
-            <Button
-                android:id="@+id/btn_view_c"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="C" />
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

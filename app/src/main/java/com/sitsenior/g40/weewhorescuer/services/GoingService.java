@@ -154,7 +154,7 @@ public class GoingService extends IntentService {
 
                     @Override
                     public void onFailure(Call<Accident> call, Throwable t) {
-                        makeToastText(t.toString());
+                        //makeToastText(t.toString());
                     }
                 });
 
